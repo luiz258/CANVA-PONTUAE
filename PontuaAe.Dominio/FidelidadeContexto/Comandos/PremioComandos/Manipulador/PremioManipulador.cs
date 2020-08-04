@@ -41,7 +41,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PremioComandos.Manipulado
         public async Task<IComandoResultado> ManipularAsync(DeletarPremioComando comando)
         {
             await _premioRepositorio.Deletar(comando.Id, comando.IdEmpresa);
-            return new ComandoResultado(true, "Premio Deletado", Notifications);
+            return new ComandoResultado(true, "Prêmio Deletado!", Notifications);
         }
 
         public async Task<IComandoResultado> ManipularAsync(EditarPremioComando comando)
@@ -51,7 +51,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PremioComandos.Manipulado
 
 
             await _premioRepositorio.Editar(premio);
-            return new ComandoResultado(true, "Salvando Informações", Notifications);
+            return new ComandoResultado(true, "Salvo com sucesso!", Notifications);
 
         }
 

@@ -13,7 +13,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PremioComandos.Entradas
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public decimal QtdPontos { get; set; }
-        //public decimal QtdPremio { get; set; }
+
 
         public bool Valida()
         {

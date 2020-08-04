@@ -20,14 +20,12 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task Salvar(Premios premios)
         {
-          await  _db.Connection.ExecuteAsync("INSERT INTO PREMIOS ( IdEmpresa, Nome,  Descricao, Quantidade, Imagem, validade, PontosNecessario) values (@IdEmpresa, @Nome,  @Descricao, @Quantidade, @Imagem, @validade, @PontosNecessario)", new
+          await  _db.Connection.ExecuteAsync("INSERT INTO PREMIOS ( IdEmpresa, Nome,  Texto,  Imagem, PontosNecessario) values (@IdEmpresa, @Nome,  @Texto, @Imagem, @PontosNecessario)", new
                  {
                      @IdEmpresa = premios.IdEmpresa,
                      @Nome = premios.Nome,
-                     @Descricao = premios.Descricao.Texto,
-                     @Quantidade = premios.Quantidade,
+                     @Texto = premios.Descricao.Texto,
                      @Imagem = premios.Imagem,
-                     @validade = premios.Validade,
                      @PontosNecessario = premios.PontosNecessario
 
                  });
@@ -96,7 +94,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<ObterDetalhePremioConsulta> ObterDetalhePremio(int ID, int IdEmpresa)
         {
-            return await _db.Connection.QueryFirstOrDefaultAsync<ObterDetalhePremioConsulta>("select ID, PontosNecessario, Descricao, Nome from PREMIOS  WHERE ID=@ID AND IdEmpresa=@IdEmpresa", new { @ID = ID, @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryFirstOrDefaultAsync<ObterDetalhePremioConsulta>("select ID, PontosNecessario, Texto, Nome from PREMIOS  WHERE ID=@ID AND IdEmpresa=@IdEmpresa", new { @ID = ID, @IdEmpresa = IdEmpresa });
         }
 
 

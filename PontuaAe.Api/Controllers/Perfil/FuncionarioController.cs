@@ -13,7 +13,10 @@ using System.Threading.Tasks;
 namespace PontuaAe.Api.Controllers.Account
 {
 
+
+    [ApiController]
     [Route("v1/funcionario")]
+    [AllowAnonymous] 
     public class FuncionarioController: Controller
     {
         private readonly FuncionarioComandoManipulador _manipulador;
@@ -27,7 +30,7 @@ namespace PontuaAe.Api.Controllers.Account
 
 
         [HttpPost]
-        [Route("v1/postFuncionario")]
+        [Route("v1/post")]
         //[Authorize(Policy = "Admin")]
         public async Task<IComandoResultado> CreateFuncionario([FromBody] CadastrarFuncionarioComando comando)
         {
@@ -48,30 +51,30 @@ namespace PontuaAe.Api.Controllers.Account
         //}
 
 
-        //[HttpGet]
-        //[Route("v1/lista/{idEmpresa}")]
-        ////[Authorize(Policy = "Admin")]
-        //public async Task<IEnumerable<ListaFuncionarioConsulta>> ListaFuncionarioAsync(int IdEmpresa)
-        //{
-        //    return await _repFuncionario.ListaFuncionario(IdEmpresa);
-        //}
+        [HttpGet]
+        [Route("v1/lista/{idEmpresa}")]
+        //[Authorize(Policy = "Admin")]
+        public async Task<IEnumerable<ListaFuncionarioConsulta>> ListaFuncionarioAsync(int IdEmpresa)
+        {
+            return await _repFuncionario.ListaFuncionario(IdEmpresa);
+        }
 
-        //[HttpGet]
-        //[Route("v1/detalhe/{id}/{idEmpresa}")]
-        //// [Authorize(Policy ="Admin")]
-        //public async Task<ObterDetalheFuncionarioConsulta> Detalhe(int Id, int idEmpresa)
-        //{
-        //    return await _repFuncionario.ObterDetalheFuncionario(Id, idEmpresa);
-        //}
+        [HttpGet]
+        [Route("v1/detalhe/{id}/{idEmpresa}")]
+        // [Authorize(Policy ="Admin")]
+        public async Task<ObterDetalheFuncionarioConsulta> Detalhe(int Id, int idEmpresa)
+        {
+            return await _repFuncionario.ObterDetalheFuncionario(Id, idEmpresa);
+        }
 
         //[HttpPost]
         //[Route("v1/Deletar")]
         ////[Authorize(Policy = "Admin")]
         //public async Task<IComandoResultado> Deletar([FromBody] RemoverColaboradorComando d )
         //{
-            
+
         //    return  (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(d);
-           
+
         //}
     }
 
