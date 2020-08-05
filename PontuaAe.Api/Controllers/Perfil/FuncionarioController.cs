@@ -32,8 +32,8 @@ namespace PontuaAe.Api.Controllers.Account
         public async Task<IComandoResultado> CreateFuncionario([FromBody] CadastrarFuncionarioComando comando)
         {
 
-            return  (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(comando);
-          
+            var result =  (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(comando);
+            return result;
         }
 
         //[HttpPut]
