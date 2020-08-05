@@ -93,7 +93,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<ObterDetalhePremioConsulta> ObterDetalhePremio(int ID, int IdEmpresa)
         {
-            return await _db.Connection.QueryFirstOrDefaultAsync<ObterDetalhePremioConsulta>("select ID, PontosNecessario, Descricao, Nome from PREMIOS  WHERE ID=@ID AND IdEmpresa=@IdEmpresa", new { @ID = ID, @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryFirstOrDefaultAsync<ObterDetalhePremioConsulta>("select ID, PontosNecessario, Texto, Nome from PREMIOS  WHERE ID=@ID AND IdEmpresa=@IdEmpresa", new { @ID = ID, @IdEmpresa = IdEmpresa });
         }
 
 
