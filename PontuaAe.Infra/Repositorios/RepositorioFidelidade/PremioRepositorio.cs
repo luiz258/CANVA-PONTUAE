@@ -20,12 +20,11 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task Salvar(Premios premios)
         {
-          await  _db.Connection.ExecuteAsync("INSERT INTO PREMIOS ( IdEmpresa, Nome,  Texto,  Imagem, PontosNecessario) values (@IdEmpresa, @Nome,  @Texto, @Imagem, @PontosNecessario)", new
+          await  _db.Connection.ExecuteAsync("INSERT INTO PREMIOS ( IdEmpresa, Nome,  Texto, PontosNecessario) values (@IdEmpresa, @Nome,  @Texto,  @PontosNecessario)", new
                  {
                      @IdEmpresa = premios.IdEmpresa,
                      @Nome = premios.Nome,
-                     @Texto = premios.Descricao.Texto,
-                     @Imagem = premios.Imagem,
+                     @Texto = premios.Descricao.Texto,                   
                      @PontosNecessario = premios.PontosNecessario
 
                  });
