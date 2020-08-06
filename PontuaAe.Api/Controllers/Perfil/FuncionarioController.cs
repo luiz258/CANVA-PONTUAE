@@ -64,7 +64,24 @@ namespace PontuaAe.Api.Controllers.Account
         // [Authorize(Policy ="Admin")]
         public async Task<ObterDetalheFuncionarioConsulta> Detalhe(int Id, int idEmpresa)
         {
-            return await _repFuncionario.ObterDetalheFuncionario(Id, idEmpresa);
+
+            var objeto = await _repFuncionario.ObterDetalheFuncionario(Id, idEmpresa);
+
+            if(objeto.RoleId == "Administrador")
+
+            {
+                objeto.ControleUsuario = 1;
+                
+            }
+
+            if(objeto.RoleId == "funcionario")
+
+            {
+                objeto.ControleUsuario = 2;
+                
+            }
+            return objeto;
+
         }
 
         //[HttpPost]
