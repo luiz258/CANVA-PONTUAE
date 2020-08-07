@@ -62,7 +62,8 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<ObterDetalheFuncionarioConsulta> ObterDetalheFuncionario(int ID, int IdEmpresa)
         {
-            return await _db.Connection.QueryFirstOrDefaultAsync<ObterDetalheFuncionarioConsulta>("select u.ID, f.NomeCompleto, u.Email, u.Senha, u.RoleId from FUNCIONARIO f  INNER JOIN USUARIO  u ON f.IdUsuario = u.ID WHERE u.ID=@ID AND f.IdEmpresa=@IdEmpresa", new { @ID = ID, @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryFirstOrDefaultAsync<ObterDetalheFuncionarioConsulta>("select u.ID, f.NomeCompleto, u.Email, u.Senha," +
+      " u.RoleId from FUNCIONARIO f  INNER JOIN USUARIO  u ON f.IdUsuario = u.ID WHERE u.ID=@ID AND f.IdEmpresa=@IdEmpresa", new { @ID = ID, @IdEmpresa = IdEmpresa });
         }
 
 

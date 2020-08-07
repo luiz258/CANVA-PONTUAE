@@ -11,7 +11,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.FuncionarioConsulta
         public string NomeCompleto { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
-        public string ControleUsuario { get; set; }
+        public int ControleUsuario { get; set; }
         public int ID { get; set; }
     }
 }

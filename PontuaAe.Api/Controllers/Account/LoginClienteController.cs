@@ -44,6 +44,7 @@ namespace PontuaAe.Api.Controllers.Account
 
 
             var _resultado =  usuario.Autenticar(model.Email, model.Senha);
+         
             dynamic role =  usuario.RoleId;
 
             if (_resultado == true)
