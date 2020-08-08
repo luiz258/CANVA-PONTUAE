@@ -53,20 +53,32 @@ namespace PontuaAe.Api.Controllers.Account
                 {
 
                     ObterUsuarioCliente _UsuarioCliente = await _repCliente.ObterDadosDoUsuarioCliente(usuario.ID);
-                    string _contatoFuncionario = await _repFuncionario.ObterContatoFuncionario(usuario.ID);
+                    //string _contatoFuncionario = await _repFuncionario.ObterContatoFuncionario(usuario.ID);
                     var token = TokenService.GenerateToken(usuario);
                     return new
                     {
-                        RoleId = usuario.RoleId,
-                        Id = usuario.ID,
-                        Contato = usuario.Contato,
-                        ContatoFuncionario = _contatoFuncionario,
-                        token = token
+                        token = token,
+                        User = new
+                        {
+                            RoleId = usuario.RoleId,
+                            Id = usuario.ID,
+                            Contato = usuario.Contato                  
+
+
+                        }
+
+
+                     
                     };
 
                 }
 
             }
+
+
+
+
+
 
             return NotFound(new { message = "Usuário ou senha inválidos" });
 

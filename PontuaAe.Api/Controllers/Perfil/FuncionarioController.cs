@@ -9,6 +9,7 @@ using PontuaAe.Dominio.FidelidadeContexto.Comandos.FuncionarioComandos.Resultado
 using System.Collections.Generic;
 using PontuaAe.Dominio.FidelidadeContexto.Consulta.FuncionarioConsulta;
 using System.Threading.Tasks;
+using PontuaAe.Dominio.FidelidadeContexto.Entidades;
 
 namespace PontuaAe.Api.Controllers.Account
 {
@@ -39,16 +40,16 @@ namespace PontuaAe.Api.Controllers.Account
             return result;
         }
 
-        //[HttpPut]
-        //[Route("v1/updateFuncionario")]
-        ////[Authorize(Policy = "Admin")]
-        //public async Task<IComandoResultado> EditFuncionarioAsync([FromBody] EditarFuncionarioComando comando)
-        //{
+        [HttpPut]
+        [Route("v1/updateFuncionario")]
+        //[Authorize(Policy = "Admin")]
+        public async Task<IComandoResultado> EditFuncionarioAsync([FromBody] EditarFuncionarioComando comando)
+        {
 
-        //    var resultado = (ComandoFuncionarioResultado) await _manipulador.ManipularAsync(comando);
-        //    return resultado;
+            var resultado = (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(comando);
+            return resultado;
 
-        //}
+        }
 
 
         [HttpGet]
@@ -70,29 +71,33 @@ namespace PontuaAe.Api.Controllers.Account
             if(objeto.RoleId == "Administrador")
 
             {
+         
                 objeto.ControleUsuario = 1;
+
                 
             }
 
-            if(objeto.RoleId == "funcionario")
+            if(objeto.RoleId == "Funcionario")
 
             {
+
                 objeto.ControleUsuario = 2;
-                
+ 
+
             }
             return objeto;
 
         }
 
-        //[HttpPost]
-        //[Route("v1/Deletar")]
-        ////[Authorize(Policy = "Admin")]
-        //public async Task<IComandoResultado> Deletar([FromBody] RemoverColaboradorComando d )
-        //{
+        [HttpDelete]
+        [Route("v1/Deletar/{id}/{idEmpresa}")]
+        //[Authorize(Policy = "Admin")]
+        public async Task<IComandoResultado> Deletar(int id, int idEmpresa)
+        {
+            var objeto = new RemoverColaboradorComando {  ID = id, IdEmpresa = idEmpresa };
+            return (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(objeto);
 
-        //    return  (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(d);
-
-        //}
+        }
     }
 
 }

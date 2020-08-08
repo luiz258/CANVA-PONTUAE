@@ -69,12 +69,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.FuncionarioComandos.Manip
             var EmailValido = new Email(comando.Email);
             AddNotifications(EmailValido.Notifications);
 
-            // Verificar se o E-mail já existe na base
-           // if (_repUsuario.ValidaEmail(comando.Email)) 
-                //AddNotification("Email", "Este E-mail já está em uso");
+            var RoleId = comando.ControleUsuario == 2 ? "Funcionario" : "Administrador";
 
-
-            var usuario = new Usuario(comando.IdUsuario, comando.Email, comando.Senha);
+            var usuario = new Usuario(comando.Email, RoleId);
             if (Invalid)
                 return new ComandoFuncionarioResultado(
                     false,
@@ -82,11 +79,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.FuncionarioComandos.Manip
                     Notifications);
 
             await _repUsuario.Editar(usuario);
-
-            var _usuario = _repUsuario.ObterUsuario(comando.Email);
             
 
-            var fucionario = new Funcionario(_usuario.Id, comando.IdEmpresa, comando.NomeCompleto, comando.Contato);
+            var fucionario = new Funcionario(comando.Id, comando.IdEmpresa, comando.NomeCompleto, comando.Contato);
 
             if (Invalid)
                 return new ComandoFuncionarioResultado(false, "Por favor, corrija os campos abaixo", Notifications);
