@@ -57,11 +57,17 @@ namespace PontuaAe.Api.Controllers.Account
                     var token = TokenService.GenerateToken(usuario);
                     return new
                     {
-                        RoleId = usuario.RoleId,
-                        Id = usuario.ID,
-                        Contato = usuario.Contato,
-                        ContatoFuncionario = _contatoFuncionario,
-                        token = token
+                        token = token,
+                        User = new
+                        {
+                            claimValue = usuario.RoleId,
+                            id = usuario.ID,
+                            contato = usuario.Contato,
+                            email = usuario.Email,
+                        },
+                        Menssage = "Login efetuado com sucesso !",
+
+
                     };
 
                 }

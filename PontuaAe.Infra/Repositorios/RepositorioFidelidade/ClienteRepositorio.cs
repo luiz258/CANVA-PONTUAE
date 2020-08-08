@@ -3,6 +3,7 @@ using PontuaAe.Dominio.FidelidadeContexto.Consulta.ClienteConsulta;
 using PontuaAe.Dominio.FidelidadeContexto.Entidades;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios;
 using PontuaAe.Infra.FidelidadeContexto.DataContexto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,12 +29,11 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         public async Task Editar(Cliente cliente)
         {
            await  _db.Connection
-                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimeto=@DataNascimeto, Cidade=@Cidade  WHERE IdUsuario=@IdUsuario", new
+                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimeto=@DataNascimeto WHERE IdUsuario=@IdUsuario", new
                 {
                     NomeCompleto = cliente.NomeCompleto,
                     @Contato = cliente.Contato,
                     @DataNascimeto = cliente.DataNascimento,
-                    @Cidade = cliente.Cidade,
                     @IdUsuario = cliente.IdUsuario,
                 });
         }
@@ -46,18 +46,18 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
 
         public async Task Salvar(Cliente cliente)
         {
+
             await _db.Connection
-                .ExecuteAsync("INSERT INTO CLIENTE ( IdUsuario, NomeCompleto, DataNascimeto, Contato, Email, Cidade) values (@IdUsuario ,@NomeCompleto ,@DataNascimento, @Contato, @Email, @Cidade)", new
-                {
-                    @IdUsuario = cliente.IdUsuario,
-                    @NomeCompleto = cliente.NomeCompleto,
-                    @DataNascimento = cliente.DataNascimento,
-                    @Contato = cliente.Contato,
-                    @Email = cliente.Email.Endereco,
-                    @Cidade = cliente.Cidade,
+           .ExecuteAsync("INSERT INTO CLIENTE ( IdUsuario, NomeCompleto, DataNascimeto, Contato, Email, Cidade) values (@IdUsuario ,@NomeCompleto ,@DataNascimento, @Contato, @Email, @Cidade)", new
+           {
+               @IdUsuario = cliente.IdUsuario,
+               @NomeCompleto = cliente.NomeCompleto,
+               @DataNascimento = cliente.DataNascimento,
+               @Contato = cliente.Contato,
+               @Cidade = cliente.Cidade,
 
 
-                }); ;
+           }); ;
         }
 
         public async Task EditarClassificacaoCliente(Pontuacao pontuacao)
