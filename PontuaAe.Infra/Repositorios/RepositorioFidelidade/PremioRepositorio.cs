@@ -32,7 +32,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task Editar(Premios premio)
         {
-           await _db.Connection.ExecuteAsync("UPDATE PREMIOS SET  Nome=@NOME, Texto=@Texto,   PontosNecessario=@PontosNecessario WHERE  ID=@ID AND IdEmpresa=@IdEmpresa", new
+           await _db.Connection.ExecuteAsync("UPDATE PREMIOS SET  Nome=@NOME, Texto=@Texto,  PontosNecessario=@PontosNecessario WHERE  ID=@ID AND IdEmpresa=@IdEmpresa", new
                  {
                      @Nome = premio.Nome,
                      @Texto = premio.Descricao.Texto,
