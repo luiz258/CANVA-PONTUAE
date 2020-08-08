@@ -60,15 +60,14 @@ namespace PontuaAe.Api.Controllers.Account
                         token = token,
                         User = new
                         {
-                            RoleId = usuario.RoleId,
-                            Id = usuario.ID,
-                            Contato = usuario.Contato                  
+                            claimValue = usuario.RoleId,
+                            id = usuario.ID,
+                            contato = usuario.Contato,
+                            email = usuario.Email,
+                        },
+                        Menssage = "Login efetuado com sucesso !",
 
 
-                        }
-
-
-                     
                     };
 
                 }

@@ -21,9 +21,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
 
         }
 
-        public Cliente(int id, string nomeCompleto, string contato, Email email, DateTime? dataNascimento, string cidade )
+        public Cliente(int idUsuario, string nomeCompleto, string contato, Email email, DateTime? dataNascimento, string cidade )
         {
-            IdUsuario = id;
+            IdUsuario = idUsuario;
             NomeCompleto = nomeCompleto;
             Contato = contato;
             Email = email;
@@ -34,9 +34,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
             AddNotifications(email.Notifications);
         }
 
-        public Cliente(int id, string nomeCompleto, DateTime? dataNascimento, string cidade)
+        public Cliente(int id, string nomeCompleto, DateTime? dataNascimento, string cidade, string contato)
         {
             IdUsuario = id;
+            Contato = contato;
             NomeCompleto = nomeCompleto;
             DataNascimento = dataNascimento;
             Cidade = cidade;

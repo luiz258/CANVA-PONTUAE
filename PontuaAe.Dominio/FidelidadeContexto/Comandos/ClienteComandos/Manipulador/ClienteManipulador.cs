@@ -108,7 +108,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
 
             
             var _usuario = await _usuarioRepsitorio.ObterUsuario(comando.Email);
-            var PerfilUsuario = new Cliente(_usuario.ID, comando.NomeCompleto, comando.Contato, EmailValido,  comando.DataNascimento, comando.Cidade);
+            var PerfilUsuario = new Cliente(_usuario.ID, comando.Nome, comando.Contato, EmailValido,  comando.DataNascimento, comando.Cidade);
 
             if (Invalid)
                 return new ComandoClienteResultado(false, "Por favor, corrija os campos abaixo", Notifications);
@@ -120,7 +120,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
         public async Task<IComandoResultado> ManipularAsync(EditarClienteComando comando)
         {
 
-            var PerfilUsuario = new Cliente(comando.IdUsuario, comando.NomeCompleto,comando.DataNascimento, comando.Cidade);
+            var PerfilUsuario = new Cliente(comando.IdUsuario, comando.Nome,comando.DataNascimento, comando.Cidade, comando.Contato);
 
             if (Invalid)
                 return new ComandoClienteResultado(false, "Por favor, corrija os campos abaixo", Notifications);
