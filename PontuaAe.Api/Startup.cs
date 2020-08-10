@@ -65,16 +65,16 @@ namespace PontuaAe.Api
 
             services.AddControllers();
 
-            //  //Cofiguração Gerenciamento de Jobs/Task  Quartz services
-            //services.AddSingleton<IJobFactory, JobFactory>();
-            //services.AddSingleton<QuartzJobRunner>();
-            //services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            //services.AddHostedService<QuartzHostedService>();
-            ////Add  job
-            //services.AddScoped<ResultadoDaCampanhaSMSJob>();
-            //services.AddSingleton(new JobSchedule(
-            //    jobType: typeof(ResultadoDaCampanhaSMSJob),
-            //    cronExpression: "0/30 * * * * ?"));
+            //Cofiguração Gerenciamento de Jobs/Task  Quartz services
+            services.AddSingleton<IJobFactory, JobFactory>();
+            services.AddSingleton<QuartzJobRunner>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddHostedService<QuartzHostedService>();
+            //Add  job
+            services.AddScoped<ClassificaTipoClienteJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(ClassificaTipoClienteJob),
+                cronExpression: "0/30 * * * * ?"));
             //-----------Automação  Aniversário----------//
 
             //services.AddScoped<AutomacaoDiaDaSemanaJob>();
@@ -88,7 +88,7 @@ namespace PontuaAe.Api
             //Cofiguração Gerenciamento de Jobs/ Task com HangFire
 
             //services.AddHangfire(x => x.UseSqlServerStorage("Server=den1.mssql7.gear.host; Database=pontuaae; User ID=pontuaae; Password=Lz8Nt8mPL~!5;"));
-        
+
             //Configuração EmailSend
             services.Configure<EmailSetting>(Configuration.GetSection("EmailSetting"));
             services.AddTransient<Services.Email.IEmailSender, AuthMessageSender>();

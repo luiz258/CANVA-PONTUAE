@@ -84,7 +84,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         }
 
-        //REFATOREI FALTA TESTA ESTA QUERY
+       
         public IEnumerable<ObterAutomacaoTipoAniversario> ObterDadosAutomacaoAniversario(string TipoAutomacao, string Segmentacao, string SegCustomizado, int ID) //MELHORA ESSE METODO,  USA APENA O ID DA AUTOMAÇÃO GERADA E IDEMPRESA
         {
             return _db.Connection.Query<ObterAutomacaoTipoAniversario>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, c.Contato, m.Segmentacao, m.SegCustomizado, m.DiasAntesAniversario, c.DataNascimeto, e.NomeFantasia, m.Estado FROM   EMPRESA e INNER JOIN MENSAGEM m ON  e.ID = m.IdEmpresa , PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro INNER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE e.ID = @ID AND  m.TipoAutomacao = @TipoAutomacao AND  p.SegCustomizado = @SegCustomizado",
@@ -152,7 +152,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa)
         {
-            return await _db.Connection.QueryAsync<ObterListaAutomacao>("SELECT m.ID, m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.Estado FROM MENSAGEM m WHERE m.EstadoEnvio NOT IN ('ok') or m.IdEmpresa= @IdEmpresa", new { @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryAsync<ObterListaAutomacao>("SELECT m.ID, m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.Estado FROM MENSAGEM m WHERE m.IdEmpresa= @IdEmpresa AND m.EstadoEnvio NOT IN ('ok') ", new { @IdEmpresa = IdEmpresa });
         }
 
         public async Task<string[]> ListaTelefones(int IdEmpresa, string SegCustomizado, string Segmentacao)

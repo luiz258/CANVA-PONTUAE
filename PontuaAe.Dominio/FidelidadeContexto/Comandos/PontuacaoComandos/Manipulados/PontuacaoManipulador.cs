@@ -112,7 +112,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                 if (comando.ValorInfor < configPontuacao.Reais)
 
-                    return new ComandoResultado(false, " O valor minimo necessário para pontua é ", configPontuacao.Reais);
+                    return new ComandoResultado(false, $" O valor minimo para pontua é  " + $"{ configPontuacao.Reais }", null);
 
 
                 if (VerificaIdPrecadastro == true)

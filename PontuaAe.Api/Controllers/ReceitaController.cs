@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -28,16 +30,24 @@ namespace PontuaAe.Api.Controllers
 
         [HttpGet]
         [Route("v1/totalVendas/{idEmpresa}")]   
-        public async Task<decimal> ObterTotalVendasMes(int idEmpresa)
+        public async Task<string> ObterTotalVendasMes(int idEmpresa)
         {
-            return await _repReceita.ObterTotalVendasMes(idEmpresa);
+            var valorOriginal = await _repReceita.ObterTotalVendasMes(idEmpresa);
+            var valorDoTicketMedio = valorOriginal.ToString("#,0.00", new CultureInfo("pt-BR"));
+            var totalVendasMes = JsonConvert.SerializeObject(valorDoTicketMedio);
+
+            return totalVendasMes;
         }
 
         [HttpGet]
         [Route("v1/ticketMedioMes/{idEmpresa}")]
-        public async Task<decimal> ObterTicketMedio(int idEmpresa)
+        public async Task<string> ObterTicketMedio(int idEmpresa)
         {
-            return await _repReceita.ObterTicketMedio(idEmpresa);
+            var valorOriginal = await _repReceita.ObterTicketMedio(idEmpresa);
+            var valorDoTicketMedio =   valorOriginal.ToString("#,0.00", new CultureInfo("pt-BR"));
+            var ticketMedioMes= JsonConvert.SerializeObject(valorDoTicketMedio);
+            
+            return ticketMedioMes;
         }
 
 
