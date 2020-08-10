@@ -84,7 +84,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task<IEnumerable<ListarEmpresasConsulta>> ListaEmpresa()
         {
             return await _db.Connection.
-                QueryAsync<ListarEmpresasConsulta>("select ID, NomeFantasia, Logo  From Empresa");
+                QueryAsync<ListarEmpresasConsulta>("select ID, NomeFantasia, Telefone, Seguimento  From Empresa");
         }
 
         public async Task<ObterDetalheEmpresa> ObterDetalheEmpresa(int ID)

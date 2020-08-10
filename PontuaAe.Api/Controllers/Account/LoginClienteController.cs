@@ -37,7 +37,7 @@ namespace PontuaAe.Api.Controllers.Account
         {
 
             var usuario = await _repUsuario.ObterUsuario(model.Email);
-
+        
             // se a linha acima não funcionar testa este bloco
             // var dd = new Usuario(usuario.Email, usuario.Senha);
             //var r = dd.Autenticar(usuario.Email, usuario.Senha);
@@ -51,7 +51,7 @@ namespace PontuaAe.Api.Controllers.Account
             {
                 if (role == "Cliente")
                 {
-
+                    var cliente = await _repCliente.ObterDadosDoUsuarioCliente(usuario.ID);
                     ObterUsuarioCliente _UsuarioCliente = await _repCliente.ObterDadosDoUsuarioCliente(usuario.ID);
                     //string _contatoFuncionario = await _repFuncionario.ObterContatoFuncionario(usuario.ID);
                     var token = TokenService.GenerateToken(usuario);
@@ -62,7 +62,7 @@ namespace PontuaAe.Api.Controllers.Account
                         {
                             claimValue = usuario.RoleId,
                             id = usuario.ID,
-                            contato = usuario.Contato,
+                            contato = cliente.Contato,
                             email = usuario.Email,
                         },
                         Menssage = "Login efetuado com sucesso !",
