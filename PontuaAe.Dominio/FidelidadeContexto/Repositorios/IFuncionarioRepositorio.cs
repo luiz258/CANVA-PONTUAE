@@ -14,6 +14,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios
         Task Editar(Funcionario funcionario);
         Task Deletar(int IdUsuario, int IdEmpresa);
         Task<int> ObterId(int ID);
+        Task<int> ObterIdEmpresa(int IdUsuario);
         Task<IEnumerable<ListaFuncionarioConsulta>> ListaFuncionario(int IdEmpresa);
         Task<ObterDetalheFuncionarioConsulta> ObterDetalheFuncionario(int ID, int IdEmpresa);
 

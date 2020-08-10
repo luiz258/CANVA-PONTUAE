@@ -64,13 +64,13 @@ namespace PontuaAe.Api.Controllers
         }
 
 
-        //[HttpPut]
-        //[Route("v1/resgatarPontos")]
-        //public async Task<IComandoResultado> ResgatarPontosAsync([FromBody]ResgatarPontosComando comando)
-        //{
-        //    var resultado = (ComandoResultado) await _manipulador.ManipularAsync(comando);
-        //    return resultado;
-        //}
+        [HttpPut]
+        [Route("v1/resgatarPontos")]
+        public async Task<IComandoResultado> ResgatarPontosAsync([FromBody]ResgatarPontosComando comando)
+        {
+            var resultado = (ComandoResultado)await _manipulador.ManipularAsync(comando);
+            return resultado;
+        }
 
 
         //[HttpPut]

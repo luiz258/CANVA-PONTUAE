@@ -19,15 +19,17 @@ namespace PontuaAe.Api.Controllers.Account
     {
         private readonly IUsuarioRepositorio _repUsuario;
         private readonly IEmpresaRepositorio _repEmpresa;
+        private readonly IFuncionarioRepositorio _repFuncionario;
         private readonly IClienteRepositorio _repCliente;
-        public LoginController(IUsuarioRepositorio repository, IEmpresaRepositorio empresaRepository, IClienteRepositorio clienteRepository)
-        {
+        public LoginController(IUsuarioRepositorio repository, IEmpresaRepositorio empresaRepository, IFuncionarioRepositorio repFuncionario, IClienteRepositorio clienteRepository)
+        {                                     
             _repUsuario = repository;
             _repCliente = clienteRepository;
+            _repFuncionario = repFuncionario;
             _repEmpresa = empresaRepository;
-        }
-
-        
+        }   
+                                               
+         
         [HttpPost]
         [Route("v1/Autenticacao")]
         public async Task<ActionResult<dynamic>>  Autenticacao([FromBody] UsuarioComando model)
@@ -47,7 +49,7 @@ namespace PontuaAe.Api.Controllers.Account
             {
                 if (role == "Funcionario")
                 {
-                    var IdEmpresa = await _repEmpresa.ObterIdEmpresa(usuario.ID);
+                    var IdEmpresa = await _repFuncionario.ObterIdEmpresa(usuario.ID);
                     var token = TokenService.GenerateToken(usuario);
                     return new
                     {

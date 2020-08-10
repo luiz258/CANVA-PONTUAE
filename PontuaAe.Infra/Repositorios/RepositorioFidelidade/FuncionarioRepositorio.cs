@@ -50,6 +50,15 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
                });
         }
 
+        public async Task<int> ObterIdEmpresa(int IdUsuario)
+        {
+            return await _db.Connection
+                 .ExecuteScalarAsync<int>("SELECT IdEmpresa FROM FUNCIONARIO WHERE IdUsuario=@IdUsuario", new
+                 { @IdUsuario = IdUsuario });
+
+
+        }
+
         public async Task<IEnumerable<ListaFuncionarioConsulta>> ListaFuncionario(int IdEmpresa)
         {
             return await _db.Connection

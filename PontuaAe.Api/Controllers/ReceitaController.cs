@@ -34,7 +34,7 @@ namespace PontuaAe.Api.Controllers
         }
 
         [HttpGet]
-        [Route("v1/ticketMedioMes/{idNegocio}")]
+        [Route("v1/ticketMedioMes/{idEmpresa}")]
         public async Task<decimal> ObterTicketMedio(int idEmpresa)
         {
             return await _repReceita.ObterTicketMedio(idEmpresa);
