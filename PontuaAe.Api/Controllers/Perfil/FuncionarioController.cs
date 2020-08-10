@@ -90,7 +90,7 @@ namespace PontuaAe.Api.Controllers.Account
         }
 
         [HttpDelete]
-        [Route("v1/{id}/{idEmpresa}")]
+        [Route("v1/delete/{id}/{idEmpresa}")]
         //[Authorize(Policy = "Admin")]
         public async Task<IComandoResultado> Deletar(int id, int idEmpresa)
         {

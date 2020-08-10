@@ -78,7 +78,10 @@ namespace PontuaAe.Api.Controllers
         // [Authorize(Policy ="Admin")]
         public async Task<ObterDetalhePremioConsulta> Detalhe(int Id, int idEmpresa)
         {
-            return await _repPremio.ObterDetalhePremio(Id, idEmpresa);
+          
+                return await _repPremio.ObterDetalhePremio(Id, idEmpresa);
+        
+         
         }
 
 
