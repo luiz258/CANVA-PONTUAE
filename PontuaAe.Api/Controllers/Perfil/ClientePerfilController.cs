@@ -55,9 +55,18 @@ namespace PontuaAe.Api.Controllers.Perfil
         [Route("v1/post")]
         public async Task<IComandoResultado> PostAsync([FromBody] CadastroClienteComando comando)
         {
-            var resultado = (ComandoClienteResultado)await _manipulador.ManipularAsync(comando);
+            try
+            {
+                var resultado = (ComandoClienteResultado)await _manipulador.ManipularAsync(comando);
+                return resultado;
+            }
+            catch (Exception e)
+            {
 
-            return resultado;
+                throw;
+            }
+
+           
         }
 
 

@@ -54,7 +54,8 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
                @NomeCompleto = cliente.NomeCompleto,
                @DataNascimento = cliente.DataNascimento,
                @Contato = cliente.Contato,
-               @Cidade = cliente.Cidade,
+               @Email = cliente.Email.Endereco,
+               @Cidade = cliente.Cidade
 
 
            }); ;
