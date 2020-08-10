@@ -8,7 +8,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.ClienteConsulta
 {
     public class ObterSaldoClienteConsulta
     {
-        public int Id { get; set; }
+        public int IdPreCadastro { get; set; }
         public int IdEmpresa { get; set; }
         public decimal Saldo { get; set; }
         public string NomeFantasia { get; set; }
