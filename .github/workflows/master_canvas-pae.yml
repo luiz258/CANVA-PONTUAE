@@ -23,10 +23,8 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
-    - name: dotnet publish
-      run: |
-          dotnet build --configuration Release
-          dotnet publish -c Release -o myapp 
+    - name: Build with dotnet
+      run: dotnet build ./PontuaAeBack.sln --configuration Release
   
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
