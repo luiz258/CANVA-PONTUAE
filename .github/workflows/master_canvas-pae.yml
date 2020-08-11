@@ -18,13 +18,13 @@ jobs:
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.102'
+        dotnet-version: '3.1'
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
-    - name: Build with dotnet
-      run: dotnet build ./PontuaAeBack.sln --configuration Release
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
   
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
