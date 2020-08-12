@@ -121,6 +121,7 @@ namespace PontuaAe.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pontua Aê, MKT e Pos venda", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pontua Aê v2, MKT e Pos venda", Version = "v1" });
             });
 
             services.AddResponseCompression();
