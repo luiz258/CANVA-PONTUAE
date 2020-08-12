@@ -22,7 +22,8 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task AtualizarSaldo(Pontuacao update)
         {
            await _db.Connection
-                 .ExecuteAsync("UPDATE PONTUACAO SET Saldo=@Saldo, DataVisita=@DataVisita,  SaldoTransacao=@SaldoTransacao  WHERE IdEmpresa=@IdEmpresa and IdPreCadastro=@IdPreCadastro", new {
+                 .ExecuteAsync("UPDATE PONTUACAO SET Validade=@Validade Saldo=@Saldo, DataVisita=@DataVisita,  SaldoTransacao=@SaldoTransacao  WHERE IdEmpresa=@IdEmpresa and IdPreCadastro=@IdPreCadastro", new {
+                     Validade = update.Validade,
                      @Saldo = update.Saldo,
                      @DataVisita = update.DataVisita,
                      @SaldoTransacao = update.SaldoTransacao,
@@ -95,7 +96,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<IEnumerable<Pontuacao>> ObterClassificacaoCliente()
         {
-            return await _db.Connection.QueryAsync<Pontuacao>("SELECT p.ID, p.IdEmpresa, p.SegCustomizado, p.Segmentacao, p.DataVisita FROM PONTUACAO ");
+            return await _db.Connection.QueryAsync<Pontuacao>("SELECT p.ID, p.IdEmpresa, p.SegCustomizado, p.Segmentacao, p.DataVisita FROM PONTUACAO p ");
         }
 
         public async Task<bool> ChecarClienteNaBasePontuacao(int IdPreCadastro, int IdEmpresa)

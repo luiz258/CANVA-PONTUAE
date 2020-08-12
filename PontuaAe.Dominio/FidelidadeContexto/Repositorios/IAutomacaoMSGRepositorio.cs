@@ -17,7 +17,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios
      Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposUltimaFidelizacao(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa);
      Task<DetalheDoResultadoDaCampanhaAutomatica> ObterDetalheDoResultadoDaCampanha(int ID, int IdEmpresa);
      Task<IEnumerable<ListaRetornoDoClienteCampanhaNormal>> ObterListaRetornoDoClienteCampanhaNormal(int Id, int IdEmpresa);
-     Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa);
+     Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa, int Estado);
 
      //obtem lista de mensagem de todas as empresas
      IEnumerable<Mensagem> ListaTipoAutomacao();

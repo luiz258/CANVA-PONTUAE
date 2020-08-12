@@ -31,7 +31,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<IEnumerable<ObterListaCampanhaSMS>> listaCampanha(int IdEmpresa) 
         {
-            return await _db.Connection.QueryAsync<ObterListaCampanhaSMS>("SELECT m.ID, m.Nome, m.Segmentacao, m.SegCustomizado,  m.EstadoEnvio, m.DataEnviada   FROM MENSAGEM m  WHERE  m.IdEmpresa=@IdEmpresa  AND m.EstadoEnvio NOT IN ('Automatico') ", new { @IdEmpresa = IdEmpresa }  );
+            return await _db.Connection.QueryAsync<ObterListaCampanhaSMS>("SELECT m.ID, m.Nome, m.Segmentacao, m.SegCustomizado,  m.EstadoEnvio, m.DataEnviada   FROM MENSAGEM m  WHERE  m.IdEmpresa=@IdEmpresa  AND m.EstadoEnvio = 'OK' ", new { @IdEmpresa = IdEmpresa }  );
         }
         //public IEnumerable<ObterListaCampanhaSMS> listaCampanhaAgendada(int IdEmpresa)
         //{

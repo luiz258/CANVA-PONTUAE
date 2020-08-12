@@ -12,6 +12,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Entrada
         public int Id { get; set; }
         public int IdEmpresa { get; set; }
 
+
         public bool Valida()
         {
             throw new NotImplementedException();

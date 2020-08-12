@@ -62,31 +62,55 @@ namespace PontuaAe.Api
             });
 
 
-
             services.AddControllers();
 
-            //Cofiguração Gerenciamento de Jobs/Task  Quartz services
+            //Cofiguração Gerenciamento de Jobs/ Task  Quartz services
+            //// documentação: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html
+            //// documentação atualizada: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#example-cron-expressions
             services.AddSingleton<IJobFactory, JobFactory>();
             services.AddSingleton<QuartzJobRunner>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             services.AddHostedService<QuartzHostedService>();
-            //Add  job
+
+            //--------JOB COMPUTAR CLASSIFICAÇÃO CLIENTES
             services.AddScoped<ClassificaTipoClienteJob>();
             services.AddSingleton(new JobSchedule(
-                jobType: typeof(ClassificaTipoClienteJob),
-                cronExpression: "0/30 * * * * ?"));
-            //-----------Automação  Aniversário----------//
+            jobType: typeof(ClassificaTipoClienteJob),
+            cronExpression: "0 05 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //services.AddScoped<AutomacaoDiaDaSemanaJob>();
-            //services.AddSingleton(new JobSchedule(
-            //jobType: typeof(AutomacaoDiaDaSemanaJob),
-            //cronExpression: "0/5 * * * * ?"));
+            //--------JOB Automação-SMS Aniversariantes
+            services.AddScoped<AutomacaoAniversarioJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(AutomacaoAniversarioJob),
+            cronExpression: "0 10 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //cronExpression: "0 4 18 ? * MON-TUE,WED-THU,FRI,SAT-SUN")); // run every 5 seconds
-            //// documentação: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html
+            //--------JOB Automação-SMS DIA DA SEMANA
+            services.AddScoped<AutomacaoDiaDaSemanaJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(AutomacaoDiaDaSemanaJob),
+            cronExpression: "0 15 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+
+            //--------JOB Automação-SMS 15 DIAS SEM RETORNO
+            services.AddScoped<AutomacaoQuinzeDiasSemRetornoJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(AutomacaoQuinzeDiasSemRetornoJob),
+            cronExpression: "0 20 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+
+            //--------JOB Automação-SMS  30 DIAS SEM RETORNO
+            services.AddScoped<AutomacaoTrintaDiasRetornoJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(AutomacaoTrintaDiasRetornoJob),
+            cronExpression: "0 25 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+
+
+            //--------JOB Automação-SMS APOS ULTIMA PONTUACAO
+            services.AddScoped<AutomacaoUltimaFidelizacaoJob>();
+            services.AddSingleton(new JobSchedule(
+            jobType: typeof(AutomacaoUltimaFidelizacaoJob),
+            cronExpression: "0 30 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+
 
             //Cofiguração Gerenciamento de Jobs/ Task com HangFire
-
             //services.AddHangfire(x => x.UseSqlServerStorage("Server=den1.mssql7.gear.host; Database=pontuaae; User ID=pontuaae; Password=Lz8Nt8mPL~!5;"));
 
             //Configuração EmailSend
@@ -96,7 +120,7 @@ namespace PontuaAe.Api
             // Congiguração Documentação da API com Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "Pontua Aê, MKT e Pos venda", Version = "v2" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pontua Aê, MKT e Pos venda", Version = "v1" });
             });
 
             services.AddResponseCompression();
@@ -120,8 +144,6 @@ namespace PontuaAe.Api
             services.AddTransient<IPreCadastroRepositorio, PreCadastroRepositorio>();
             services.AddTransient<IConfigClassificacaoClienteRepositorio, ConfigClassificacaoClienteRepositorio>();
             services.AddTransient<IConfiguracaoCashBackRepositorio, ConfiguracaoCashBackRepositorio>();
- 
-
             services.AddTransient<UsuarioManipulador, UsuarioManipulador>();
             services.AddTransient<PontuacaoManipulador, PontuacaoManipulador>();
             services.AddTransient<ClienteManipulador, ClienteManipulador>();
@@ -136,9 +158,6 @@ namespace PontuaAe.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseApiConfig(env);
-
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -146,35 +165,27 @@ namespace PontuaAe.Api
                 c.RoutePrefix = string.Empty;
             });
 
+            //não deleta este comentário
             //app.UseHangfireServer();
             //app.UseHangfireDashboard();
 
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
-            //app.UseCors(c =>
-            //{
-            //    c.AllowAnyHeader();
-            //    c.AllowAnyMethod();
-            //    c.AllowAnyOrigin();
-            //});
-
-
-
-
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-
+            //não deleta este comentário
             //InitProcess();
 
         }
         private void InitProcess()
         {
+            //não deleta este comentário
             // AutomacaoAniversarioJob aniversario = new AutomacaoAniversarioJob();
-           // RecurringJob.AddOrUpdate<AutomacaoManipulador>(x =>  x.AutomacaoTipoDiaDaSemanaAsync(), Cron.Minutely());
+            // RecurringJob.AddOrUpdate<AutomacaoManipulador>(x =>  x.AutomacaoTipoDiaDaSemanaAsync(), Cron.Minutely());
         }
     }
 }

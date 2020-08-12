@@ -150,9 +150,9 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             return await _db.Connection.QueryFirstOrDefaultAsync<DetalheDoResultadoDaCampanhaAutomatica>("SELECT m.TipoAutomacao, m.Conteudo, m.QtdEnviada, m.ValorInvestido,  SUM(s.ValorRecebido) AS TotalVendas, COUNT(s.DataCompra) AS QtdRetorno, m.Estado FROM MENSAGEM m INNER JOIN SITUACAO_SMS S ON s.IdEmpresa = m.IdEmpresa  WHERE m.IdEmpresa = @IdEmpresa AND m.ID = @ID  AND m.EstadoEnvio NOT IN ('ok') GROUP BY m.ID, m.Nome, m.Conteudo, m.QtdEnviada, m.ValorInvestido, m.DataEnvio, m.TipoAutomacao,  m.Estado  ", new { @IdEmpresa = IdEmpresa , @ID = ID });
         }
 
-        public async Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa)
+        public async Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa, int Estado)
         {
-            return await _db.Connection.QueryAsync<ObterListaAutomacao>("SELECT m.ID, m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.Estado FROM MENSAGEM m WHERE m.IdEmpresa= @IdEmpresa AND m.EstadoEnvio NOT IN ('ok') ", new { @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryAsync<ObterListaAutomacao>("SELECT m.ID, m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.Estado FROM MENSAGEM m WHERE m.IdEmpresa= @IdEmpresa AND  and m.Estado = @Estado ", new { @IdEmpresa = IdEmpresa, @Estado = Estado });
         }
 
         public async Task<string[]> ListaTelefones(int IdEmpresa, string SegCustomizado, string Segmentacao)

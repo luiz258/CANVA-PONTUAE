@@ -39,7 +39,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         public int ID { get; set; }
         public int IdEmpresa { get; private set; }
         public int IdPreCadastro { get; private set; }
-        public int IdPontuacao { get; private set; }
         public DateTime Validade { get; private set; }
         public decimal SaldoTransacao { get; private set; }
         public decimal Saldo { get; private set; }
@@ -80,10 +79,13 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
 
         //estou subsstituindo o qtdVisitasUmMes para qtdVisitasClassificacaoOuro  assim cada empresa vai ter uma configuração pra qtdVistas um mes pra classifica 
         //o cliente como ouro , prata
-        public void SeguimentarCliente(DateTime ultimaVisita, int tempoEmdiasClienteOuro, int tempoEmDiasClientePrata, int tempoEmDiasClienteBronze, int qtdVisitasClassificacaoOuro, int qtdVisitasClassificacaoPrata, int qtdVisitasClassificacaoBronze, int qtdRetornoOuro, int qtdRetornoPrata, int qtdRetornoBronze)
+        public void SeguimentarCliente(DateTime ultimaVisita, int tempoEmdiasClienteOuro, int tempoEmDiasClientePrata, int tempoEmDiasClienteBronze, int qtdVisitasClassificacaoOuro, int qtdVisitasClassificacaoPrata, int qtdVisitasClassificacaoBronze, int qtdRetornoOuro, int qtdRetornoPrata, int qtdRetornoBronze, int id, int idEmpresa)
         {
             TimeSpan data = DateTime.Now.Subtract(ultimaVisita);
             int TempoEmDias = data.Days;
+
+            this.ID = id;
+            this.IdEmpresa = idEmpresa;
 
 
 

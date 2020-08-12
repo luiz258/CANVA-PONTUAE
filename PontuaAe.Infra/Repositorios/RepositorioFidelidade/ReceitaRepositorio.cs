@@ -36,10 +36,10 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             { @IdPontuacao = IdPontuacao, @IdEmpresa = IdEmpresa, @TempoEmDiasClientePrata  = TempoEmDiasClientePrata });
         }
 
-        public async Task<int> ObterQtdDiasAusenteClassificacaoOuro(int IdEmpresa, int IdPontuacao, int TempoEmdiasClienteOuro)
+        public async Task<int> ObterQtdDiasAusenteClassificacaoOuro(int IdEmpresa, int IdPontuacao, int TempoEmDiasClienteOuro)
         {
-            return await _db.Connection.ExecuteScalarAsync<int>("SELECT COUNT (DataVenda) FROM RECEITA WHERE IdPontuacao = @IdPontuacao and IdEmpresa = @IdEmpresa and DataVenda  BETWEEN DATEADD(MONTH, @TempoEmdiasClienteOuro, CONVERT(date, GETDATE())) AND DATEADD(MONTH, 1 , CONVERT(DATE, GETDATE()))", new
-            { @IdPontuacao = IdPontuacao, @IdEmpresa = IdEmpresa, @TempoEmdiasClienteOuro = TempoEmdiasClienteOuro });
+            return await _db.Connection.ExecuteScalarAsync<int>("SELECT COUNT (DataVenda) FROM RECEITA WHERE IdPontuacao = @IdPontuacao and IdEmpresa = @IdEmpresa and DataVenda  BETWEEN DATEADD(MONTH, @TempoEmDiasClienteOuro, CONVERT(date, GETDATE())) AND DATEADD(MONTH, 1 , CONVERT(DATE, GETDATE()))", new
+            { @IdPontuacao = IdPontuacao, @IdEmpresa = IdEmpresa, @TempoEmDiasClienteOuro = TempoEmDiasClienteOuro });
         }
 
         public async Task<int> ObterQtdDiasAusenteClassificacaoBronze(int IdEmpresa, int IdPontuacao, int TempoEmDiasClienteBronze)
