@@ -68,8 +68,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
             var arrayDeCodigoDasMensagens = await  _enviarSMS.EnviarSMSPorSMSDEVAsync(tt, conteudo, data_, comando.HoraEnvio);
 
 
+            var juntaDataHora = $"{data_}" + $"{comando.HoraEnvio}";
 
-            var agenda = new Agenda(data_, comando.HoraEnvio);   //VERIFICA ESSA LINHA DE CODIGO
+            var agenda = new Agenda(juntaDataHora);  
             var _campanhaSMS = new Mensagem(comando.IdEmpresa, comando.Nome, comando.Segmentacao, comando.SegCustomizado, comando.QtdSelecionado, comando.Conteudo, agenda);
             _campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
             await _campanhaRepositorio.Salvar(_campanhaSMS);
