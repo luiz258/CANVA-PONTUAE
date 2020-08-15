@@ -9,8 +9,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios
 {
     public interface IConfigClassificacaoClienteRepositorio
     {
-        Task Salvar(ConfigClassificacaoCliente model);
-        Task Editar(ConfigClassificacaoCliente model);
-        Task<ConfigClassificacaoCliente> ObterConfig(int IdEmpresa);
+        Task Salvar(TemplateClassificacaoCliente model);
+        Task Editar(TemplateClassificacaoCliente model);
+        Task<ConsultaTemplateClassificacaoCliente> ObterConfig(int IdEmpresa);
     }
 }

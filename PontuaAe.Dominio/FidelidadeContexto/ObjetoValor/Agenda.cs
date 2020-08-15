@@ -12,6 +12,11 @@ namespace PontuaAe.Dominio.FidelidadeContexto.ObjetoValor
         {
 
         }
+        public Agenda(string dataEnvio)
+        {
+            DataEnvio = dataEnvio;
+
+        }
         public Agenda(string dataEnvio, string horarioEnvio)
         {
             DataEnvio = dataEnvio;

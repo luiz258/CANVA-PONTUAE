@@ -22,8 +22,8 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<bool> ChecarDocumento(string Documento)
         {
-             return await _db.Connection
-                .QueryFirstOrDefaultAsync<bool>("SELECT CASE WHEN EXISTS( SELECT ID FROM EMPRESA WHERE Documento= @Documento) THEN CAST( 1 AS BIT) ELSE CAST(0 AS BIT)  END", new { @Documento = Documento });
+            return await _db.Connection
+               .QueryFirstOrDefaultAsync<bool>("SELECT CASE WHEN EXISTS( SELECT ID FROM EMPRESA WHERE Documento= @Documento) THEN CAST( 1 AS BIT) ELSE CAST(0 AS BIT)  END", new { @Documento = Documento });
 
         }
 
@@ -36,49 +36,49 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task Editar(Empresa empresa)
         {
-           await _db.Connection
-                .ExecuteAsync("UPDATE EMPRESA SET " +
-                    "NomeFantasia=@NomeFantasia, " +
-                    "Descricao=@Descricao, " +
-                    "NomeResponsavel=@NomeResponsavel, " +
-                    "Email=@Email, " +
-                    "Telefone=@Telefone, " +
-                    "Horario=@Horario, " +
-                    "Facebook=@Facebook, " +
-                    "Website=@Website, " +
-                    "Instagram=@Instagram, " +
-                    "Delivery=@Delivery, " +
-                    "Bairro=@Bairro, " +
-                    "Rua=@Rua, " +
-                    "Numero=@Numero, " +
-                    "Cep=@Cep, " +
-                    "Cidade=@Cidade, " +
-                    "Estado=@Estado, " +
-                    "Logo=@Logo, " +
-                    "Complemento=@Complemento " +
-                    "WHERE IdUsuario=@IdUsuario ",
-                 new
-                 {
-                     @NomeFantasia = empresa.NomeFantasia,
-                     @Descricao = empresa.Descricao,
-                     @NomeResponsavel = empresa.NomeResponsavel,
-                     @Email = empresa.Email,
-                     @Telefone = empresa.Telefone,
-                     @Horario = empresa.Horario,
-                     @Facebook = empresa.Facebook,
-                     @Website = empresa.Website,
-                     @Instagram = empresa.Instagram,
-                     @Delivery = empresa.Delivery,
-                     @Bairro = empresa.Bairro,
-                     @Rua = empresa.Rua,
-                     @Numero = empresa.Numero,
-                     @Cep = empresa.Cep,
-                     @Cidade = empresa.Cidade,
-                     @Estado = empresa.Estado,
-                     @Logo = empresa.Logo,
-                     @Complemento = empresa.Complemento,
-                     @IdUsuario = empresa.IdUsuario
-                 });
+            await _db.Connection
+                 .ExecuteAsync("UPDATE EMPRESA SET " +
+                     "NomeFantasia=@NomeFantasia, " +
+                     "Descricao=@Descricao, " +
+                     "NomeResponsavel=@NomeResponsavel, " +
+                     "Email=@Email, " +
+                     "Telefone=@Telefone, " +
+                     "Horario=@Horario, " +
+                     "Facebook=@Facebook, " +
+                     "Website=@Website, " +
+                     "Instagram=@Instagram, " +
+                     "Delivery=@Delivery, " +
+                     "Bairro=@Bairro, " +
+                     "Rua=@Rua, " +
+                     "Numero=@Numero, " +
+                     "Cep=@Cep, " +
+                     "Cidade=@Cidade, " +
+                     "Estado=@Estado, " +
+                     "Logo=@Logo, " +
+                     "Complemento=@Complemento " +
+                     "WHERE IdUsuario=@IdUsuario ",
+                  new
+                  {
+                      @NomeFantasia = empresa.NomeFantasia,
+                      @Descricao = empresa.Descricao,
+                      @NomeResponsavel = empresa.NomeResponsavel,
+                      @Email = empresa.Email,
+                      @Telefone = empresa.Telefone,
+                      @Horario = empresa.Horario,
+                      @Facebook = empresa.Facebook,
+                      @Website = empresa.Website,
+                      @Instagram = empresa.Instagram,
+                      @Delivery = empresa.Delivery,
+                      @Bairro = empresa.Bairro,
+                      @Rua = empresa.Rua,
+                      @Numero = empresa.Numero,
+                      @Cep = empresa.Cep,
+                      @Cidade = empresa.Cidade,
+                      @Estado = empresa.Estado,
+                      @Logo = empresa.Logo,
+                      @Complemento = empresa.Complemento,
+                      @IdUsuario = empresa.IdUsuario
+                  });
         }
 
         public async Task<IEnumerable<ListarEmpresasConsulta>> ListaEmpresa()
@@ -93,7 +93,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
                 .QueryFirstOrDefaultAsync<ObterDetalheEmpresa>("SELECT * FROM EMPRESA WHERE ID=@ID", new
                 { @ID = ID });
 
-           
+
         }
         // Esse
         public async Task<int> ObterIdEmpresa(int IdUsuario)
@@ -114,32 +114,32 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task Salvar(Empresa empresa)
         {
-           await _db.Connection
-                .ExecuteAsync(" INSERT INTO EMPRESA (NomeFantasia, NomeResponsavel, Descricao, Seguimento, Documento, Email, Telefone, Bairro, Rua, Numero, Complemento, Cep, Cidade, Estado, Logo, Instagram, Facebook, Website, Horario, Delivery, IdUsuario) VALUES  (@NomeFantasia, @NomeResponsavel, @Descricao, @Seguimento, @Documento, @Email, @Telefone, @Bairro, @Rua, @Numero, @Complemento, @Cep, @Cidade, @Estado, @Logo, @Instagram, @Facebook, @Website, @Horario, @Delivery, @IdUsuario)",
-                    new
-                    {
-                        @NomeFantasia = empresa.NomeFantasia,
-                        @NomeResponsavel = empresa.NomeResponsavel,
-                        @Descricao = empresa.Descricao,
-                        @Seguimento = empresa.Seguimento,
-                        @Documento = empresa.Documento.Cnpj,
-                        @Email = empresa.Email,
-                        @Telefone = empresa.Telefone,
-                        @Bairro = empresa.Bairro,
-                        @Rua = empresa.Rua,
-                        @Numero = empresa.Numero,
-                        @Complemento = empresa.Complemento,
-                        @Cep = empresa.Cep,
-                        @Cidade = empresa.Cidade,
-                        @Estado = empresa.Estado,
-                        @Logo = empresa.Logo,
-                        @Instagram = empresa.Instagram,
-                        @Facebook = empresa.Facebook,
-                        @Website = empresa.Website,
-                        @Horario = empresa.Horario,
-                        @Delivery = empresa.Delivery,
-                        @IdUsuario = empresa.IdUsuario
-                    });
+            await _db.Connection
+                 .ExecuteAsync(" INSERT INTO EMPRESA (NomeFantasia, NomeResponsavel, Descricao, Seguimento, Documento, Email, Telefone, Bairro, Rua, Numero, Complemento, Cep, Cidade, Estado, Logo, Instagram, Facebook, Website, Horario, Delivery, IdUsuario) VALUES  (@NomeFantasia, @NomeResponsavel, @Descricao, @Seguimento, @Documento, @Email, @Telefone, @Bairro, @Rua, @Numero, @Complemento, @Cep, @Cidade, @Estado, @Logo, @Instagram, @Facebook, @Website, @Horario, @Delivery, @IdUsuario)",
+                     new
+                     {
+                         @NomeFantasia = empresa.NomeFantasia,
+                         @NomeResponsavel = empresa.NomeResponsavel,
+                         @Descricao = empresa.Descricao,
+                         @Seguimento = empresa.Seguimento,
+                         @Documento = empresa.Documento.Cnpj,
+                         @Email = empresa.Email,
+                         @Telefone = empresa.Telefone,
+                         @Bairro = empresa.Bairro,
+                         @Rua = empresa.Rua,
+                         @Numero = empresa.Numero,
+                         @Complemento = empresa.Complemento,
+                         @Cep = empresa.Cep,
+                         @Cidade = empresa.Cidade,
+                         @Estado = empresa.Estado,
+                         @Logo = empresa.Logo,
+                         @Instagram = empresa.Instagram,
+                         @Facebook = empresa.Facebook,
+                         @Website = empresa.Website,
+                         @Horario = empresa.Horario,
+                         @Delivery = empresa.Delivery,
+                         @IdUsuario = empresa.IdUsuario
+                     });
         }
 
 

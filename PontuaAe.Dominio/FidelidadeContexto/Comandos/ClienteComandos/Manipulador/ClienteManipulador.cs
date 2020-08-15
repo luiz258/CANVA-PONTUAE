@@ -141,13 +141,13 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
                 //criar  um metodo para busca a  variavel de tempo de visita (1= 30 dias, 2 = 60 dias, 3= 90 ...) e passa como parametro nos metodos QtdVisitasClassificacaoOuro ....
                 
                 Pontuacao ClassificaTipoCliente = new Pontuacao();
-                ConfigClassificacaoCliente dado = await _repConfigClassificacaoCliente.ObterConfig(item.IdEmpresa);
-                var agrupamentoEmOuro = await _receitaRepositorio.ObterQtdDiasAusenteClassificacaoOuro( item.IdEmpresa, item.IdPontuacao, dado.TempoEmDiasClienteOuro);  
-                var agrupamentoEmPrata = await _receitaRepositorio.ObterQtdDiasAusenteClassificacaoPrata( item.IdEmpresa, item.IdPontuacao, dado.TempoEmDiasClientePrata);
-                var agrupamentoEmBronze = await _receitaRepositorio.ObterQtdDiasAusenteClassificacaoBronze( item.IdEmpresa, item.IdPontuacao, dado.TempoEmDiasClienteBronze);
+                ConsultaTemplateClassificacaoCliente dado = await _repConfigClassificacaoCliente.ObterConfig(item.IdEmpresa);
+                var agrupamentoEmOuro = await _receitaRepositorio.ObterQtdDiasAusenteClassificacaoOuro( item.IdEmpresa, item.ID, dado.TempoEmDiasClienteOuro);  
+                var agrupamentoEmPrata = await _receitaRepositorio.ObterQtdDiasAusenteClassificacaoPrata( item.IdEmpresa, item.ID, dado.TempoEmDiasClientePrata);
+                var agrupamentoEmBronze = await _receitaRepositorio.ObterQtdDiasAusenteClassificacaoBronze( item.IdEmpresa, item.ID, dado.TempoEmDiasClienteBronze);
 
                 ClassificaTipoCliente.SeguimentarCliente(item.DataVisita, dado.TempoEmDiasClienteOuro, dado.TempoEmDiasClientePrata, dado.TempoEmDiasClienteBronze,
-                dado.QtdVisitasClassificacaoOuro, dado.QtdVisitasClassificacaoPrata, dado.QtdVisitasClassificacaoBronze, agrupamentoEmOuro, agrupamentoEmPrata, agrupamentoEmBronze);  
+                dado.QtdVisitasClassificacaoOuro, dado.QtdVisitasClassificacaoPrata, dado.QtdVisitasClassificacaoBronze, agrupamentoEmOuro, agrupamentoEmPrata, agrupamentoEmBronze, item.ID, item.IdEmpresa);  
                 await _clienteRepositorio.EditarClassificacaoCliente(ClassificaTipoCliente);   
             }
         }

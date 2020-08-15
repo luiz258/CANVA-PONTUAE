@@ -215,7 +215,8 @@
     <Compile Include="FidelidadeContexto\Consulta\PremiosConsulta\ObterDetalhePremioConsulta.cs" />
     <Compile Include="FidelidadeContexto\Consulta\RelatoriosConsulta\ObterTotalClientes.cs" />
     <Compile Include="FidelidadeContexto\Consulta\UsuarioConsulta\ObterIDConsulta.cs" />
-    <Compile Include="FidelidadeContexto\Entidades\ConfigClassificacaoCliente.cs" />
+    <Compile Include="FidelidadeContexto\Entidades\ConsultaTemplateClassificacaoCliente.cs" />
+    <Compile Include="FidelidadeContexto\Entidades\TemplateClassificacaoCliente.cs" />
     <Compile Include="FidelidadeContexto\Entidades\ConfiguracaoCashBack.cs" />
     <Compile Include="FidelidadeContexto\Entidades\ContaSMS.cs" />
     <Compile Include="FidelidadeContexto\Entidades\ConversaoSMS.cs" />

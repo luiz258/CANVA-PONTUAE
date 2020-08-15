@@ -8,12 +8,13 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta
 {
     public class ObterAutomacaoPorId
     {
-        public int Id { get; set; }
-        public string Segmento { get; set; }
+        public int ID { get; set; }
+        public string TipoAutomacao { get; set; }
+        public string Segmentacao { get; set; }
         public string SegCustomizado { get; set; }
-        public string DiaSemana { get; set; }
-        public string DiaMes { get; set; }
-        public string DiasAntensAniversario { get; set; }
+        public string TempoPorDiaDaSemana { get; set; }
+        public int TempoPorDiaDoMes { get; set; }
+        public int DiasAntesAniversario { get; set; }
         public string Conteudo { get; set; }
     }
 }

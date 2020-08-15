@@ -55,7 +55,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
                 comando.TipoAutomacao,
                 comando.TempoPorDiaDaSemana,
                 comando.DiasAntesAniversario,
-                comando.DiaMes,
+                comando.TempoPorDiaDoMes,
                 comando.Conteudo,
                 comando.Segmentacao,
                 comando.SegCustomizado,
@@ -95,7 +95,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         public async Task<IComandoResultado> ManipularAsync(DesativarAutomacao comando)
         {
             await _automacaoRepositorio.Desativar(comando.IdEmpresa, comando.Id);
-            return new ComandoResultado(true, "Campanha Removido", Notifications);
+            return new ComandoResultado(true, "Desativada", Notifications);
         }
 
 

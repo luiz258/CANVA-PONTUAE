@@ -19,24 +19,28 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             _db = db;
         }
 
-        public Task Editar(ConfigClassificacaoCliente model)
+        public Task Editar(TemplateClassificacaoCliente model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ConfigClassificacaoCliente> ObterConfig(int IdEmpresa)
+        public async Task<ConsultaTemplateClassificacaoCliente> ObterConfig(int IdEmpresa)
         {
-            throw new NotImplementedException();
+            return await _db.Connection
+               .QueryFirstOrDefaultAsync<ConsultaTemplateClassificacaoCliente>("SELECT * FROM CONFIG_CLASSIFICACAO_CLIENTE WHERE IdEmpresa=@IdEmpresa", new
+               { @IdEmpresa = IdEmpresa });
         }
 
-        public async Task Salvar(ConfigClassificacaoCliente model)
+        public async Task Salvar(TemplateClassificacaoCliente model)
         {
-           await  _db.Connection.ExecuteAsync("INSERT INTO CONFIG_CLASSIFICACAO_CLIENTE (QtdVisitasClassificacaoOuro, QtdVisitasClassificacaoPrata, QtdVisitasClassificacaoBronze, QtdVisitaClassificacaoAtivo, TempoEmDiasClienteOuro, TempoEmDiasClientePrata , TempoEmDiasClienteBronze, TempoEmDiasClientePedido, TempoEmDiasClienteInativo )VALUES (@QtdVisitasClassificacaoOuro, @QtdVisitasClassificacaoPrata, @QtdVisitasClassificacaoBronze, @QtdVisitaClassificacaoAtivo, @TempoEmDiasClienteOuro, @TempoEmDiasClientePrata , @TempoEmDiasClienteBronze, @TempoEmDiasClientePedido, @TempoEmDiasClienteInativo)", new 
+           await  _db.Connection.ExecuteAsync("INSERT INTO CONFIG_CLASSIFICACAO_CLIENTE (IdEmpresa, QtdVisitasClassificacaoOuro, QtdVisitasClassificacaoPrata, QtdVisitasClassificacaoBronze, QtdVisitaClassificacaoAtivo, TempoEmDiasClienteOuro, TempoEmDiasClientePrata , TempoEmDiasClienteBronze, TempoEmDiasClientePedido, TempoEmDiasClienteInativo )VALUES (@IdEmpresa, @QtdVisitasClassificacaoOuro, @QtdVisitasClassificacaoPrata, @QtdVisitasClassificacaoBronze, @QtdVisitaClassificacaoAtivo, @TempoEmDiasClienteOuro, @TempoEmDiasClientePrata , @TempoEmDiasClienteBronze, @TempoEmDiasClientePedido, @TempoEmDiasClienteInativo)", new 
             {
+                @IdEmpresa = model.IdEmpresa,
                 @QtdVisitasClassificacaoOuro = model.QtdVisitasClassificacaoOuro,
                 @QtdVisitasClassificacaoPrata = model.QtdVisitasClassificacaoPrata,
                 @QtdVisitasClassificacaoBronze = model.QtdVisitasClassificacaoBronze ,
                 @QtdVisitaClassificacaoAtivo = model.QtdVisitaClassificacaoAtivo,
+                
                 @TempoEmDiasClienteOuro = model.TempoEmDiasClienteOuro,
                 @TempoEmDiasClientePrata = model.TempoEmDiasClientePrata,
                 @TempoEmDiasClienteBronze = model.TempoEmDiasClienteBronze ,

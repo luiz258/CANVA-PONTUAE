@@ -32,13 +32,14 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             //falta edita a agenda pra dfinir  o momento do envio
         public async Task Editar(Mensagem model)
         {
-          await _db.Connection.ExecuteAsync("UPDATE MENSAGEM SET TipoAutomacao=@TipoAutomacao, TempoPorDiaDaSemana=@DiaSemana, DiasAntesAniversario=@DiasAntesAniversario, TempoPorDiaDoMes=@DiaMes, Conteudo=@Conteudo, Estado=@Estado, Segmentacao=@Segmentacao, SegCustomizado=@SegCustomizado, QtdEnviada=@QtdEnviada, ValorInvestido=@ValorInvestido  WHERE IdEmpresa=@IdEmpresa AND ID=@ID", 
+          await _db.Connection.ExecuteAsync("UPDATE MENSAGEM SET  TempoPorDia=@TempoPorDia, TipoAutomacao=@TipoAutomacao, TempoPorDiaDaSemana=@TempoPorDiaDaSemana, DiasAntesAniversario=@DiasAntesAniversario, TempoPorDiaDoMes=@TempoPorDiaDoMes, Conteudo=@Conteudo, Estado=@Estado, Segmentacao=@Segmentacao, SegCustomizado=@SegCustomizado, QtdEnviada=@QtdEnviada, ValorInvestido=@ValorInvestido  WHERE IdEmpresa=@IdEmpresa AND ID=@ID", 
               new 
               {
+                  @TempoPorDia = model.TempoPorDia,
                   @TipoAutomacao = model.TipoAutomacao,
-                  @TempoPorDiaDaSemana = model.DiaSemana,
+                  @TempoPorDiaDaSemana = model.TempoPorDiaDaSemana,
                   @DiasAntesAniversario = model.DiasAntesAniversario,
-                  @TempoPorDiaDoMes = model.DiaMes,
+                  @TempoPorDiaDoMes = model.TempoPorDiaDoMes,
                   @Conteudo = model.Conteudo,
                   @Estado = model.Estado,
                   @Segmentacao = model.Segmentacao,
@@ -48,6 +49,28 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
                   @IdEmpresa = model.IdEmpresa,
                   @ID = model.ID,
               });
+        }
+
+        public async Task Salvar(Mensagem model)
+        {
+
+            await _db.Connection.ExecuteAsync("INSERT INTO MENSAGEM (IdEmpresa, TempoPorDia, TipoAutomacao, TempoPorDiaDaSemana, DiasAntesAniversario, TempoPorDiaDoMes, Conteudo, SegCustomizado, Segmentacao, Estado, QtdEnviada, ValorInvestido )VALUES(@IdEmpresa, @TempoPorDia, @TipoAutomacao, @TempoPorDiaDaSemana, @DiasAntesAniversario, @TempoPorDiaDoMes, @Conteudo, @SegCustomizado, @Segmentacao, @Estado, @QtdEnviada, @ValorInvestido)",
+              new
+              {
+                  @IdEmpresa = model.IdEmpresa,
+                  @TempoPorDia = model.TempoPorDia,
+                  @TipoAutomacao = model.TipoAutomacao,
+                  @TempoPorDiaDaSemana = model.TempoPorDiaDaSemana,
+                  @DiasAntesAniversario = model.DiasAntesAniversario,
+                  @TempoPorDiaDoMes = model.TempoPorDiaDoMes,
+                  @Conteudo = model.Conteudo,
+                  @SegCustomizado = model.SegCustomizado,
+                  @Segmentacao = model.Segmentacao,
+                  @Estado = model.Estado,
+                  @QtdEnviada = model.QtdEnviada,
+                  @ValorInvestido = model.ValorInvestido
+              });
+
         }
 
         public async Task atualizarDadosMensagem(Mensagem model)
@@ -62,27 +85,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
                 });
         }
 
-        public async Task Salvar(Mensagem model)
-        {
-
-           await _db.Connection.ExecuteAsync("INSERT INTO MENSAGEM (IdEmpresa, TempoPorDia, TipoAutomacao, TempoPorDiaDaSemana, DiasAntesAniversario, TempoPorDiaDoMes, Conteudo, SegCustomizado, Segmentacao, Estado, QtdEnviada, ValorInvestido )VALUES(@IdEmpresa, @TempoPorDia, @TipoAutomacao, @TempoPorDiaDaSemana, @DiasAntesAniversario, @TempoPorDiaDoMes, @Conteudo, @SegCustomizado, @Segmentacao, @Estado, @QtdEnviada, @ValorInvestido)",
-             new
-             {
-                 @IdEmpresa = model.IdEmpresa,
-                 @TempoPorDia = model.TempoPorDia,
-                 @TipoAutomacao = model.TipoAutomacao,
-                 @TempoPorDiaDaSemana = model.DiaSemana,
-                 @DiasAntesAniversario = model.DiasAntesAniversario,
-                 @TempoPorDiaDoMes = model.DiaMes,
-                 @Conteudo = model.Conteudo,
-                 @SegCustomizado = model.SegCustomizado,
-                 @Segmentacao = model.Segmentacao,
-                 @Estado = model.Estado,
-                 @QtdEnviada = model.QtdEnviada,
-                 @ValorInvestido = model.ValorInvestido
-             });
-
-        }
+        
 
        
         public IEnumerable<ObterAutomacaoTipoAniversario> ObterDadosAutomacaoAniversario(string TipoAutomacao, string Segmentacao, string SegCustomizado, int ID) //MELHORA ESSE METODO,  USA APENA O ID DA AUTOMAÇÃO GERADA E IDEMPRESA
@@ -131,28 +134,19 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             return await _db.Connection.QueryAsync<Mensagem>("SELECT ID, IdEmpresa FROM MENSAGEM");
         }
 
-        //public async Task AtualizarEstadoCampanha(Mensagem model)
-        //{
-        //    await _db.Connection.ExecuteAsync("UPDATE MENSAGEM SET EstadoEnvio=@EstadoEnvio WHERE IdEmpresa=@IdEmpresa AND ID=@ID", new
-        //    {
-        //        @EstadoEnvio = model.EstadoEnvio,
-        //        @IdEmpresa = model.IdEmpresa,
-        //        @ID = model.ID
-
-        //    });
-        //}
-
-
-
-
         public async Task<DetalheDoResultadoDaCampanhaAutomatica> ObterDetalheDoResultadoDaCampanha(int ID, int IdEmpresa)
         {
             return await _db.Connection.QueryFirstOrDefaultAsync<DetalheDoResultadoDaCampanhaAutomatica>("SELECT m.TipoAutomacao, m.Conteudo, m.QtdEnviada, m.ValorInvestido,  SUM(s.ValorRecebido) AS TotalVendas, COUNT(s.DataCompra) AS QtdRetorno, m.Estado FROM MENSAGEM m INNER JOIN SITUACAO_SMS S ON s.IdEmpresa = m.IdEmpresa  WHERE m.IdEmpresa = @IdEmpresa AND m.ID = @ID  AND m.EstadoEnvio NOT IN ('ok') GROUP BY m.ID, m.Nome, m.Conteudo, m.QtdEnviada, m.ValorInvestido, m.DataEnvio, m.TipoAutomacao,  m.Estado  ", new { @IdEmpresa = IdEmpresa , @ID = ID });
         }
 
-        public async Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa)
+        public async Task<ObterAutomacaoPorId> ObterDetalheDaAutomacao(int ID, int IdEmpresa)
         {
-            return await _db.Connection.QueryAsync<ObterListaAutomacao>("SELECT m.ID, m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.Estado FROM MENSAGEM m WHERE m.IdEmpresa= @IdEmpresa AND m.EstadoEnvio NOT IN ('ok') ", new { @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryFirstOrDefaultAsync<ObterAutomacaoPorId>("SELECT m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.TempoPorDiaDaSemana, m.TempoPorDiaDoMes, m.DiasAntesAniversario, m.Conteudo FROM MENSAGEM m WHERE m.IdEmpresa = @IdEmpresa AND m.ID = @ID  ", new { @IdEmpresa = IdEmpresa, @ID = ID });
+        }
+
+        public async Task<IEnumerable<ObterListaAutomacao>> listaAutomacao(int IdEmpresa, int Estado)
+        {
+            return await _db.Connection.QueryAsync<ObterListaAutomacao>("SELECT m.ID, m.TipoAutomacao, m.Segmentacao, m.SegCustomizado, m.Estado FROM MENSAGEM m WHERE m.IdEmpresa= @IdEmpresa AND m.Estado = @Estado ", new { @IdEmpresa = IdEmpresa, @Estado = Estado });
         }
 
         public async Task<string[]> ListaTelefones(int IdEmpresa, string SegCustomizado, string Segmentacao)

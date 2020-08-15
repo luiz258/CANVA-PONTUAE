@@ -59,7 +59,7 @@ namespace PontuaAe.Api.Controllers.Marketing
         }
 
 
-        //VERIFICA SE   AUTOMAÇÃO VAI USA A MESMA CONSULTA  SE SIM ENTÃO DESCATA UMA CLASSE DE CONSULTA
+        
         [HttpGet]
         [Route("v1/ListaRetornoContatos/{id}/{idEmpresa}")]
         //[ResponseCache(Duration = 15)]  // durante 15 minutos não vai have requisição 

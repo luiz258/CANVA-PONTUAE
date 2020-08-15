@@ -13,7 +13,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta
         public string Segmentacao { get; set; }
         public string SegCustomizado { get; set; }
         public string EstadoEnvio { get; set; }
-        public string DataEnviada { get; set; }
+        public string DataEnvio { get; set; }
 
     }
 }

@@ -64,7 +64,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
 
 
             // criar configuração para Computar o comportamento do tempo de visita e frequencia do cliente
-            ConfigClassificacaoCliente criarConfiguracaoPadrao = new ConfigClassificacaoCliente(_idEmpresa);
+            TemplateClassificacaoCliente criarConfiguracaoPadrao = new TemplateClassificacaoCliente(_idEmpresa);
              await _repConfigClassificacaoCliente.Salvar(criarConfiguracaoPadrao);
 
             return new ComandoEmpresaResultado(true, "Dados Salvos", Notifications);

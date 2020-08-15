@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 namespace PontuaAe.Api.GereciamentoJobsTask.Jobs
 {
     [DisallowConcurrentExecution]
-    public class AutomacaoAniversárioJob :IJob
+    public class AutomacaoAniversarioJob :IJob
     {
 
         private readonly AutomacaoManipulador _manipulador;
 
-        public AutomacaoAniversárioJob(AutomacaoManipulador manipulador)
+        public AutomacaoAniversarioJob(AutomacaoManipulador manipulador)
         {
 
             _manipulador = manipulador;
