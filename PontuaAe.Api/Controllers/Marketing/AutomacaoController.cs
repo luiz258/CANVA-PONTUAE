@@ -48,10 +48,30 @@ namespace PontuaAe.Api.Controllers.Marketing
         //[Authorize(Policy = "Admin, Funcionario")]
         public async Task<IComandoResultado> PutAsync([FromBody]EditarAutomacaoComando comando)
         {
-            var resultado = (ComandoResultado)await _manipulador.ManipularAsync(comando);
-            return resultado;
+            try
+            {
+                var resultado = (ComandoResultado)await _manipulador.ManipularAsync(comando);
+                return resultado;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+           
         }
 
+
+        [HttpPut]
+        [Route("v1/Desativar/{id}/{idEmpresa}")]
+        //[Authorize(Policy = "Admin, Funcionario")]
+        public async Task<IComandoResultado> DesativarAutomacao(int id, int idEmpresa)
+        {
+
+            var objeto = new DesativarAutomacao { Id = id, IdEmpresa = idEmpresa };
+            var resultado = (ComandoResultado)await _manipulador.ManipularAsync(objeto);
+            return resultado;
+        }
 
         [HttpGet]
         [Route("v1/Lista/{idEmpresa}/{estado}")]
@@ -72,6 +92,15 @@ namespace PontuaAe.Api.Controllers.Marketing
 
 
         [HttpGet]
+        [Route("v1/Detalhe/{id}/{idEmpresa}")]
+        public async Task<ObterAutomacaoPorId> ObterDetalheAutomacao(int id, int idEmpresa)
+        {
+
+            return await _repAutomacao.ObterDetalheDaAutomacao(id, idEmpresa);
+        }
+
+
+        [HttpGet]
         [Route("v1/{id}/{idEmpresa}")]
         public async Task<IEnumerable<ListaRetornoDoClienteCampanhaNormal>> ListaRetornoDosClientesAposRecebeCampanhaAutomatica(int id, int idEmpresa)
         {
@@ -81,16 +110,8 @@ namespace PontuaAe.Api.Controllers.Marketing
 
         }
 
-        [HttpPut]
-        [Route("v1/Desativar/{id}/{idEmpresa}")]
-        //[Authorize(Policy = "Admin, Funcionario")]
-        public async Task<IComandoResultado> DesativarAutomacao(int id, int idEmpresa)
-        {
 
-            var objeto = new DesativarAutomacao { Id = id, IdEmpresa = idEmpresa };
-            var resultado = (ComandoResultado)await _manipulador.ManipularAsync(objeto);
-            return resultado;
-        }
+
 
         [HttpDelete]
         [Route("v1/{id}/{idEmpresa}")]
@@ -182,33 +203,34 @@ namespace PontuaAe.Api.Controllers.Marketing
 
         }
 
-        //[HttpPost]
-        //[Route("v1/ClassificaTipoClienteJob")]
-        //public async Task<IActionResult> ClassificaTipoClienteJob()
-        //{
-        //    try
-        //    {
-        //        await _manipuladorCliente.ClassificaRecorrencia();
-        //        return Ok("OK");
-        //    }
-        //    catch (Exception e)
-        //    {
+        [HttpPost]
+        [Route("v1/ClassificaTipoClienteJob")]
+        public async Task<IActionResult> ClassificaTipoClienteJob()
+        {
+            try
+            {
+                await _manipuladorCliente.ClassificaRecorrencia();
+                return Ok("OK");
+            }
+            catch (Exception e)
+            {
 
-        //        return NotFound(e);
-        //    }
+                return NotFound(e);
+            }
+        }
 
-        //}
-        //[HttpGet]
-        //[Route("v1/ListaContato/{segCustomizado}/{idEmpresa}")]
-        //[AllowAnonymous]
-        //public async Task<IEnumerable<ListaContatosPorSegCustomizado>> BuscaContatosPorSegCustomizado(int idEmpresa)
-        //{
+            //}
+            //[HttpGet]
+            //[Route("v1/ListaContato/{segCustomizado}/{idEmpresa}")]
+            //[AllowAnonymous]
+            //public async Task<IEnumerable<ListaContatosPorSegCustomizado>> BuscaContatosPorSegCustomizado(int idEmpresa)
+            //{
 
-        //    return await _repCampanha.BuscaContatosPorSegCustomizado(idEmpresa);  
-
-
-        //}
+            //    return await _repCampanha.BuscaContatosPorSegCustomizado(idEmpresa);  
 
 
-    }
+            //}
+
+
+        }
 }

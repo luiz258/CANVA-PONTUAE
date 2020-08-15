@@ -31,7 +31,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task<IEnumerable<ObterListaCampanhaSMS>> listaCampanha(int IdEmpresa) 
         {
-            return await _db.Connection.QueryAsync<ObterListaCampanhaSMS>("SELECT m.ID, m.Nome, m.Segmentacao, m.SegCustomizado,  m.EstadoEnvio, m.DataEnviada   FROM MENSAGEM m  WHERE  m.IdEmpresa=@IdEmpresa  AND m.EstadoEnvio = 'OK' ", new { @IdEmpresa = IdEmpresa }  );
+            return await _db.Connection.QueryAsync<ObterListaCampanhaSMS>("SELECT m.ID, m.Nome, m.Segmentacao, m.SegCustomizado,  m.EstadoEnvio, m.DataEnvio   FROM MENSAGEM m   WHERE  m.IdEmpresa=@IdEmpresa  AND m.EstadoEnvio = 'OK' ", new { @IdEmpresa = IdEmpresa }  );
         }
         //public IEnumerable<ObterListaCampanhaSMS> listaCampanhaAgendada(int IdEmpresa)
         //{
@@ -56,7 +56,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task Salvar(Mensagem model)
         {
-           await _db.Connection.ExecuteAsync("INSERT INTO MENSAGEM (IdEmpresa, EstadoEnvio, Nome, Segmentacao, SegCustomizado, QtdSelecionado, DataEnvio, HoraEnvio, QtdEnviada, ValorInvestido, Conteudo)VALUES( @IdEmpresa, @EstadoEnvio, @Nome, @Segmentacao, @SegCustomizado, @QtdSelecionado, @DataEnvio, @HoraEnvio, @QtdEnviada, @ValorInvestido, @Conteudo)",
+           await _db.Connection.ExecuteAsync("INSERT INTO MENSAGEM (IdEmpresa, EstadoEnvio, Nome, Segmentacao, SegCustomizado, QtdSelecionado, DataEnvio, QtdEnviada, ValorInvestido, Conteudo)VALUES( @IdEmpresa, @EstadoEnvio, @Nome, @Segmentacao, @SegCustomizado, @QtdSelecionado, @DataEnvio, @QtdEnviada, @ValorInvestido, @Conteudo)",
                 new
                 {
                     @IdEmpresa = model.IdEmpresa,
@@ -65,8 +65,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
                     @Segmentacao = model.Segmentacao,
                     @SegCustomizado = model.SegCustomizado,
                     @QtdSelecionado = model.QtdSelecionado,
-                    @DataEnvio =  model.Agendar.DataEnvio,
-                    @HoraEnvio =  model.Agendar.HoraEnvio,
+                    @DataEnvio =  model.Agendar.DataEnvio,                  
                     @QtdEnviada = model.QtdEnviada,
                     @ValorInvestido = model.ValorInvestido,
                     @Conteudo = model.Conteudo

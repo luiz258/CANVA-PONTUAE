@@ -30,13 +30,15 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
             ID = id;
             IdEmpresa = idEmpresa;
             TipoAutomacao = tipoAutomacao;
-            DiaSemana = diaSemana;
+            TempoPorDiaDaSemana = diaSemana;
             DiasAntesAniversario = diasAntesAniversario;
-            DiaMes = diaMes;
+            TempoPorDiaDoMes = diaMes;
             Conteudo = conteudo;
             SegCustomizado = segCustomizado;
             Segmentacao = segmentacao;
             TempoPorDia = tempoPorDia;
+            Estado = true;
+            EstadoEnvio = "Automatico";
         }
        
         //Criação da campanha automatica 
@@ -53,9 +55,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         {
             IdEmpresa = idEmpresa;
             TipoAutomacao = tipoAutomacao;
-            DiaSemana = diaSemana;
+            TempoPorDiaDaSemana = diaSemana;
             DiasAntesAniversario = diasAntesAniversario;
-            DiaMes = diaMes;
+            TempoPorDiaDoMes = diaMes;
             Conteudo = conteudo;
             Segmentacao = segmentacao;
             SegCustomizado = segCustomizado;
@@ -120,9 +122,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         public string TipoAutomacao { get; private set; } //Esse atributo representa a descricao Tipo em campanha automatizada,
         public string Segmentacao { get; private set; }
         public string SegCustomizado { get; private set; }
-        public string DiaSemana { get; private set; } // definir que todo dia de uma semana vai envia a oferta  ex: toda terça feira dispara o sms com a mensagem
+        public string TempoPorDiaDaSemana { get; private set; } // definir que todo dia de uma semana vai envia a oferta  ex: toda terça feira dispara o sms com a mensagem
         public int DiasAntesAniversario { get; private set; } // definir o tempo antes do aniversario ex  2 dias antes sera enviado o sms da promoção  
-        public int DiaMes { get; private set; } //  dia(1 a 31) de todo mes vai envia uma mensagem definida 
+        public int TempoPorDiaDoMes { get; private set; } //  dia(1 a 31) de todo mes vai envia uma mensagem definida 
         public string Conteudo { get; private set; }
         public string Nome { get; private set; }
         public int QtdSelecionado { get; private set; }
