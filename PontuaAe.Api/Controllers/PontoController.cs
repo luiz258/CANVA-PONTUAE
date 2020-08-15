@@ -36,11 +36,11 @@ namespace PontuaAe.Api.Controllers
         public async Task<IComandoResultado> PreRegistroOuPontuar([FromBody] PontuarClienteComando comando)
         {
             //esse metodo consulta  o idCliente  na tabela CLIENTES para identifica se existe na base de Cliente
-            int _idCliente = await ObterIdClienteNaBasePreCadastroAsync( comando.Contato);
-            var _comando = new PontuarClienteComando {IdPreCadastro = _idCliente, IdEmpresa = comando.IdEmpresa, Id = comando.Id, Contato = comando.Contato, ValorInfor = comando.ValorInfor };
+            int _idCliente = await ObterIdClienteNaBasePreCadastroAsync(comando.Contato);
+            var _comando = new PontuarClienteComando { IdPreCadastro = _idCliente, IdEmpresa = comando.IdEmpresa, Id = comando.Id, Contato = comando.Contato, ValorInfor = comando.ValorInfor };
 
-            return  (ComandoResultado) await _manipulador.ManipularAsync(_comando);
-            
+            return (ComandoResultado)await _manipulador.ManipularAsync(_comando);
+
         }
 
         protected async Task<int> ObterIdClienteNaBasePreCadastroAsync(string Contato)
