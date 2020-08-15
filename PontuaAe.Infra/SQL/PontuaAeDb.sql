@@ -51,12 +51,12 @@ TipoProgramaFidelidade int
 );
 
 
---CREATE TABLE CONFIG_CASHBACK (  ---ESTA TABELA NÃO VAI SE CRIADA NO MOMENTO
---ID int IDENTITY(1,1) PRIMARY KEY,
---IdEmpresa int FOREIGN KEY REFERENCES EMPRESA(ID),
---Percentual int,
---Estado bit
---);
+CREATE TABLE CONFIG_CASHBACK (  ---ESTA TABELA NÃO VAI SE CRIADA NO MOMENTO
+ID int IDENTITY(1,1) PRIMARY KEY,
+IdEmpresa int FOREIGN KEY REFERENCES EMPRESA(ID),
+Percentual int,
+Estado bit
+);
 
 CREATE TABLE FUNCIONARIO(
 ID int IDENTITY(1,1) PRIMARY KEY,
@@ -157,7 +157,7 @@ DiasAntesAniversario int,  --usado em aniversário e Apos completa o cartão e apo
 TempoPorDiaDaSemana varchar(15),
 TempoPorDiaDoMes int,
 TempoPorDia int,
-DataEnvio varchar(20), --Remover 
+DataEnvio varchar(40), 
 HoraEnvio varchar(10),
 DataEnviada datetime,  -- no dominio, pegar data e hora atual e registra a data em que foi enviado para a api de sms
 Conteudo varchar(180),
@@ -179,7 +179,7 @@ IdSMS int,
 Estado varchar(10),
 DataRecebida Datetime, 
 DataCompra  DateTime,
-ValorRecebido decimal(20,2),  --altera este atributo para ValorGasto e faz o count de total de valorgasto
+ValorRecebido decimal(20,2), 
 Contatos varchar(11),
 );
 
