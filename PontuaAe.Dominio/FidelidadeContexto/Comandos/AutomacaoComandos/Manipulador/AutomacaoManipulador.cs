@@ -24,10 +24,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         private readonly IClienteRepositorio _clienteRepositorio;
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
-        string[] numero;
+     
         //string[] ContatosAniversarianteMesmoDia;  remover
         //string[] ContatosAniversariantesDiasDesiguais;  remover
-        string[] arrayContatos;
+      
 
         public AutomacaoManipulador(
              IAutomacaoMSGRepositorio automacaoRepositorio,

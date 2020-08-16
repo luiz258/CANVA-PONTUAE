@@ -46,14 +46,14 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         public string Segmentacao { get; private set; }
         public string SegCustomizado { get; private set; }
 
-        public void Pontuar(decimal valorGasto, decimal pontosFidelidade, decimal gastoNecessario, int validadePontos, decimal saldo)
+        public void Pontuar(decimal valorGasto, decimal pontosFidelidade, decimal gastoNecessario, decimal saldo)
         {
             var _saldoTransacao = (valorGasto * pontosFidelidade) / gastoNecessario;
             SaldoTransacao = Math.Round(_saldoTransacao, 0);
             saldo += SaldoTransacao;
             Saldo = saldo;
             // Mudar esta regra,  para valida a data do programa, colocar uma data de expiração do programa 
-            Validade = DateTime.Now.AddDays(validadePontos); //adiciono a validade exemplo   360 dias
+            Validade = DateTime.Now.AddDays(180); //adiciono a validade exemplo   360 dias
         }
 
         //Este percentual é aplicado em contas do tipo CASH BACK quanto o saldo do cliente é igual a ZERO.Sua fórmula de bonificação é: bonificacao = valor_compra* (percentual_conta_zerada/100)

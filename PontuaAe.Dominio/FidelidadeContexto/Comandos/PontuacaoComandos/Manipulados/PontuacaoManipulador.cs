@@ -121,7 +121,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                     var pontuacaoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
 
-                    validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, configPontuacao.ValidadePontos, pontuacaoAnterior);
+                    validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, pontuacaoAnterior);
 
                     await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
@@ -142,7 +142,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                     var SaldoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
 
-                    validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, configPontuacao.ValidadePontos, SaldoAnterior);
+                    validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, SaldoAnterior);
 
                     await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
