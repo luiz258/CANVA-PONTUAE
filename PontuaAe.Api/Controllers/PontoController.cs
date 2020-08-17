@@ -43,7 +43,7 @@ namespace PontuaAe.Api.Controllers
 
                 return (ComandoResultado)await _manipulador.ManipularAsync(_comando);
             }
-            catch (Exception )
+            catch (Exception e)
             {
 
                 throw;
