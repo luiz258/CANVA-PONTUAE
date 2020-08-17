@@ -187,6 +187,6 @@ namespace PontuaAe.Api
             // AutomacaoAniversarioJob aniversario = new AutomacaoAniversarioJob();
             // RecurringJob.AddOrUpdate<AutomacaoManipulador>(x =>  x.AutomacaoTipoDiaDaSemanaAsync(), Cron.Minutely());
         }
-
+         //
     }
 }
