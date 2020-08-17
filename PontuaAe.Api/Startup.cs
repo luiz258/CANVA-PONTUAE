@@ -64,63 +64,63 @@ namespace PontuaAe.Api
 
             services.AddControllers();
 
-            //CofiguraÁ„o Gerenciamento de Jobs/ Task  Quartz services
-            //// documentaÁ„o: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html
-            //// documentaÁ„o atualizada: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#example-cron-expressions
+            //Cofigura√ß√£o Gerenciamento de Jobs/ Task  Quartz services
+            //// documenta√ß√£o: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html
+            //// documenta√ß√£o atualizada: https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#example-cron-expressions
             services.AddSingleton<IJobFactory, JobFactory>();
             services.AddSingleton<QuartzJobRunner>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             services.AddHostedService<QuartzHostedService>();
 
-            //--------JOB COMPUTAR CLASSIFICA«√O CLIENTES
+            //--------JOB COMPUTAR CLASSIFICA√á√ÉO CLIENTES
             services.AddScoped<ClassificaTipoClienteJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(ClassificaTipoClienteJob),
             cronExpression: "0 05 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //--------JOB AutomaÁ„o-SMS Aniversariantes
+            //--------JOB Automa√ß√£o-SMS Aniversariantes
             services.AddScoped<AutomacaoAniversarioJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoAniversarioJob),
             cronExpression: "0 10 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //--------JOB AutomaÁ„o-SMS DIA DA SEMANA
+            //--------JOB Automa√ß√£o-SMS DIA DA SEMANA
             services.AddScoped<AutomacaoDiaDaSemanaJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoDiaDaSemanaJob),
             cronExpression: "0 15 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //--------JOB AutomaÁ„o-SMS 15 DIAS SEM RETORNO
+            //--------JOB Automa√ß√£o-SMS 15 DIAS SEM RETORNO
             services.AddScoped<AutomacaoQuinzeDiasSemRetornoJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoQuinzeDiasSemRetornoJob),
             cronExpression: "0 20 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //--------JOB AutomaÁ„o-SMS  30 DIAS SEM RETORNO
+            //--------JOB Automa√ß√£o-SMS  30 DIAS SEM RETORNO
             services.AddScoped<AutomacaoTrintaDiasRetornoJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoTrintaDiasRetornoJob),
             cronExpression: "0 25 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
 
-            //--------JOB AutomaÁ„o-SMS APOS ULTIMA PONTUACAO
+            //--------JOB Automa√ß√£o-SMS APOS ULTIMA PONTUACAO
             services.AddScoped<AutomacaoUltimaFidelizacaoJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoUltimaFidelizacaoJob),
             cronExpression: "0 30 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
 
-            //CofiguraÁ„o Gerenciamento de Jobs/ Task com HangFire
+            //Cofigura√ß√£o Gerenciamento de Jobs/ Task com HangFire
             //services.AddHangfire(x => x.UseSqlServerStorage("Server=den1.mssql7.gear.host; Database=pontuaae; User ID=pontuaae; Password=Lz8Nt8mPL~!5;"));
 
-            //ConfiguraÁ„o EmailSend
+            //Configura√ß√£o EmailSend
             services.Configure<EmailSetting>(Configuration.GetSection("EmailSetting"));
             services.AddTransient<Services.Email.IEmailSender, AuthMessageSender>();
 
-            // CongiguraÁ„o DocumentaÁ„o da API com Swagger
+            // Congigura√ß√£o Documenta√ß√£o da API com Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pontua AÍ, MKT e Pos venda", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pontua A√™, MKT e Pos venda", Version = "v1" });
             });
 
             services.AddResponseCompression();
@@ -165,7 +165,7 @@ namespace PontuaAe.Api
                 c.RoutePrefix = string.Empty;
             });
 
-            //n„o deleta este coment·rio
+            //n√£o deleta este coment√°rio
             //app.UseHangfireServer();
             //app.UseHangfireDashboard();
 
@@ -177,17 +177,16 @@ namespace PontuaAe.Api
                 endpoints.MapControllers();
             });
 
-            //n„o deleta este coment·rio
+            //n√£o deleta este coment√°rio
             //InitProcess();
 
         }
         private void InitProcess()
         {
-            //n„o deleta este coment·rio
+            //n√£o deleta este coment√°rio
             // AutomacaoAniversarioJob aniversario = new AutomacaoAniversarioJob();
             // RecurringJob.AddOrUpdate<AutomacaoManipulador>(x =>  x.AutomacaoTipoDiaDaSemanaAsync(), Cron.Minutely());
         }
 
-        //dadda
     }
 }
