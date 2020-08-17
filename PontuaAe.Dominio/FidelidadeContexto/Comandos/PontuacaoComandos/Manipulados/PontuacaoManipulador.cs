@@ -196,7 +196,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                 throw;
             }
-
          
 
         }
