@@ -44,7 +44,7 @@ namespace PontuaAe.Api.Controllers.Account
                 "Você deverá alterar sua senha após o primeiro login.  Sua Senha 🔑: " + senhaGerada);
 
             var senha = CriptografarSenha(senhaGerada);
-            _repository.ResetaSenha(senha, usuario.Id);
+             await _repository.ResetaSenha(senha, usuario.Id);
 
             return "OK";
         }
