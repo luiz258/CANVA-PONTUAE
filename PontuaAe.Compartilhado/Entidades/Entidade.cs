@@ -1,4 +1,5 @@
-﻿using FluentValidator;
+﻿
+using FluentValidator;
 using System;
 
 
