@@ -43,6 +43,9 @@ namespace PontuaAe.Api.Controllers
 
         }
 
+
+
+
         protected async Task<int> ObterIdClienteNaBasePreCadastroAsync(string Contato)
         {
             int _idPreCadastroDoContato;   
