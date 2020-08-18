@@ -20,12 +20,12 @@ jobs:
       with:
         dotnet-version: "3.1.401"
     - name: Install dependencies
-      run: dotnet restore
-    - name: Build with dotnet
-      run: dotnet build --configuration Release --no-restore
-
+      run: dotnet restore           
+    - name: Build
+      run: dotnet pack PontuaAeBack.sln --include-symbols     
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      working-directory: ./PontuaAe.Api
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
