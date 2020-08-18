@@ -52,144 +52,151 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
         public async Task<IComandoResultado> ManipularAsync(PontuarClienteComando comando)
         {
+            try
+            {
+                var nomeEmpresa = await _empresaRepositorio.ObterNome(comando.IdEmpresa);
+
+                //os bloco de if  são para  atualiza o saldo de ponto da PONTUAÇAO ou para cria uma nova pontuação  para o contato
+                var VerificaIdPrecadastro = await _pontuacaoRepositorio.ChecarClienteNaBasePontuacao(comando.IdPreCadastro, comando.IdEmpresa);
+
+                //se a conta cashback estive Ativada
+                var tipoConfig = await _configCashBackRepositorio.ChecarConfigCashBack();
+                //----------VERIFICAÇÃO POR CASHBACK----------------
+
+                if (tipoConfig == 1)
+                {
+
+                    // Busca configuraçãoCasback
+                    var config = await _configPontosRepositorio.ObterdadosConfiguracao(comando.IdEmpresa);
+
+                    if (VerificaIdPrecadastro == true)
+                    {
+                        Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
+
+                        var pontuacaoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
+
+                        validador.PontuarPorCashBack(config.Percentual, comando.ValorInfor, pontuacaoAnterior);
+
+                        await _pontuacaoRepositorio.AtualizarSaldo(validador);
+
+                    }
+                    else if (tipoConfig == 2)
+                    {
+                        Pontuacao geraPontuacaoSaldoZero = new Pontuacao(0, comando.IdEmpresa, comando.IdPreCadastro);
+                        await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
+
+                        //envia sms boas vindas ao programa de fidelidade
+
+                        var n = comando.Contato;
+                        string _numero = n;
+                        await _enviarSMS.EnviarPorLocaSMSAsync(_numero, $"{nomeEmpresa} : Parabens! voce Faz parte do nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja seus pontos");
+
+                        Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
+
+                        var SaldoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
+
+                        validador.PontuarPorCashBack(config.Percentual, comando.ValorInfor, SaldoAnterior);
+
+                        await _pontuacaoRepositorio.AtualizarSaldo(validador);
+
+                    }
+
+                }
+
+                else
+                {
+
+                    //----------VERIFICAÇÃO POR PONTUACAO----------------
+
+                    var configPontuacao = await _configPontosRepositorio.ObterdadosConfiguracao(comando.IdEmpresa);
+
+                    if (comando.ValorInfor < configPontuacao.Reais)
+
+                        return new ComandoResultado(false, $" O valor minimo para pontua é  " + $"{ configPontuacao.Reais }", null);
 
 
-            var nomeEmpresa = await _empresaRepositorio.ObterNome(comando.IdEmpresa);
+                    if (VerificaIdPrecadastro == true)
+                    {
+                        Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
 
-            //os bloco de if  são para  atualiza o saldo de ponto da PONTUAÇAO ou para cria uma nova pontuação  para o contato
-            var VerificaIdPrecadastro = await _pontuacaoRepositorio.ChecarClienteNaBasePontuacao(comando.IdPreCadastro, comando.IdEmpresa);
+                        var pontuacaoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
 
-            //se a conta cashback estive Ativada
-            var tipoConfig = await _configCashBackRepositorio.ChecarConfigCashBack();
-                      //----------VERIFICAÇÃO POR CASHBACK----------------
-             
-            if (tipoConfig == 1)
+                        validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, pontuacaoAnterior);
+
+                        await _pontuacaoRepositorio.AtualizarSaldo(validador);
+
+                    }
+
+                    else if (VerificaIdPrecadastro == false)
+                    {
+                        Pontuacao geraPontuacaoSaldoZero = new Pontuacao(0, comando.IdEmpresa, comando.IdPreCadastro);
+                        await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
+
+                        //envia sms boas vindas ao programa de fidelidade
+
+                        var n = comando.Contato;
+                        string _numero = n;
+                        await _enviarSMS.EnviarPorLocaSMSAsync(_numero, $"{nomeEmpresa} : Parabens! voce Faz parte do nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja seus pontos");
+
+                        Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
+
+                        var SaldoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
+
+                        validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, SaldoAnterior);
+
+                        await _pontuacaoRepositorio.AtualizarSaldo(validador);
+
+                    }
+                }
+
+
+                //obter ID da Pontuação por parametro IdPreCadastro E IdEmpresa no momento da operação
+                var Id = await _pontuacaoRepositorio.ObterIdPontuacao(comando.IdEmpresa, comando.IdPreCadastro);
+
+                //RECEITA 
+                Receita DadosReceita = new Receita(comando.ValorInfor, comando.IdEmpresa, Id, comando.Id, "pontuacao");
+                await _receitaRepositorio.Salvar(DadosReceita);
+                //Notificação Saldo de Pontos
+
+                var numero = comando.Contato;
+                var idPreCadastro = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
+                decimal saldoCliente = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro);
+                int saldo = Convert.ToInt32(saldoCliente);
+
+                await _enviarSMS.EnviarPorLocaSMSAsync(numero, $"{nomeEmpresa}: Voce Acumulou {saldo} pontos em nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja como funciona e os premios que pode resgatar");
+
+                //Este bloco abaixo, averigua se sera necessário
+                //var _saldoCliente =  _clienteRepositorio.ObterSaldo(IdCliente, comando.IdEmpresa);        
+                //IList<Premios> ListPremiosDisponiveis = _premiosRepositorio.PremiosDisponiveis(_saldoCliente.Saldo);
+
+                //Notificação Prêmios disponiveis
+                // if(ListPremiosDisponiveis != null)
+                // {
+                //    _enviarSMS.EnviarAsync(contato, $"{nomeEmpresa}:voce ja pode resgatar: premios em nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja o que pode resgatar");
+                //}
+
+
+                IEnumerable<SituacaoSMS> ListaSituacao;
+                ListaSituacao = await _situacaoRepositorio.ListaSituacaoSMS(comando.IdEmpresa);
+                foreach (var i in ListaSituacao)
+                {
+                    if (i.Contatos == comando.Contato)
+                    {
+                        var dataRetorno = DateTime.Now;
+                        var dadosSituacao = new SituacaoSMS(comando.ValorInfor, dataRetorno, i.Contatos, comando.IdEmpresa, i.IdMensagem, i.IdSMS);
+                        await _situacaoRepositorio.SalvarSituacao(dadosSituacao);
+
+                    }
+                }
+
+                return new ComandoResultado(true, "A pontuação foi registrada com sucesso ", Notifications);
+            }
+            catch (Exception e)
             {
 
-                // Busca configuraçãoCasback
-                var config = await _configPontosRepositorio.ObterdadosConfiguracao(comando.IdEmpresa);
-
-                if (VerificaIdPrecadastro == true)
-                {
-                    Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
-
-                    var pontuacaoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
-
-                    validador.PontuarPorCashBack(config.Percentual, comando.ValorInfor, pontuacaoAnterior);
-
-                    await _pontuacaoRepositorio.AtualizarSaldo(validador);
-
-                }
-                else if (tipoConfig == 2)
-                {
-                    Pontuacao geraPontuacaoSaldoZero = new Pontuacao(0, comando.IdEmpresa, comando.IdPreCadastro);
-                    await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
-
-                    //envia sms boas vindas ao programa de fidelidade
-
-                    var n = comando.Contato;
-                    string _numero = n;
-                    await _enviarSMS.EnviarPorLocaSMSAsync(_numero, $"{nomeEmpresa} : Parabens! voce Faz parte do nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja seus pontos");
-
-                    Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
-
-                    var SaldoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
-
-                    validador.PontuarPorCashBack(config.Percentual, comando.ValorInfor, SaldoAnterior);
-
-                    await _pontuacaoRepositorio.AtualizarSaldo(validador);
-
-                }
-
+                throw;
             }
-
-            else
-            {
-
-                //----------VERIFICAÇÃO POR PONTUACAO----------------
-
-                var configPontuacao = await _configPontosRepositorio.ObterdadosConfiguracao(comando.IdEmpresa);
-
-                if (comando.ValorInfor < configPontuacao.Reais)
-
-                    return new ComandoResultado(false, $" O valor minimo para pontua é  " + $"{ configPontuacao.Reais }", null);
-
-
-                if (VerificaIdPrecadastro == true)
-                {
-                    Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
-
-                    var pontuacaoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
-
-                    validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, pontuacaoAnterior);
-
-                    await _pontuacaoRepositorio.AtualizarSaldo(validador);
-
-                }
-
-                else if (VerificaIdPrecadastro == false)
-                {
-                    Pontuacao geraPontuacaoSaldoZero = new Pontuacao(0, comando.IdEmpresa, comando.IdPreCadastro);
-                    await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
-
-                    //envia sms boas vindas ao programa de fidelidade
-
-                    var n = comando.Contato;
-                    string _numero = n;
-                    await _enviarSMS.EnviarPorLocaSMSAsync(_numero, $"{nomeEmpresa} : Parabens! voce Faz parte do nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja seus pontos");
-
-                    Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
-
-                    var SaldoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
-
-                    validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, SaldoAnterior);
-
-                    await _pontuacaoRepositorio.AtualizarSaldo(validador);
-
-                }
-            }
-
-
-            //obter ID da Pontuação por parametro IdPreCadastro E IdEmpresa no momento da operação
-            var Id = await _pontuacaoRepositorio.ObterIdPontuacao(comando.IdEmpresa, comando.IdPreCadastro);
-
-            //RECEITA 
-            Receita DadosReceita = new Receita(comando.ValorInfor, comando.IdEmpresa, Id, comando.Id, "pontuacao");
-            await _receitaRepositorio.Salvar(DadosReceita);
-            //Notificação Saldo de Pontos
-
-            var numero = comando.Contato;
-            var idPreCadastro = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
-            decimal saldoCliente = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro);
-            int saldo = Convert.ToInt32(saldoCliente);
-
-            await _enviarSMS.EnviarPorLocaSMSAsync(numero, $"{nomeEmpresa}: Voce Acumulou {saldo} pontos em nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja como funciona e os premios que pode resgatar");
-
-            //Este bloco abaixo, averigua se sera necessário
-            //var _saldoCliente =  _clienteRepositorio.ObterSaldo(IdCliente, comando.IdEmpresa);        
-            //IList<Premios> ListPremiosDisponiveis = _premiosRepositorio.PremiosDisponiveis(_saldoCliente.Saldo);
-
-            //Notificação Prêmios disponiveis
-            // if(ListPremiosDisponiveis != null)
-            // {
-            //    _enviarSMS.EnviarAsync(contato, $"{nomeEmpresa}:voce ja pode resgatar: premios em nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja o que pode resgatar");
-            //}
-
-
-            IEnumerable<SituacaoSMS> ListaSituacao;
-            ListaSituacao = await _situacaoRepositorio.ListaSituacaoSMS(comando.IdEmpresa);
-            foreach (var i in ListaSituacao)
-            {
-                if (i.Contatos == comando.Contato)
-                {
-                    var dataRetorno = DateTime.Now;
-                    var dadosSituacao = new SituacaoSMS(comando.ValorInfor, dataRetorno, i.Contatos, comando.IdEmpresa, i.IdMensagem, i.IdSMS);
-                    await _situacaoRepositorio.SalvarSituacao(dadosSituacao);
-
-                }
-            }
-
-            return new ComandoResultado(true, "A pontuação foi registrada com sucesso ", Notifications);
+         
 
         }
 
