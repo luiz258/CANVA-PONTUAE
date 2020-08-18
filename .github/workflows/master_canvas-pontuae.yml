@@ -25,15 +25,16 @@ jobs:
     - name: Build
       run: dotnet pack PontuaAeBack.sln --include-symbols     
     - name: dotnet publish
-      working-directory: ./PontuaAe.Api
+
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
       
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
+      
       with:
         app-name: 'canvas-pontuae'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_3a6851ffa21f4b919a1620a14a7790c4 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
-
+        working-directory: ./PontuaAe.Api
