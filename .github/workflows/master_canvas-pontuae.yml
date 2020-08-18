@@ -18,10 +18,11 @@ jobs:
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.401'
-
+        dotnet-version: 3.1.401
+    - name: Install dependencies
+      run: dotnet restore
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -33,3 +34,4 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_3a6851ffa21f4b919a1620a14a7790c4 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
+
