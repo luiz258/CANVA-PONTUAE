@@ -19,6 +19,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: "3.1.401"
+        
+    - name: Set up asp.Net Framework
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: "4.6.1"
+          
     - name: Install dependencies
       run: dotnet restore           
     - name: Build
