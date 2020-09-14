@@ -8,21 +8,27 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
 {
     public class ContaSMS
     {
+        public ContaSMS()
+        {
+
+        }
         public ContaSMS(int idEmpresa, int saldo)
         {
             IdEmpresa = idEmpresa;
             Saldo = saldo;
         }
 
-        public ContaSMS(int id, int idEmpresa, int saldo)
+        public ContaSMS(int id, int idEmpresa, int saldo )
         {
             ID = id;
             IdEmpresa = idEmpresa;
             Saldo = saldo;
         }
 
-        public int ID { get; private set; }
-        public int IdEmpresa { get; private set; }
+      
+
+        public int ID { get;  set; }
+        public int IdEmpresa { get;  set; }
         public int Saldo { get; set; }
 
 

@@ -19,6 +19,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Entradas
         public DateTime? DataNascimento { get; set; }
         public string Email { get; set; }
         public string Contato { get; set; }
+        public string Sexo { get; set; }
         public string Senha { get; set; }
         public string Cidade { get; set; }
         public string RoleId => "Cliente";

@@ -11,5 +11,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios
     {
         Task Salvar(ContaSMS model);
         Task Editar(ContaSMS model);
+
+        Task<ContaSMS> ObterContaSMS(int IdEmpresa);
     }
 }

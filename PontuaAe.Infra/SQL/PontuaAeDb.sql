@@ -1,7 +1,7 @@
-CREATE DATABASE PONTUAE
+CREATE DATABASE PONTUAAE
 go
 
-USE PONTUAE
+USE PONTUAAE
 
 GO
 CREATE TABLE USUARIO(
@@ -39,7 +39,7 @@ Logo varchar(200),
 
 );
 
-CREATE TABLE CONFIG_PONTUACAO(
+CREATE TABLE CONFIG_PONTUACAO( 
 ID int IDENTITY(1,1) PRIMARY KEY,
 IdEmpresa int FOREIGN KEY REFERENCES EMPRESA(ID),
 Nome varchar(50),
@@ -47,15 +47,7 @@ Reais decimal(20,2),
 PontosFidelidade decimal(20,2),
 ValidadePontos int,
 Percentual int,
-TipoProgramaFidelidade int
-);
-
-
-CREATE TABLE CONFIG_CASHBACK (  ---ESTA TABELA NÃO VAI SE CRIADA NO MOMENTO
-ID int IDENTITY(1,1) PRIMARY KEY,
-IdEmpresa int FOREIGN KEY REFERENCES EMPRESA(ID),
-Percentual int,
-Estado bit
+TipoDeProgramaFidelidade int  
 );
 
 CREATE TABLE FUNCIONARIO(
@@ -127,7 +119,7 @@ IdEmpresa int FOREIGN KEY REFERENCES EMPRESA(ID),
 IdPontuacao int FOREIGN KEY REFERENCES PONTUACAO(ID),  
 Valor decimal(20,2), 
 DataVenda datetime,
-TipoAtividade varchar(20),  --aqui vai se registrado se o atendimento foi feito cadastro, pontuação ou resgate, Ativação do cliente,
+TipoAtividade varchar(20), 
 );
 
 CREATE TABLE CONFIG_CLASSIFICACAO_CLIENTE(
@@ -153,22 +145,20 @@ TipoAutomacao varchar(30),
 Segmentacao varchar(30),
 SegCustomizado varchar(10),
 MeioComunicacao int,
-DiasAntesAniversario int,  --usado em aniversário e Apos completa o cartão e apos ultima fidelização
+DiasAntesAniversario int, 
 TempoPorDiaDaSemana varchar(15),
 TempoPorDiaDoMes int,
 TempoPorDia int,
 DataEnvio varchar(40), 
 HoraEnvio varchar(10),
-DataEnviada datetime,  -- no dominio, pegar data e hora atual e registra a data em que foi enviado para a api de sms
+DataEnviada datetime,  
 Conteudo varchar(180),
 QtdSelecionado int, 
 ValorInvestido decimal(20,2),
 QtdEnviada int,
-EstadoEnvio varchar(30), --Enviada, agendada ou concluido  "Automatico"   quando a agenda for enviada muda o satus para concluido
+EstadoEnvio varchar(30), 
 Estado bit,--ativa e desativa automacao
-
---estou adicinando esse um atributo identifica as campanhas automaticas
-StatusAutomacao varchar(10)
+StatusAutomacao varchar(10) --estou adicinando esse um atributo identifica as campanhas automaticas
 );
 
 CREATE TABLE SITUACAO_SMS(
@@ -193,6 +183,7 @@ PontoResgatado int,
 DataResgate DATETIME
 
 );
+
 
 
 

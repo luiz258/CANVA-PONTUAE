@@ -29,13 +29,12 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task EditarConfiguracaoPontuacao(ConfiguracaoPontos regra)
         {
            await _db.Connection
-              .ExecuteAsync("UPDATE CONFIG_PONTUACAO SET Nome=@Nome, Reais=@Reais, PontosFidelidade=@PontosFidelidade, ValidadePontos=@ValidadePontos, TipoProgramaFidelidade=@TipoProgramaFidelidade WHERE IdEmpresa = @IdEmpresa ", new
+              .ExecuteAsync("UPDATE CONFIG_PONTUACAO SET Nome=@Nome, Reais=@Reais, PontosFidelidade=@PontosFidelidade, ValidadePontos=@ValidadePontos WHERE IdEmpresa = @IdEmpresa ", new
               {
                   @Nome = regra.Nome,
                   @Reais = regra.Reais,
                   @PontosFidelidade = regra.PontosFidelidade,
                   @ValidadePontos = regra.ValidadePontos,
-                  @TipoProgramaFidelidade = regra.TipoProgramaFidelidade,
                   @IdEmpresa = regra.IdEmpresa
                  
               });
@@ -50,7 +49,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
                     @Reais = regra.Reais,
                     @PontosFidelidade = regra.PontosFidelidade,
                     @ValidadePontos = regra.ValidadePontos,
-                    @TipoProgramaFidelidade = regra.TipoProgramaFidelidade,
+                    @TipoProgramaFidelidade = regra.TipoDeProgramaFidelidade,
                     @IdEmpresa = regra.IdEmpresa
 
                 });

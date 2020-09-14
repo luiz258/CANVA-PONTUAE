@@ -24,7 +24,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta
         public string SegCustomizado { get; set; }
         public int Estado { get; set; }
         public string Contato { get; set; }
-        public string DataNascimeto{ get; set; }
+        public string NomeCompleto { get; set; }
+        public string DataNascimento{ get; set; }
         public int DiasAntesAniversario { get; set; }
     }
 }

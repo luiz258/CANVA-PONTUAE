@@ -13,43 +13,49 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         {
                 
         }
-        public ConfiguracaoPontos(int idEmpresa, int percentual)
-        {
-            IdEmpresa = idEmpresa;
-            Percentual = percentual;
-            TipoProgramaFidelidade = 1;
 
-        }
-
-        public ConfiguracaoPontos(string nome, int idEmpresa, decimal pontosFidelidade, decimal reais, int validadePontos)
+        //metodo para criar programa por pontos e valor gasto
+        public ConfiguracaoPontos(string nome, int idEmpresa, decimal pontosFidelidade, decimal reais, int validadePontos, int percentual, int tipoDeProgramaFidelidade)
         {
+      
             Nome = nome;
             IdEmpresa = idEmpresa;
             Reais = reais;
             PontosFidelidade = pontosFidelidade;            
             ValidadePontos = validadePontos;
-            TipoProgramaFidelidade = 2;
-
+            Percentual = percentual;
+            TipoDeProgramaFidelidade = tipoDeProgramaFidelidade;
 
         }
 
-        public ConfiguracaoPontos( decimal pontosFidelidade, decimal reais, int validadePontos)
+        //criar programa por cashback
+        public ConfiguracaoPontos(string nome, int idEmpresa, decimal reais, int percentual)
         {
-            
-            Reais = reais;
-            PontosFidelidade = pontosFidelidade;
-            ValidadePontos = validadePontos;
+
+            Nome = nome;
+            IdEmpresa = idEmpresa;
+            Reais = reais;           
+            Percentual = percentual;
 
         }
+
+
+        //public ConfiguracaoPontos( decimal pontosFidelidade, decimal reais, int validadePontos)            DELETA ESTE BLOCO
+        //{
+            
+        //    Reais = reais;
+        //    PontosFidelidade = pontosFidelidade;
+        //    ValidadePontos = validadePontos;
+
+        //}
 
         public int IdEmpresa { get;  set; } 
         public string Nome { get;  set; } 
         public decimal Reais { get;  set; } 
         public decimal PontosFidelidade { get;  set; }  
         public int ValidadePontos { get;  set; } 
-        public int TipoProgramaFidelidade { get;  set; } 
+        public int TipoDeProgramaFidelidade { get;  set; } 
         public int Percentual { get;  set; } 
-        //public decimal PontosInicial { get; private set; } 
 
     }
 }

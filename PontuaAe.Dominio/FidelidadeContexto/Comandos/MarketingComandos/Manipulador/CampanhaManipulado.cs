@@ -24,7 +24,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
         private readonly IEnviarSMS _agendarSMS;
-       
+        private readonly IContaSMSRepositorio _contaSMS;
+
 
         public CampanhaManipulado(
             ICampanhaMSGRepositorio campanhaRepositorio,
@@ -32,7 +33,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
             IClienteRepositorio clienteRepositorio,
             ISituacaoRepositorio situacaoRepositorio,
             IEnviarSMS enviarSMS,
-            IEnviarSMS agendarSMS
+            IEnviarSMS agendarSMS,
+            IContaSMSRepositorio contaSMS
 
            )
 
@@ -43,36 +45,38 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
             _situacaoRepositorio = situacaoRepositorio;
             _enviarSMS = enviarSMS;
             _agendarSMS = agendarSMS;
+            _contaSMS = contaSMS;
 
-        }
+    }
 
         public async Task<IComandoResultado> ManipularAsync(AddCampanhaComando comando)
         {
             
 
-            var nomeEmpresa = await _empresaRepositorio.ObterNome(comando.IdEmpresa);
+            var nomeEmpresa = await _empresaRepositorio.ObterDados(comando.IdEmpresa);
 
-            var conteudo = $"{nomeEmpresa}:{comando.Conteudo}";
+            //var conteudo = $"{nomeEmpresa}:{comando.Conteudo}";
 
            
             IEnumerable <ListaContatosPorSegCustomizado> ListContatos = await _campanhaRepositorio.BuscaContatosPorSegCustomizado(comando.IdEmpresa, comando.SegCustomizado);
            
-            List<string> tt = new List<string>();
-            foreach (var item in ListContatos)
-            {
-                tt.Add(item.Contato);
-            }
+            //List<string> tt = new List<string>();
+            //foreach (var item in ListContatos)
+            //{
+            //    tt.Add(item.Contato);
+            //}
 
             var data_ = comando.DataEnvio.ToString("dd/MM/yyyy");
             //var hora_ = comando.HoraEnvio.ToString("HH:mm:ss");
-            var arrayDeCodigoDasMensagens = await  _enviarSMS.EnviarSMSPorSMSDEVAsync(tt, conteudo, data_, comando.HoraEnvio);
+            var arrayDeCodigoDasMensagens = await  _enviarSMS.EnviarSMSPorSMSDEVAsync(ListContatos, comando.Conteudo, data_, comando.HoraEnvio);
 
 
-            var juntaDataHora = $"{data_}" + $"{comando.HoraEnvio}";
+            var juntaDataHora = $"{data_} " + $"{comando.HoraEnvio}";
 
             var agenda = new Agenda(juntaDataHora);  
             var _campanhaSMS = new Mensagem(comando.IdEmpresa, comando.Nome, comando.Segmentacao, comando.SegCustomizado, comando.QtdSelecionado, comando.Conteudo, agenda);
             _campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
+          
             await _campanhaRepositorio.Salvar(_campanhaSMS);
 
             //Obter ID da Campanha  e  criar  tabela Situacao com codigo, idMensagem e IdEmpresa Relacionados 
@@ -90,6 +94,12 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
                 await _situacaoRepositorio.SalvarSituacao(mensagemSMS);
 
             }
+
+            var dado = await _contaSMS.ObterContaSMS(comando.IdEmpresa);
+            int SMSUtilizado = arrayDeCodigoDasMensagens.Count;
+            var saldo = dado.Saldo - SMSUtilizado;
+            ContaSMS creditoSMS = new ContaSMS(dado.ID, comando.IdEmpresa, saldo);
+            await _contaSMS.Editar(creditoSMS);
 
             return new ComandoResultado(true, "OK", Notifications);
 

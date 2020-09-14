@@ -10,8 +10,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.ClienteConsulta
     {
         public string NomeCompleto { get; set; }
         public string Contato { get; set; }
+        public string Sexo { get; set; }
         public string Email { get; set; }
-        public DateTime DataNascimeto { get; set; }
+        public DateTime DataNascimento { get; set; }
        // public string Resgate { get; set; }
         public decimal Saldo { get; set; }
         public decimal Captado { get; set; }

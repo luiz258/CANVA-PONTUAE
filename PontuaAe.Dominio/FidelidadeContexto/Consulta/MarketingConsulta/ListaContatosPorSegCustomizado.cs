@@ -10,5 +10,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta
     {
 
       public string Contato { get; set; }
+      public string NomeCompleto { get; set; }
+  
+   
     }
 }

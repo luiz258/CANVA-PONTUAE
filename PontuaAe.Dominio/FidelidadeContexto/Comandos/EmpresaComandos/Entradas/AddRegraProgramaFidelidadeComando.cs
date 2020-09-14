@@ -16,7 +16,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Entradas
         public string Nome { get; set; } 
         public decimal PontosFidelidade { get; set; } 
         public int ValidadePontos { get; set; }  
-        public int TipoProgramaFidelidade { get; set; } 
+        public int Percentual { get; set; }
+        public int TipoDeProgramaFidelidade => 2;
 
         public bool Valida()
         {

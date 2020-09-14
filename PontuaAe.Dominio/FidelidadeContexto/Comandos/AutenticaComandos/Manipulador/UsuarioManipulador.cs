@@ -89,7 +89,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutenticaComandos.Manipul
         public async Task<IComandoResultado> ManipularAsync(UsuarioComando comando)
         {
             var usuario = new Usuario(comando.Email, comando.Senha);
-            await  _repositorio.AlteraConta(usuario.ID, usuario.Email, usuario.Senha);
+            await  _repositorio.ResetaSenha(comando.Senha, comando.ID);
 
             return new ComandoUsuarioResultado(true, "Senha Alterada", Notifications);
         }

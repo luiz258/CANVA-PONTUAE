@@ -16,7 +16,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios
         Task Editar(Empresa empresa);
         Task<bool> ChecarDocumento(string Documento);
         Task<bool> ChecarEmail(string EnderecoEmail);
-        Task<string> ObterNome(int ID);
+        Task<dynamic> ObterDados(int ID);
         Task<int> ObterIdEmpresa(int IdUsuario);
         Task<ObterDetalheEmpresa> ObterDetalheEmpresa(int ID);
         Task<IEnumerable<ListarEmpresasConsulta>> ListaEmpresa();

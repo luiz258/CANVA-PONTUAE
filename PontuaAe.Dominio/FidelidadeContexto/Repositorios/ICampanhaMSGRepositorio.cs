@@ -17,7 +17,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios
         //Task AtualizarEstadoCampanha(Mensagem model);  // editar o atributo EstadoEnvio
         Task<DetalheDoResultadoDaCampanha> ObterDetalheDoResultadoDaCampanha(int Id, int IdEmpresa);
         Task<int> ObterID(int IdEmpresa);
-        Task<IEnumerable<Mensagem>> ListaMensagem();// usar no metodo automatico
+
         Task<int> ObterTotalCreditoSMSdaEmpresa(int IdEmpresa);
         Task SalvarCodigoDoSMS(int Codigo, int IdEmpresa, int IdMensagem);
         Task<IEnumerable<int>> listaDeCodigoSMS(int IdCampanha);

@@ -18,9 +18,10 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             _db = db;
         }
 
-        public async Task AlteraSenha(int IdUsuario, string Senha)
+        
+        public async Task AlteraSenha(int ID, string Senha)  //VERIFICA SE ESTÁ SENDO UTILIZADO
         {
-            await _db.Connection.ExecuteAsync("UPDATE USUARIO SET  Senha=@Senha  WHERE  ID=@IdUsuario", new { @Senha = Senha, @ID = IdUsuario });
+            await _db.Connection.ExecuteAsync("UPDATE USUARIO SET  Senha=@Senha  WHERE  ID=@ID", new { @Senha = Senha, @ID = ID });
         }
 
         public async Task Deletar(int ID)
@@ -97,7 +98,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         public async Task AlteraConta(int ID, string Email, string Senha)
         {
-            await _db.Connection.ExecuteAsync("UPDATE USUARIO SET Email=@Email, Senha=@Senha WHERE ID=@ID", new { @ID = ID, @Email = Email,  @Senha = Senha});
+            await _db.Connection.ExecuteAsync("UPDATE USUARIO SET  Senha=@Senha WHERE ID=@ID", new { @ID = ID, @Senha = Senha});
         }
     }
 }

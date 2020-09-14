@@ -18,6 +18,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta
         public string SegCustomizado { get; set; }
         public string TipoAutomacao { get; set; }
         public string Contato { get; set; }
+        public string NomeCompleto { get; set; }
         public string TempoPorDiaDaSemana { get; set; }
         public string NomeDoDiaDaSemana { get; set; }
 
