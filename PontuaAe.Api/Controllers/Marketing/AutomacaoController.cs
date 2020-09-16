@@ -16,6 +16,7 @@ namespace PontuaAe.Api.Controllers.Marketing
     [ApiController]
     [Route("v1/automacao")]
     [AllowAnonymous]
+    //afjajflkajflaj
     public class AutomacaoController : Controller
     {
         private readonly ICampanhaMSGRepositorio _repCampanha;
