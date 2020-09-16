@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -39,33 +41,27 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS
         }
 
 
-        //METODO  API  SMS DEV:  ENVIA MENSAGEM
-        public async Task<string[]> EnviarSMSPorSMSDEVAsync(string[] Contatos, string Conteudo)
+        //METODO  API  SMS DEV:  ENVIA MENSAGEM, usado na pontuação
+        public async Task Enviar_Um_SMSPor_API_SMSDEVAsync(string Contatos, string Conteudo)
         {
 
-            arrayId = new string[Contatos.Length];
 
-            for (var i = 0; i < Contatos.Length; i++)
-            {
 
-                var numero = Contatos[i];
-                StringContent queryString = new StringContent("");
-                HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudo}", queryString);
-                response.EnsureSuccessStatusCode();
-                string resultado = response.Content.ReadAsStringAsync().Result;
-                String _resultado = resultado;
-                string[] dados = _resultado.Split(',');
-                var _dado = dados[2];
-                string[] d = _dado.Split(':');
-                var dado = JsonConvert.DeserializeObject(d[1]);
-                int id = Convert.ToInt32(dado);
-                string posicao = $"{numero} , {id}";
-                this.arrayId[i] = posicao;
-            }
-
-            return arrayId;
-
+            var numero = Contatos;
+            StringContent queryString = new StringContent("");
+            HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudo}", queryString);
+            response.EnsureSuccessStatusCode();
+            string resultado = response.Content.ReadAsStringAsync().Result;
+            String _resultado = resultado;
+            //string[] dados = _resultado.Split(',');
+            //var _dado = dados[2];
+            //string[] d = _dado.Split(':');
+            //var dado = JsonConvert.DeserializeObject(d[1]);
+            //int id = Convert.ToInt32(dado);
+            //string posicao = $"{numero} , {id}"; //
         }
+
+         
 
         //METODO  API LOCASMS:  AGENDA DE ENVIO DE SMS
         //public async Task<string> AgendarEnvioPorLocaSMSAsync(string Contatos, string Conteudo, string DataEnvio, string HoraEnvio)
@@ -79,17 +75,78 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS
         //    return idCampanha;
         //}
 
-        //METODO  API SMS DEV: AGENDA DE ENVIO DE SMS
-        public async Task<List<string>> EnviarSMSPorSMSDEVAsync(List<string> Contatos, string Conteudo, string DataEnvio, string HoraEnvio)
+        //METODO  API SMS DEV: AGENDA DE ENVIO DE SMS     
+        public async Task<List<string>> EnviarSMSPorSMSDEVAsync(IEnumerable<ListaContatosPorSegCustomizado> ListContatos, string Conteudo, string DataEnvio, string HoraEnvio)
         {
-           var  qtdContato = new string[Contatos.Count];
-
-            for (var i = 0; i < qtdContato.Length; i++)
+            
+            List<string> _Contatos = new List<string>();
+            foreach (var item in ListContatos)
             {
+                _Contatos.Add(item.Contato);              
+                      
 
-                var numero = Contatos[i];
+                    string Conteudoeditado;
+                    if (item.NomeCompleto != null)
+                    {
+                        dynamic _nomeCompleto = item.NomeCompleto;
+                        dynamic _nome = _nomeCompleto.Split(" ");
+                        string n = Convert.ToString(_nome[0]);
+                        Conteudoeditado = Conteudo.Replace("%nome%", n);
+                    }
+                    else
+                    {
+                        Conteudoeditado = Conteudo;
+                        Conteudoeditado = Conteudo.Replace("%nome%", "");
+                    }
+       
+                    var numero = item.Contato;
+                    StringContent queryString = new StringContent("");
+                    HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudoeditado}&jobdate={DataEnvio}&jobtime={HoraEnvio}", queryString);
+                    response.EnsureSuccessStatusCode();
+                    string resultado = response.Content.ReadAsStringAsync().Result;
+                    String _resultado = resultado;
+                    string[] dados = _resultado.Split(',');
+                    var _dado = dados[2];
+                    string[] d = _dado.Split(':');
+                    var dado = JsonConvert.DeserializeObject(d[1]);
+                    int id = Convert.ToInt32(dado);
+                    string posicao = $"{numero} , {id}";
+
+                     _Contatos.Add(posicao);
+                     _Contatos.Remove(item.Contato);
+                     
+
+               
+            }
+
+            return _Contatos;
+        }
+
+        public async Task<List<string>> EnviarSMSPorSMSDEVAsync(IEnumerable<ObterAutomacaoTipoDiaSemana> listaDadosAutomacao, string Conteudo, string DataEnvio, string HoraEnvio)
+        {
+            List<string> _Contatos = new List<string>();
+            foreach (var item in listaDadosAutomacao)
+            {
+                _Contatos.Add(item.Contato);
+
+
+                string Conteudoeditado;
+                if (item.NomeCompleto != null)
+                {
+                    dynamic _nomeCompleto = item.NomeCompleto;
+                    dynamic _nome = _nomeCompleto.Split(" ");
+                    string n = Convert.ToString(_nome[0]);
+                    Conteudoeditado = Conteudo.Replace("%nome%", n);
+                }
+                else
+                {
+                    Conteudoeditado = Conteudo;
+                    Conteudoeditado = Conteudo.Replace("%nome%", "");
+                }
+
+                var numero = item.Contato;
                 StringContent queryString = new StringContent("");
-                HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudo}&jobdate={DataEnvio}&jobtime={HoraEnvio}", queryString);
+                HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudoeditado}&jobdate={DataEnvio}&jobtime={HoraEnvio}", queryString);
                 response.EnsureSuccessStatusCode();
                 string resultado = response.Content.ReadAsStringAsync().Result;
                 String _resultado = resultado;
@@ -99,10 +156,86 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS
                 var dado = JsonConvert.DeserializeObject(d[1]);
                 int id = Convert.ToInt32(dado);
                 string posicao = $"{numero} , {id}";
-                Contatos[i] = posicao;
+
+                _Contatos.Add(posicao);
+                _Contatos.Remove(item.Contato);
+
             }
 
-            return Contatos;
+            return _Contatos;
+        }
+
+        public async Task<List<string>> EnviarSMSPorSMSDEVAsync(IEnumerable<ObterAutomacaoTipoUltimaFide> listDadosAutomacao, string DataEnvio, string HoraEnvio)
+        {
+            List<string> _Contatos = new List<string>();
+            foreach (var item in listDadosAutomacao)
+            {
+                _Contatos.Add(item.Contato);
+
+
+                string Conteudoeditado;
+                if (item.NomeCompleto != null)
+                {
+                    dynamic _nomeCompleto = item.NomeCompleto;
+                    dynamic _nome = _nomeCompleto.Split(" ");
+                    string n = Convert.ToString(_nome[0]);
+                    Conteudoeditado = item.Conteudo.Replace("%nome%", n);
+                }
+                else
+                {
+                    Conteudoeditado = item.Conteudo;
+                    Conteudoeditado = item.Conteudo.Replace("%nome%", "");
+                }
+                var numero = item.Contato;
+                StringContent queryString = new StringContent("");
+                HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudoeditado}&jobdate={DataEnvio}&jobtime={HoraEnvio}", queryString);
+                response.EnsureSuccessStatusCode();
+                string resultado = response.Content.ReadAsStringAsync().Result;
+                String _resultado = resultado;
+                string[] dados = _resultado.Split(',');
+                var _dado = dados[2];
+                string[] d = _dado.Split(':');
+                var dado = JsonConvert.DeserializeObject(d[1]);
+                int id = Convert.ToInt32(dado);
+                string posicao = $"{numero} , {id}";
+
+                _Contatos.Add(posicao);
+                _Contatos.Remove(item.Contato);
+
+            }
+
+            return _Contatos;
+        }
+
+        public async Task<string> EnviarSMSPorSMSDEVAsync(string Contato, string NomeCompleto, string Conteudo, string DataEnvio, string HoraEnvio)
+        {
+            string Conteudoeditado;
+            if (NomeCompleto != null)
+            {
+                dynamic _nomeCompleto = NomeCompleto;
+                dynamic _nome = _nomeCompleto.Split(" ");
+                string n = Convert.ToString(_nome[0]);
+                Conteudoeditado = Conteudo.Replace("%nome%", n);
+            }
+            else
+            {
+                Conteudoeditado = Conteudo;
+                Conteudoeditado = Conteudo.Replace("%nome%", "");
+            }
+            var numero = Contato;
+            StringContent queryString = new StringContent("");
+            HttpResponseMessage response = await client.PostAsync($"https://api.smsdev.com.br/send?key={Chave_SMSDEV}&type=9&number={numero}&msg={Conteudoeditado}&jobdate={DataEnvio}&jobtime={HoraEnvio}", queryString);
+            response.EnsureSuccessStatusCode();
+            string resultado = response.Content.ReadAsStringAsync().Result;
+            String _resultado = resultado;
+            string[] dados = _resultado.Split(',');
+            var _dado = dados[2];
+            string[] d = _dado.Split(':');
+            var dado = JsonConvert.DeserializeObject(d[1]);
+            int id = Convert.ToInt32(dado);
+            string conatoComIdentificacao= $"{numero} , {id}";
+       
+            return conatoComIdentificacao;
         }
 
 

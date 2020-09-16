@@ -41,11 +41,11 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task<IEnumerable<ListaContatosPorSegmentacao>> BuscaContatosPorSegmentacao(int IdEmpresa, string Segmentacao)
         {
             return await _db.Connection.QueryAsync<ListaContatosPorSegmentacao>("SELECT pc.Contato  FROM PRE_CADASTRO pc INNER JOIN  PONTUACAO p ON pc.ID = p.IdPreCadastro  WHERE p.IdEmpresa = @IdEmpresa AND p.Segmentacao= @Segmentacao", new { @IdEmpresa = IdEmpresa, @Segmentacao = Segmentacao });
-        } 
+        }               
 
         public async Task<IEnumerable<ListaContatosPorSegCustomizado>> BuscaContatosPorSegCustomizado(int IdEmpresa, string SegCustomizado)
         {
-            return await _db.Connection.QueryAsync<ListaContatosPorSegCustomizado>("SELECT pc.Contato  FROM PRE_CADASTRO pc JOIN  PONTUACAO p ON p.IdPreCadastro = pc.ID   WHERE p.IdEmpresa = @IdEmpresa AND p.SegCustomizado=@SegCustomizado", new { @IdEmpresa = IdEmpresa, @SegCustomizado  = SegCustomizado });
+            return await _db.Connection.QueryAsync<ListaContatosPorSegCustomizado>("SELECT c.NomeCompleto, pc.Contato  FROM PRE_CADASTRO pc JOIN  PONTUACAO p ON p.IdPreCadastro = pc.ID FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE p.IdEmpresa = @IdEmpresa AND p.SegCustomizado=@SegCustomizado", new { @IdEmpresa = IdEmpresa, @SegCustomizado  = SegCustomizado });
         }
 
         //public async Task AtualizarEstadoCampanha(Mensagem model)   //averiguar para remover estre 
@@ -115,6 +115,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             throw new NotImplementedException();
         }
 
+  
         public async Task<IEnumerable<int>> listaDeCodigoSMS(int IdCampanha)
         {
             return await _db.Connection.QueryAsync<int>("SELECT ID FROM CODIGO_SMS WHERE IdCampanha = @IdCampanha", new { @IdCampanha = IdCampanha });

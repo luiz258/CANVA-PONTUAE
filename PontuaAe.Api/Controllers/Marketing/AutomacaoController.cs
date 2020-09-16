@@ -16,6 +16,7 @@ namespace PontuaAe.Api.Controllers.Marketing
     [ApiController]
     [Route("v1/automacao")]
     [AllowAnonymous]
+    //afjajflkajflaj
     public class AutomacaoController : Controller
     {
         private readonly ICampanhaMSGRepositorio _repCampanha;
@@ -164,24 +165,24 @@ namespace PontuaAe.Api.Controllers.Marketing
         }
 
 
-        [HttpPost]
-        [Route("v1/jobAutomacaoQuinzeDias")]
+        //[HttpPost]
+        //[Route("v1/jobAutomacaoQuinzeDias")]
         //[Authorize(Policy = "Admin")]
         //[Authorize(Policy = "Funcionario")]
-        public async Task<IActionResult> jobAutomacaoQuinzeDias()
-        {
-            try
-            {
-                await _manipulador.AutomacaoClientesInativoQuinzeDias();
-                return Ok("OK");
-            }
-            catch (System.Exception)
-            {
+        //public async Task<IActionResult> jobAutomacaoQuinzeDias()
+        //{
+        //    try
+        //    {
+        //        await _manipulador.AutomacaoClientesInativoQuinzeDias();
+        //        return Ok("OK");
+        //    }
+        //    catch (System.Exception)
+        //    {
 
-                throw;
-            }
+        //        throw;
+        //    }
 
-        }
+        //}
 
 
         [HttpPost]

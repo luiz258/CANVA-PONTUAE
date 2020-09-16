@@ -89,7 +89,7 @@ namespace PontuaAe.Api.Controllers
         //[Route("v1/resgatarCashbacks")]
         //public async Task<IComandoResultado> ResgatarCashBackAsync([FromBody]ResgatarCashBackComando comando)
         //{
-        //    var resultado = (ComandoResultado) await _manipulador.ManipularAsync(comando);
+        //    var resultado = (ComandoResultado)await _manipulador.ManipularAsync(comando);
         //    return resultado;
         //}
 

@@ -105,10 +105,10 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
         }
 
-        public async Task<string> ObterNome(int ID)
+        public async Task<dynamic> ObterDados(int ID)
         {
             return await _db.Connection
-             .QueryFirstOrDefaultAsync<string>("SELECT NomeFantasia FROM EMPRESA WHERE ID=@ID", new
+             .QueryFirstOrDefaultAsync<dynamic>("SELECT NomeFantasia, Telefone FROM EMPRESA WHERE ID=@ID", new
              { @ID = ID });
         }
 

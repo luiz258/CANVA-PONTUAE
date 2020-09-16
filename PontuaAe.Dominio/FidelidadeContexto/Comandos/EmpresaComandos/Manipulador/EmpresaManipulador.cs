@@ -59,7 +59,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             var _idEmpresa = await _empresaRep.ObterIdEmpresa(usuarioAdmim.ID);
      
             //Adicionar  creditos SMS na Empresa
-            ContaSMS creditoSMS = new ContaSMS(_idEmpresa, 500 );
+            ContaSMS creditoSMS = new ContaSMS(_idEmpresa, 200 );
             await _contaSMS.Salvar(creditoSMS);
 
 
@@ -91,14 +91,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
 
 
 
-
-
-
-
-
-
-
-
         public async Task<IComandoResultado> ManipularAsync(AddRegraProgramaFidelidadeComando comando)
         {
             ////1 : CashBack
@@ -112,7 +104,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             ////2 : Pontos
          
                 //criação da regra da pontuação
-                var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos);
+                var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos, 0, comando.TipoDeProgramaFidelidade);
                 await _configPontoRep.SalvaConfiguracaoPontuacao(configuracaoPontos);
             
             return new ComandoEmpresaResultado(true, "Salvo", Notifications);
@@ -127,8 +119,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             //1 : CashBack
             if (comando.TipoProgramaFidelidade == 1)
             {
-                var configCasBack = new ConfiguracaoCashBack();
-                await _configCashBack.Editar(configCasBack);
+                var configCasBack = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.Reais, comando.TipoProgramaFidelidade);
+                await _configPontoRep.EditarConfiguracaoPontuacao(configCasBack);  
                 return new ComandoEmpresaResultado(true, "OK", Notifications);
 
             }
@@ -137,10 +129,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             if (comando.TipoProgramaFidelidade == 2)
             {
                 //criação da regra da pontuação
-                var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos);
+                var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos, 0, comando.TipoProgramaFidelidade);
                 await _configPontoRep.EditarConfiguracaoPontuacao(configuracaoPontos);
             }
-            return new ComandoEmpresaResultado(true, "ok", Notifications);
+            return new ComandoEmpresaResultado(true, "cartão fidelidade criado com sucesso", Notifications);
 
 
         }

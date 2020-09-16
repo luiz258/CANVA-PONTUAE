@@ -76,25 +76,21 @@ namespace PontuaAe.Api
             services.AddScoped<ClassificaTipoClienteJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(ClassificaTipoClienteJob),
-            cronExpression: "0 05 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 01 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
             //--------JOB Automação-SMS Aniversariantes
             services.AddScoped<AutomacaoAniversarioJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoAniversarioJob),
-            cronExpression: "0 10 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 0 10am 1,15 * ?"));
 
             //--------JOB Automação-SMS DIA DA SEMANA
             services.AddScoped<AutomacaoDiaDaSemanaJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoDiaDaSemanaJob),
-            cronExpression: "0 15 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 16 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
-            //--------JOB Automação-SMS 15 DIAS SEM RETORNO
-            services.AddScoped<AutomacaoQuinzeDiasSemRetornoJob>();
-            services.AddSingleton(new JobSchedule(
-            jobType: typeof(AutomacaoQuinzeDiasSemRetornoJob),
-            cronExpression: "0 20 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+
 
             //--------JOB Automação-SMS  30 DIAS SEM RETORNO
             services.AddScoped<AutomacaoTrintaDiasRetornoJob>();

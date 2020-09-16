@@ -134,7 +134,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         public bool Estado { get; private set; }
         public string EstadoEnvio { get; private set; }
         public string TipoBusca { get; private set; }
-        public int TempoPorDia { get; private set; }
+        public int TempoPorDia { get;  set; }
    
         public void CalcularQtdEnviado(int qtdEnviada) => ValorInvestido = 0.12 * (QtdEnviada += qtdEnviada); 
 

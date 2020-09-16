@@ -88,15 +88,15 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         
 
        
-        public IEnumerable<ObterAutomacaoTipoAniversario> ObterDadosAutomacaoAniversario(string TipoAutomacao, string Segmentacao, string SegCustomizado, int ID) //MELHORA ESSE METODO,  USA APENA O ID DA AUTOMAÇÃO GERADA E IDEMPRESA
+        public async Task<IEnumerable<ObterAutomacaoTipoAniversario>> ObterDadosAutomacaoAniversario( string Segmentacao, string SegCustomizado, int ID) //MELHORA ESSE METODO,  USA APENA O ID DA AUTOMAÇÃO GERADA E IDEMPRESA
         {
-            return _db.Connection.Query<ObterAutomacaoTipoAniversario>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, c.Contato, m.Segmentacao, m.SegCustomizado, m.DiasAntesAniversario, c.DataNascimeto, e.NomeFantasia, m.Estado FROM   EMPRESA e INNER JOIN MENSAGEM m ON  e.ID = m.IdEmpresa , PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro INNER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE e.ID = @ID AND  m.TipoAutomacao = @TipoAutomacao AND  p.SegCustomizado = @SegCustomizado",
+            return _db.Connection.Query<ObterAutomacaoTipoAniversario>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, c.Contato,c.NomeCompleto, m.Segmentacao, m.SegCustomizado, m.DiasAntesAniversario, c.DataNascimento, e.NomeFantasia, m.Estado FROM   EMPRESA e INNER JOIN MENSAGEM m ON  e.ID = m.IdEmpresa , PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro INNER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE e.ID = @ID AND p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado AND MONTH(GETDATE())",
 
                  new
                  {
                      @ID = ID,
-                     @TipoAutomacao = TipoAutomacao,
-                     @SegCustomizado =SegCustomizado 
+                     @Segmentacao = Segmentacao,
+                     @SegCustomizado = SegCustomizado 
                  });
         }
 
@@ -104,10 +104,10 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         //{
         //    throw new NotImplementedException();
         //}
-        public IEnumerable<ObterAutomacaoTipoDiaSemana> ObterDadosAutomacaoSemana(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa) //MELHORA ESSE METODO,  USA APENA O ID DA AUTOMAÇÃO GERADA E IDEMPRESA
+        public async Task<IEnumerable<ObterAutomacaoTipoDiaSemana>> ObterDadosAutomacaoSemana(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa)
         {
 
-            return _db.Connection.Query<ObterAutomacaoTipoDiaSemana>(" SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.SegCustomizado, m.TempoPorDiaDaSemana, m.Estado, e.NomeFantasia, pc.Contato, DATENAME(DW, GETDATE()) AS NomeDoDiaDaSemana, m.Estado FROM   EMPRESA e  JOIN MENSAGEM m ON e.ID = m.IdEmpresa, PRE_CADASTRO pc  JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro  JOIN CLIENTE c ON pc.Contato = c.Contato WHERE    m.TipoAutomacao = @TipoAutomacao AND p.SegCustomizado = @SegCustomizado AND e.ID = @IdEmpresa", new {
+            return _db.Connection.Query<ObterAutomacaoTipoDiaSemana>(" SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.SegCustomizado, m.TempoPorDiaDaSemana, m.Estado, e.NomeFantasia, c.NomeCompleto, pc.Contato, m.Estado FROM   EMPRESA e  JOIN MENSAGEM m ON e.ID = m.IdEmpresa, PRE_CADASTRO pc  JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE p.SegCustomizado = @SegCustomizado OR p.Segmentacao = @Segmentacao AND e.ID = @IdEmpresa", new {
                     @TipoAutomacao = TipoAutomacao,
                     //@Segmentacao = Segmentacao,
                     @SegCustomizado = SegCustomizado,
@@ -121,8 +121,6 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             
             throw new NotImplementedException();
         }
-
-
 
         public IEnumerable<Mensagem> ListaTipoAutomacao()
         {
@@ -160,35 +158,29 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
            await _db.Connection.ExecuteAsync("UPDATE MENSAGEM SET Estado=0 WHERE  IdEmpresa=@IdEmpresa  AND ID=@ID ", new {@IdEmpresa = IdEmpresa, @ID = ID});
         }
-
-        public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposQuinzeDias(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa)
-        {
-            return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto " +
-                "FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro  FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato " +
-                "WHERE e.ID = @IdEmpresa AND m.TipoAutomacao = 'Quinze dias'  AND p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado AND  m.TipoAutomacao <> 'Aniversariante' " +
-                " AND m.TipoAutomacao <> 'Dia da semana '  AND m.TipoAutomacao <> 'Dia do Mes' AND m.TipoAutomacao <> 'Trinta dias' AND m.TipoAutomacao <> 'Ultima fidelizacao' " 
-                , new { @TipoAutomacao = TipoAutomacao, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado, @IdEmpresa = IdEmpresa });
-        }
-
+                                        //          Esta ação vai fica comentada até me descidir se vou altera ou não
+        //public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposQuinzeDias(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa)
+        //{
+        //    return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto " +
+        //        "FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro  FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato " +
+        //        "WHERE e.ID = @IdEmpresa AND m.TipoAutomacao = 'Quinze dias'  AND p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado AND  m.TipoAutomacao <> 'Aniversariante' " +
+        //        " AND m.TipoAutomacao <> 'Dia da semana '  AND m.TipoAutomacao <> 'Dia do Mes' AND m.TipoAutomacao <> 'Trinta dias' AND m.TipoAutomacao <> 'Ultima fidelizacao' " 
+        //        , new { @TipoAutomacao = TipoAutomacao, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado, @IdEmpresa = IdEmpresa });
+        //}
 
         public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposTrintaDias(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa)
         {
-            return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto " +
-                "FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro " +
-                " FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE e.ID = @IdEmpresa AND m.TipoAutomacao = @TipoAutomacao  AND p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado " +
-                " AND  m.TipoAutomacao <> 'Aniversariante'  AND m.TipoAutomacao <> 'Dia da semana '  AND m.TipoAutomacao <> 'Dia do Mes' AND m.TipoAutomacao <> 'Trinta dias' AND m.TipoAutomacao <> 'Ultima fidelizacao' AND m.TipoAutomacao <> 'Quinze dias'"
-                , new { @TipoAutomacao = TipoAutomacao, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado, @IdEmpresa = IdEmpresa });
+            throw new NotImplementedException();
         }
         
         
         
-        public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposUltimaFidelizacao(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa)
+        public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposUltimaFidelizacao(int TempoPorDia, string Segmentacao, string SegCustomizado, int IdEmpresa)
         {
             return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto" +
                 " FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro  FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato " +
-                "WHERE e.ID = @IdEmpresa AND m.TipoAutomacao = 'Ultima fidelizacao'  AND p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado  AND  m.TipoAutomacao <> @TipoAutomacao " +
-                " AND m.TipoAutomacao <> 'Dia da semana'  AND m.TipoAutomacao <> 'Dia do Mes' AND m.TipoAutomacao <> 'Trinta dias' AND m.TipoAutomacao <> 'Quinze dias'" 
-                  , new { @TipoAutomacao = TipoAutomacao, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado, @IdEmpresa = IdEmpresa });
+                "WHERE e.ID = @IdEmpresa AND  p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado AND DataVisita BETWEEN GETDATE() AND DATEADD(DAY, @TempoPorDia, GETDATE())"
+                  , new { @IdEmpresa = IdEmpresa, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado, @TempoPorDia = TempoPorDia,  });
         }
         public async Task<IEnumerable<ListaRetornoDoClienteCampanhaNormal>> ObterListaRetornoDoClienteCampanhaNormal(int Id, int IdEmpresa)
         {
@@ -201,5 +193,15 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         {
             throw new NotImplementedException();
         }
+
+        public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposTrintaDias(string Segmentacao, string SegCustomizado, int IdEmpresa)
+        {          
+             return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto " +
+             "FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro " +
+             " FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE e.ID = @IdEmpresa AND p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado AND DataVisita BETWEEN DATEADD(MONTH, -1, CONVERT(date, GETDATE())) AND DATEADD(MONTH, 1 , CONVERT(DATE, GETDATE()))   "
+             , new { @IdEmpresa = IdEmpresa, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado });
+        }
+
+    
     }
 }

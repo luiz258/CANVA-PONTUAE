@@ -30,31 +30,32 @@ namespace PontuaAe.Api.Controllers.Account
         }
 
         [HttpPost]
-        [Route("v1/recuperarSenha")] // recuperarConta
+        [Route("v1/contaEmail")] // recuperarConta
         //[Authorize(Policy = "Admin")]
         //[Authorize(Policy = "Funcionario")]
         public async Task<dynamic> SenhaEsquecida([FromBody] UsuarioComando dado)
         {
-            var usuario = _repository.ObterUsuario(dado.Email);
+            var usuario = await _repository.ObterUsuario(dado.Email);
 
             var senhaGerada = geraSenha();
 
             //email destino, assunto do email, mensagem a enviar
-            EnviarEmail(dado.Email, $"", "Olá, 😉 Estamos enviando a sua nova senha " +
+          await  EnviarEmailAsync(dado.Email, $"", "Olá, 😉 Estamos enviando a sua nova senha " +
                 "Você deverá alterar sua senha após o primeiro login.  Sua Senha 🔑: " + senhaGerada);
 
             var senha = CriptografarSenha(senhaGerada);
-             await _repository.ResetaSenha(senha, usuario.Id);
+             await _repository.ResetaSenha(senha, usuario.ID);
 
             return "OK";
         }
 
-        protected void EnviarEmail(string email, string assunto, string mensagem)
+        protected async Task EnviarEmailAsync(string email, string assunto, string mensagem)
         {
             try
             {
                 //email destino, assunto do email, mensagem a enviar
-                 _emailSender.SendEmailAsync(email, assunto, mensagem);
+                 
+               await _emailSender.SendEmailAsync(email, assunto, mensagem);
 
             }
             catch (Exception ex)
@@ -95,7 +96,9 @@ namespace PontuaAe.Api.Controllers.Account
         [Route("v1/putUsuario")]
         public async Task<IComandoResultado> PutAsync([FromBody]  UsuarioComando comando)
         {
-            var usuario = (ComandoUsuarioResultado)await _manipulador.ManipularAsync(comando);
+            var senhaCriptografada = CriptografarSenha(comando.Senha);
+            var objeto = new UsuarioComando { Senha = senhaCriptografada };
+            var usuario = (ComandoUsuarioResultado)await _manipulador.ManipularAsync(objeto);
             return usuario;
         }
     }

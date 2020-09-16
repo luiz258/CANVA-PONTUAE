@@ -23,7 +23,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
         private readonly IPreCadastroRepositorio _preCadastroRepositorio;
-        private readonly IConfiguracaoCashBackRepositorio _configCashBackRepositorio;
 
         public PontuacaoManipulador(
             IClienteRepositorio clienteRepositorio,
@@ -47,23 +46,24 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
             _situacaoRepositorio = situacaoRepositorio;
             _enviarSMS = enviarSMS;
             _preCadastroRepositorio = preCadastroRepositorio;
-            _configCashBackRepositorio = configCashBackRepositorio;
+           
         }
 
         public async Task<IComandoResultado> ManipularAsync(PontuarClienteComando comando)
         {
             try
             {
-                var nomeEmpresa = await _empresaRepositorio.ObterNome(comando.IdEmpresa);
+                var campo = await _empresaRepositorio.ObterDados(comando.IdEmpresa);
 
                 //os bloco de if  são para  atualiza o saldo de ponto da PONTUAÇAO ou para cria uma nova pontuação  para o contato
                 var VerificaIdPrecadastro = await _pontuacaoRepositorio.ChecarClienteNaBasePontuacao(comando.IdPreCadastro, comando.IdEmpresa);
 
-                //se a conta cashback estive Ativada
-                var tipoConfig = await _configCashBackRepositorio.ChecarConfigCashBack();
+                //obter a logica do programa de fidelidade    1 = cashback    2 = pontuação
+                var tipoConfigFidelidade = 2;  //no momento está definido como 2 
+
                 //----------VERIFICAÇÃO POR CASHBACK----------------
 
-                if (tipoConfig == 1)
+                if (tipoConfigFidelidade == 1)
                 {
 
                     // Busca configuraçãoCasback
@@ -80,7 +80,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                         await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
                     }
-                    else if (tipoConfig == 2)
+                    else if (tipoConfigFidelidade == 2)
                     {
                         Pontuacao geraPontuacaoSaldoZero = new Pontuacao(0, comando.IdEmpresa, comando.IdPreCadastro);
                         await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
@@ -89,7 +89,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         var n = comando.Contato;
                         string _numero = n;
-                        await _enviarSMS.EnviarPorLocaSMSAsync(_numero, $"{nomeEmpresa} : Parabens! voce Faz parte do nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja seus pontos");
+                        await _enviarSMS.Enviar_Um_SMSPor_API_SMSDEVAsync(_numero, $"{campo.NomeFantasia}: voce recebeu cashback Aêêê... clique aqui: https://api.whatsapp.com/send?phone=5563992382064&text=Ola%2C%20estou%20participando%20do%20");
 
                         Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
 
@@ -133,10 +133,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                         await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
 
                         //envia sms boas vindas ao programa de fidelidade
-
+                        
                         var n = comando.Contato;
-                        string _numero = n;
-                        await _enviarSMS.EnviarPorLocaSMSAsync(_numero, $"{nomeEmpresa} : Parabens! voce Faz parte do nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja seus pontos");
+                        var _numero = n;
+                        await _enviarSMS.Enviar_Um_SMSPor_API_SMSDEVAsync(_numero, $"{campo.NomeFantasia} :Voce recebeu pontos Aêêê! CADASTRE-SE EM NOSSO SITE: http://pontuaae.herokuapp.com/registerCustomer");
 
                         Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
 
@@ -148,7 +148,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                     }
                 }
-
 
                 //obter ID da Pontuação por parametro IdPreCadastro E IdEmpresa no momento da operação
                 var Id = await _pontuacaoRepositorio.ObterIdPontuacao(comando.IdEmpresa, comando.IdPreCadastro);
@@ -163,7 +162,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                 decimal saldoCliente = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro);
                 int saldo = Convert.ToInt32(saldoCliente);
 
-                await _enviarSMS.EnviarPorLocaSMSAsync(numero, $"{nomeEmpresa}: Voce Acumulou {saldo} pontos em nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja como funciona e os premios que pode resgatar");
+                await _enviarSMS.Enviar_Um_SMSPor_API_SMSDEVAsync(numero, $"{campo.NomeFantasia}: Seu saldo : {saldo} pontos . Acesse http://pontuaae.herokuapp.com/loginCliente e veja como funciona e os premios que pode resgatar");
 
                 //Este bloco abaixo, averigua se sera necessário
                 //var _saldoCliente =  _clienteRepositorio.ObterSaldo(IdCliente, comando.IdEmpresa);        
@@ -172,7 +171,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                 //Notificação Prêmios disponiveis
                 // if(ListPremiosDisponiveis != null)
                 // {
-                //    _enviarSMS.EnviarAsync(contato, $"{nomeEmpresa}:voce ja pode resgatar: premios em nosso programa de fidelidade. Acesse https://pontuaae.com.br e veja o que pode resgatar");
+                //    _enviarSMS.EnviarAsync(contato, $"{nomeEmpresa}:voce ja pode resgatar: premios em nosso programa de fidelidade. Acesse https://pontuaae.com e veja o que pode resgatar");
                 //}
 
 
@@ -189,7 +188,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                     }
                 }
 
-                return new ComandoResultado(true, "A pontuação foi registrada com sucesso ", Notifications);
+                return new ComandoResultado(true, "Registrado com sucesso ", Notifications);
             }
             catch (Exception e)
             {
@@ -199,7 +198,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
          
 
         }
-
 
         public async Task<IComandoResultado> ManipularAsync(ResgatarPontosComando comando)
         {
@@ -223,7 +221,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
             return new ComandoResultado(true, "Resgate efetuado com sucesso. Pode entregar o prêmio ao cliente", Notifications);
 
         }
-
         public async Task<IComandoResultado> ManipularAsync(ResgatarCashBackComando comando)
         {
             decimal obterSaldo = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
@@ -231,7 +228,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
             var resgatar = new Pontuacao(obterSaldo, comando.IdEmpresa, comando.IdPreCadastro);
             resgatar.DebitarCashBack(comando.Valor);
             await _pontuacaoRepositorio.AtualizarSaldo(resgatar);
-            return new ComandoResultado(true, "Transação fetuada com sucesso.", Notifications);
+            return new ComandoResultado(true, "Transação efetuada com sucesso.", Notifications);
         }
     }
 }
