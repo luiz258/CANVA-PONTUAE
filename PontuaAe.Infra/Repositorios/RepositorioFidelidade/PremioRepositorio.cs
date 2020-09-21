@@ -73,7 +73,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task<IEnumerable<ListarPremiosPorClienteConsulta>> listaPremiosPorCliente(int IdEmpresa, int IdPreCadastro)
         {
             return await _db.Connection
-                .QueryAsync<ListarPremiosPorClienteConsulta>("SELECT PREMIOS.Nome, PREMIOS.PontosNecessario, PONTUACAO.Saldo, pc.ID FROM PREMIOS, PRE_CADASTRO AS pc INNER JOIN PONTUACAO  ON  pc.ID = PONTUACAO.IdPreCadastro WHERE PONTUACAO.IdPreCadastro = @IdPreCadastro  AND PREMIOS.IdEmpresa = @IdEmpresa ", new
+                .QueryAsync<ListarPremiosPorClienteConsulta>("SELECT PREMIOS.Nome, PREMIOS.PontosNecessario, PONTUACAO.Saldo, pc.ID FROM PREMIOS, PRE_CADASTRO AS pc INNER JOIN PONTUACAO  ON  pc.ID = PONTUACAO.IdPreCadastro WHERE PONTUACAO.IdPreCadastro = @IdPreCadastro  AND PONTUACAO.IdEmpresa = @IdEmpresa  AND PREMIOS.IdEmpresa = @IdEmpresa ", new
                 { @IdPreCadastro = IdPreCadastro, @IdEmpresa = IdEmpresa });
         }
 
