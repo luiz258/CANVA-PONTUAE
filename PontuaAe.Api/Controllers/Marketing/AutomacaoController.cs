@@ -23,11 +23,13 @@ namespace PontuaAe.Api.Controllers.Marketing
         private readonly IAutomacaoMSGRepositorio _repAutomacao;
         private readonly AutomacaoManipulador _manipulador;
         private readonly ClienteManipulador _manipuladorCliente;
+        private readonly AutomacaoManipulador _manipuladorAutomacaoCampanhas;
 
 
-        public AutomacaoController(AutomacaoManipulador manipulador, ClienteManipulador manipuladorCliente, IAutomacaoMSGRepositorio repAutomacao, ICampanhaMSGRepositorio repCampanha)
+        public AutomacaoController(AutomacaoManipulador manipulador, ClienteManipulador manipuladorCliente, AutomacaoManipulador manipuladorAutomacaoCampanhas,  IAutomacaoMSGRepositorio repAutomacao, ICampanhaMSGRepositorio repCampanha)
         {
             _manipuladorCliente = manipuladorCliente;
+            _manipuladorAutomacaoCampanhas = manipuladorAutomacaoCampanhas;
             _manipulador = manipulador;
             _repAutomacao = repAutomacao;
             _repCampanha = repCampanha;
@@ -210,7 +212,7 @@ namespace PontuaAe.Api.Controllers.Marketing
         {
             try
             {
-                await _manipuladorCliente.ClassificaRecorrencia();
+                await _manipuladorCliente.ClassificaRecorrencia();  
                 return Ok("OK");
             }
             catch (Exception e)
@@ -220,18 +222,35 @@ namespace PontuaAe.Api.Controllers.Marketing
             }
         }
 
-            //}
-            //[HttpGet]
-            //[Route("v1/ListaContato/{segCustomizado}/{idEmpresa}")]
-            //[AllowAnonymous]
-            //public async Task<IEnumerable<ListaContatosPorSegCustomizado>> BuscaContatosPorSegCustomizado(int idEmpresa)
-            //{
 
-            //    return await _repCampanha.BuscaContatosPorSegCustomizado(idEmpresa);  
+        [HttpPost]
+        [Route("v1/jobAposUltimaFidelizacaoO")]
+        public async Task<IActionResult> jobAposUltimaFidelizacao()
+        {
+            try
+            {
+                await _manipuladorAutomacaoCampanhas.AutomacaoAposUltimaFidelizacao();
+                return Ok("OK");
+            }
+            catch (Exception e)
+            {
 
-
-            //}
-
-
+                return NotFound(e);
+            }
         }
+
+        //}
+        //[HttpGet]
+        //[Route("v1/ListaContato/{segCustomizado}/{idEmpresa}")]
+        //[AllowAnonymous]
+        //public async Task<IEnumerable<ListaContatosPorSegCustomizado>> BuscaContatosPorSegCustomizado(int idEmpresa)
+        //{
+
+        //    return await _repCampanha.BuscaContatosPorSegCustomizado(idEmpresa);  
+
+
+        //}
+
+
+    }
 }

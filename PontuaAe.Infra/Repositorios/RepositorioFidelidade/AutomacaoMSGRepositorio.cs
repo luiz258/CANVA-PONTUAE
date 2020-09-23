@@ -122,9 +122,9 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Mensagem> ListaTipoAutomacao()
+        public async Task<IEnumerable<Mensagem>> ListaTipoAutomacao()
         {
-            return  _db.Connection.Query<Mensagem>("SELECT ID, IdEmpresa, Segmentacao, SegCustomizado, TipoAutomacao FROM MENSAGEM ");
+            return await _db.Connection.QueryAsync<Mensagem>("SELECT ID, IdEmpresa, Segmentacao, SegCustomizado,TempoPorDia, Estado, TipoAutomacao FROM MENSAGEM ORDER by TipoAutomacao  ");
         }
 
         public async Task<IEnumerable<Mensagem>> ListaMensagem()
@@ -158,7 +158,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
 
            await _db.Connection.ExecuteAsync("UPDATE MENSAGEM SET Estado=0 WHERE  IdEmpresa=@IdEmpresa  AND ID=@ID ", new {@IdEmpresa = IdEmpresa, @ID = ID});
         }
-                                        //          Esta ação vai fica comentada até me descidir se vou altera ou não
+        //Esta ação vai fica comentada até me descidir se vou altera ou não
         //public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposQuinzeDias(string TipoAutomacao, string Segmentacao, string SegCustomizado, int IdEmpresa)
         //{
         //    return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto " +
@@ -172,15 +172,17 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         {
             throw new NotImplementedException();
         }
-        
-        
-        
-        public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposUltimaFidelizacao(int TempoPorDia, string Segmentacao, string SegCustomizado, int IdEmpresa)
+
+
+        public async Task<IEnumerable<Mensagem>> ListaDatasUlimasVisitas(int IdEmpresa, int TempoPorDia, string SegCustomizado)// está query e um complemento da query abaixo
         {
-            return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.Segmentacao, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto" +
-                " FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro  FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato " +
-                "WHERE e.ID = @IdEmpresa AND  p.Segmentacao = @Segmentacao OR p.SegCustomizado = @SegCustomizado AND DataVisita BETWEEN GETDATE() AND DATEADD(DAY, @TempoPorDia, GETDATE())"
-                  , new { @IdEmpresa = IdEmpresa, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado, @TempoPorDia = TempoPorDia,  });
+            return await _db.Connection.QueryAsync<Mensagem>("select p.SegCustomizado, dateadd (day, @TempoPorDia, GETDATE()) AS DataUlimaVisita  from EMPRESA e, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro  WHERE e.ID = @IdEmpresa and p.IdEmpresa = @IdEmpresa  and p.SegCustomizado = @SegCustomizado", new { @IdEmpresa = IdEmpresa, @TempoPorDia = TempoPorDia, @SegCustomizado = SegCustomizado });
+        }
+
+
+        public async Task<IEnumerable<ObterAutomacaoTipoUltimaFide>> ObterContatosQueVisitaramAposUltimaFidelizacao(DateTime DataVisita, string Segmentacao, string SegCustomizado, int IdEmpresa)
+        {
+            return await _db.Connection.QueryAsync<ObterAutomacaoTipoUltimaFide>("SELECT m.ID, m.TipoAutomacao, m.Conteudo, m.TempoPorDia, m.SegCustomizado, e.NomeFantasia, pc.Contato, c.NomeCompleto FROM MENSAGEM m INNER JOIN EMPRESA e ON e.ID = m.IdEmpresa, PRE_CADASTRO pc INNER JOIN PONTUACAO p ON pc.ID = p.IdPreCadastro FULL OUTER JOIN CLIENTE c ON pc.Contato = c.Contato WHERE  m.Estado = 1 AND e.ID = @IdEmpresa AND   p.SegCustomizado = @SegCustomizado AND   p.IdEmpresa = @IdEmpresa AND  cast(p.DataVisita as date) = cast(@DataVisita as date)", new { @IdEmpresa = IdEmpresa, @SegCustomizado = SegCustomizado, @DataVisita = DataVisita  });
         }
         public async Task<IEnumerable<ListaRetornoDoClienteCampanhaNormal>> ObterListaRetornoDoClienteCampanhaNormal(int Id, int IdEmpresa)
         {
@@ -202,6 +204,5 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
              , new { @IdEmpresa = IdEmpresa, @Segmentacao = Segmentacao, @SegCustomizado = SegCustomizado });
         }
 
-    
     }
 }

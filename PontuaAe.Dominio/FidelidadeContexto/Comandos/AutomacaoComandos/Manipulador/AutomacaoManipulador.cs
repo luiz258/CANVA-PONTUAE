@@ -112,12 +112,12 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
 
             List<ObterAutomacaoTipoAniversario> listaContatosAniversarianteMesmoDia = new List<ObterAutomacaoTipoAniversario>();
            
-            IEnumerable<Mensagem> Lista = _automacaoRepositorio.ListaTipoAutomacao();    
+            IEnumerable<Mensagem> Lista = await _automacaoRepositorio.ListaTipoAutomacao();    
 
             foreach (var linha in Lista)
             {
 
-                if (linha.Estado == true)
+                if (linha.Estado == 1)
                 {
                     IEnumerable<ObterAutomacaoTipoAniversario> listDadosAutomacaoAniversario;
                     listDadosAutomacaoAniversario = await _automacaoRepositorio.ObterDadosAutomacaoAniversario(linha.Segmentacao, linha.SegCustomizado, linha.IdEmpresa);
@@ -184,10 +184,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         public async Task AutomacaoTipoDiaDaSemana()
         {
 
-            IEnumerable<Mensagem> Lista = _automacaoRepositorio.ListaTipoAutomacao();
+            IEnumerable<Mensagem> Lista = await _automacaoRepositorio.ListaTipoAutomacao();
             foreach (var l in Lista)
             {
-                if (l.Estado == true)
+                if (l.Estado == 1)
                 {
                     if (l.TempoPorDiaDaSemana == "Segunda-feira")
                     {
@@ -272,12 +272,12 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         public async Task AutomacaoTipoTrintaDias()
         {
        
-            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = _automacaoRepositorio.ListaTipoAutomacao();
+            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = await _automacaoRepositorio.ListaTipoAutomacao();
 
             foreach (var l in ListaMensagensAutomaticasDeTodasAsEmpresas)
             {
 
-                if (l.Estado == true)
+                if (l.Estado == 1)
                 {
                     IEnumerable<ObterAutomacaoTipoUltimaFide> listDadosAutomacao;
                     listDadosAutomacao = await _automacaoRepositorio.ObterContatosQueVisitaramAposTrintaDias( l.Segmentacao, l.SegCustomizado, l.IdEmpresa);
@@ -321,54 +321,61 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
 
 
 
-        //-----4 APOS QUINZE DIAS SEM RETORNO, EXECUTAR O SHEDULE AS 03:30HS; TODO DIA VERIFICA E AGENDA O ENVIO PARA AS 10:12HS
+        
        
-        //// //-----5 Apos ultima fidelização, EXECUTAR O SHEDULE AS 03:30HS; TODO DIA VERIFICA  E AGENDA O ENVIO PARA AS 10:15HS
+        
         public async Task AutomacaoAposUltimaFidelizacao()
         {
-
+            //BUSCAR LISTA DE DATAS DE VISITAS COM ID EMPRESAS  EM CADA 
             //quando eu criar uma configuração de uma campanha automatica para envia sms para base segmentada na regra de apos ultima fidelização
-            // seja ela apos 3 dias fazer select where por intervalo de dias apos a data da visita
             List<dynamic> arrayContatos = new List<dynamic>();
+           
 
-            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = _automacaoRepositorio.ListaTipoAutomacao();
+            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = await _automacaoRepositorio.ListaTipoAutomacao();
             foreach (var l in ListaMensagensAutomaticasDeTodasAsEmpresas)
             {
                 int numeroNegativo = -System.Math.Abs(l.TempoPorDia);
-                if (l.Estado == true)
+                IEnumerable<Mensagem> ListaDatasUlimasVisitas = await _automacaoRepositorio.ListaDatasUlimasVisitas(l.IdEmpresa, numeroNegativo, l.SegCustomizado);
+                foreach (var item in ListaDatasUlimasVisitas)
+                {
+
+                
+                
+                if (l.Estado == 1)
                 {
 
                     IEnumerable<ObterAutomacaoTipoUltimaFide> listDadosAutomacao;
-                   
-                    listDadosAutomacao = await _automacaoRepositorio.ObterContatosQueVisitaramAposUltimaFidelizacao(numeroNegativo, l.Segmentacao, l.SegCustomizado, l.IdEmpresa);
+
+                    listDadosAutomacao = await _automacaoRepositorio.ObterContatosQueVisitaramAposUltimaFidelizacao( item.DataUlimaVisita, l.Segmentacao, l.SegCustomizado, l.IdEmpresa);
 
                     //string[] arrayContatos = new string[] { };
 
-                  
-     
-                        string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
-                        string horaEnvio = "11:40";
-                        
-                        var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listDadosAutomacao,  dataEnvio, horaEnvio);
-                        Agenda agenda = new Agenda(dataEnvio, horaEnvio);
-                        var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
-                        campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
-                        await _automacaoRepositorio.atualizarDadosMensagem(campanhaSMS);
 
-                        foreach (var c in arrayDeCodigoDasMensagens)
-                        {
 
-                            var array = c.Split(',');
-                            var contato = array[0];
-                            var idSMS = Convert.ToInt32(array[1]);
-                            var _dataEnvio = DateTime.Now;
-                            var mensagemSMS = new SituacaoSMS(_dataEnvio, contato, l.IdEmpresa, l.ID, idSMS);
-                            await _situacaoRepositorio.SalvarSituacao(mensagemSMS);
+                    string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
+                    string horaEnvio = "14:30";
 
-                        }
+                    var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listDadosAutomacao, dataEnvio, horaEnvio);
+                    Agenda agenda = new Agenda(dataEnvio, horaEnvio);
+                    var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
+                    campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
+                    await _automacaoRepositorio.atualizarDadosMensagem(campanhaSMS);
 
-                   
+                    foreach (var c in arrayDeCodigoDasMensagens)
+                    {
+
+                        var array = c.Split(',');
+                        var contato = array[0];
+                        var idSMS = Convert.ToInt32(array[1]);
+                        var _dataEnvio = DateTime.Now;
+                        var mensagemSMS = new SituacaoSMS(_dataEnvio, contato, l.IdEmpresa, l.ID, idSMS);
+                        await _situacaoRepositorio.SalvarSituacao(mensagemSMS);
+
+                    }
+
+
                 }
+            }
             }
         }
     }

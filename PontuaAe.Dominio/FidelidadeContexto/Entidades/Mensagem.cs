@@ -37,7 +37,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
             SegCustomizado = segCustomizado;
             Segmentacao = segmentacao;
             TempoPorDia = tempoPorDia;
-            Estado = true;
+            Estado = 1;
             EstadoEnvio = "Automatico";
         }
        
@@ -62,7 +62,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
             Segmentacao = segmentacao;
             SegCustomizado = segCustomizado;
             TempoPorDia = tempoPorDia;
-            Estado = true;
+            Estado = 1;
             ValorInvestido = 0;
             QtdEnviada = 0;
             EstadoEnvio = "Automatico";
@@ -131,10 +131,11 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         public Agenda Agendar { get; set; }
         public int QtdEnviada { get; private set; }
         public double ValorInvestido { get; private set; }
-        public bool Estado { get; private set; }
+        public int Estado { get; private set; }
         public string EstadoEnvio { get; private set; }
         public string TipoBusca { get; private set; }
         public int TempoPorDia { get;  set; }
+        public DateTime DataUlimaVisita { get;  set; }
    
         public void CalcularQtdEnviado(int qtdEnviada) => ValorInvestido = 0.12 * (QtdEnviada += qtdEnviada); 
 
