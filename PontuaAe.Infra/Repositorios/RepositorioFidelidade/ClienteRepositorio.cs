@@ -49,7 +49,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         {
 
             await _db.Connection
-           .ExecuteAsync("INSERT INTO CLIENTE ( IdUsuario, NomeCompleto, DataNascimento, Contato, Sexo, Email, Cidade) values (@IdUsuario ,@NomeCompleto ,@DataNascimento, @Contato, @Sexo, @Email, @Cidade)", new
+           .ExecuteAsync("INSERT INTO CLIENTE ( IdUsuario, NomeCompleto, DataNascimento, Contato, Sexo, Email, Cidade) values (@IdUsuario, @NomeCompleto, @DataNascimento, @Contato, @Sexo, @Email, @Cidade)", new
            {
                @IdUsuario = cliente.IdUsuario,
                @NomeCompleto = cliente.NomeCompleto,

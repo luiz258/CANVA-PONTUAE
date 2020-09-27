@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PontuaAe.Compartilhado.DbConfig;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,7 +15,7 @@ namespace PontuaAe.Infra.Repositorios
 
         public DbConfig()
         {
-            Connection = new SqlConnection("Server=den1.mssql7.gear.host; Database=pontuaae; User ID=pontuaae; Password=Lz8Nt8mPL~!5;");
+            Connection = new SqlConnection(Config.ConnectionString);
             Connection.Open();
         }
 

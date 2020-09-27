@@ -43,13 +43,13 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task SalvaConfiguracaoPontuacao(ConfiguracaoPontos regra)
         {
            await _db.Connection
-                .ExecuteAsync("INSERT INTO CONFIG_PONTUACAO ( Nome, Reais, PontosFidelidade, ValidadePontos, TipoProgramaFidelidade, IdEmpresa) VALUES (@Nome, @Reais, @PontosFidelidade, @ValidadePontos, @TipoProgramaFidelidade, @IdEmpresa)", new
+                .ExecuteAsync("INSERT INTO CONFIG_PONTUACAO ( Nome, Reais, PontosFidelidade, ValidadePontos, TipoDeProgramaFidelidade, IdEmpresa) VALUES (@Nome, @Reais, @PontosFidelidade, @ValidadePontos, @TipoDeProgramaFidelidade, @IdEmpresa)", new
                 {
                     @Nome = regra.Nome,
                     @Reais = regra.Reais,
                     @PontosFidelidade = regra.PontosFidelidade,
                     @ValidadePontos = regra.ValidadePontos,
-                    @TipoProgramaFidelidade = regra.TipoDeProgramaFidelidade,
+                    @TipoDeProgramaFidelidade = regra.TipoDeProgramaFidelidade,
                     @IdEmpresa = regra.IdEmpresa
 
                 });

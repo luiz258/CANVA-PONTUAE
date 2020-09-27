@@ -32,6 +32,7 @@ namespace PontuaAe.Api.Controllers
         [HttpPost]
         [Route("v1/post")]
         //[Authorize(Policy ="Admin")]
+        [AllowAnonymous]
         public async Task<IComandoResultado> CriarProgramaFidelidadeComandoAsync([FromBody]AddRegraProgramaFidelidadeComando comando)
         {
             var resultado = (ComandoEmpresaResultado)await _manipulador.ManipularAsync(comando);
@@ -43,7 +44,7 @@ namespace PontuaAe.Api.Controllers
         [HttpPut] 
         [Route("v1/put")]
         //[Authorize(Policy ="Admin")]
-        public async Task<IComandoResultado> EditarProgramaFidelidadeComandoAsync([FromBody]AddRegraProgramaFidelidadeComando comando)
+        public async Task<IComandoResultado> EditarProgramaFidelidadeComandoAsync([FromBody]EditarRegraPontuacaoComando comando)
         {
             var resultado = (ComandoEmpresaResultado)await _manipulador.ManipularAsync(comando);
             return resultado;

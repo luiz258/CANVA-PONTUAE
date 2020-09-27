@@ -37,12 +37,20 @@ namespace PontuaAe.Api.Controllers.Account
 
             var usuario = await _repUsuario.ObterUsuario(model.Email);
 
+            if (usuario == null)
+            {
+                return Ok(new { message = "Usuário ou senha inválidos" });
+            }
+
             // se a linha acima não funcionar testa este bloco
-           // var dd = new Usuario(usuario.Email, usuario.Senha);
+            // var dd = new Usuario(usuario.Email, usuario.Senha);
             //var r = dd.Autenticar(usuario.Email, usuario.Senha);
 
 
-            var _resultado =  usuario.Autenticar(model.Email, model.Senha); 
+            var _resultado =  usuario.Autenticar(model.Email, model.Senha);
+
+         
+
             dynamic role = usuario.RoleId;
            
             if (_resultado == true)
@@ -93,8 +101,8 @@ namespace PontuaAe.Api.Controllers.Account
                 }
                
             }
-                
-            return NotFound(new { message = "Usuário ou senha inválidos" });
+           return  NotFound(new { message = "Usuário ou senha inválidos" });
+
 
         }
 

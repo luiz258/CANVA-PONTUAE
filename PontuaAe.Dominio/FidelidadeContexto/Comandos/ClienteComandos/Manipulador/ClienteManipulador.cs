@@ -97,7 +97,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
                     "Por favor, corrija os campos abaixo",
                     Notifications);
 
-            var usuario = new Usuario( comando.Email, comando.Senha,  comando.RoleId);
+            var usuario = new Usuario(comando.Email, comando.Senha, comando.RoleId);
             if (Invalid)
                 return new ComandoClienteResultado(
                     false,
@@ -106,7 +106,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
 
             await _usuarioRepsitorio.Salvar(usuario);
 
-            
+
             var _usuario = await _usuarioRepsitorio.ObterUsuario(comando.Email);
             var PerfilUsuario = new Cliente(_usuario.ID, comando.Nome, comando.Contato, EmailValido,  comando.DataNascimento, comando.Cidade, comando.Sexo);
 

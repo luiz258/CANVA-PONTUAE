@@ -75,8 +75,15 @@ namespace PontuaAe.Api.Controllers.Perfil
         [Route("v1/put")]
         public async Task<IComandoResultado> PutAsync([FromBody] EditarClienteComando comando)
         {
-            var cliente = (ComandoClienteResultado)await _manipulador.ManipularAsync(comando);
-            return cliente;
+            try
+            {
+                var cliente = (ComandoClienteResultado)await _manipulador.ManipularAsync(comando);
+                return cliente;
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
 
 

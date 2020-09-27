@@ -47,7 +47,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PremioComandos.Manipulado
         public async Task<IComandoResultado> ManipularAsync(EditarPremioComando comando)
         {
             Descricao descricao = new Descricao(comando.Texto);
-            Premios premio = new Premios(comando.ID  , comando.IdEmpresa, comando.Nome, descricao, comando.QtdPontos);
+            Premios premio = new Premios(comando.ID  , comando.IdEmpresa, comando.Title, descricao, comando.QtdPontos);
 
 
             await _premioRepositorio.Editar(premio);
