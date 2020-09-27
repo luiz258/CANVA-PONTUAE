@@ -35,13 +35,13 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.FuncionarioComandos.Manip
             var EmailValido = new Email(comando.Email);
             AddNotifications(EmailValido.Notifications);
 
-            // Verificar se o E-mail já existe na base
+            //// Verificar se o E-mail já existe na base
             if (await _repUsuario.ValidaEmail(comando.Email))
                 AddNotification("Email", "Este E-mail já está em uso");
 
             var RoleId = comando.ControleUsuario == 2 ? "Funcionario" : "Administrador";
-            
-        var usuario = new Usuario(comando.Email, comando.Senha, RoleId);
+
+            var usuario = new Usuario(comando.Email, comando.Senha, RoleId);
             if (Invalid)
                 return new ComandoFuncionarioResultado(
                     false,

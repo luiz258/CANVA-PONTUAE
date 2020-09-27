@@ -12,10 +12,10 @@ namespace PontuaAe.Infra.FidelidadeContexto.DataContexto
     public class PontuaAeDataContexto : IDisposable
     {
         public SqlConnection Connection { get; set; }
-
+        //classe nao utilizada
         public PontuaAeDataContexto()
         {
-            Connection = new SqlConnection("Server= den1.mssql7.gear.host; Database=pontuaedb; User ID=pontuaedb; Password=Gi3Q-?06D8XL;");
+            Connection = new SqlConnection("Server=tcp:db-pontuaae.database.windows.net,1433;Initial Catalog=Db-Pontuaae;Persist Security Info=False;User ID=pontuaae-sa;Password=1q2w3e4r!@#$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             Connection.Open();
         }
 

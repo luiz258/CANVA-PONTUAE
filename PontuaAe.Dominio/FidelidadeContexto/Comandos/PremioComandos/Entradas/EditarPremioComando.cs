@@ -12,7 +12,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PremioComandos.Entradas
     {
         public int ID { get; set; }
         public int IdEmpresa { get; set; }
-        public string Nome { get; set; }
+        public string Title { get; set; }
         public string Texto { get; set; }
         public decimal QtdPontos { get; set; }
       
