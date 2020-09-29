@@ -42,12 +42,17 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
 
         //public ConfiguracaoPontos( decimal pontosFidelidade, decimal reais, int validadePontos)            DELETA ESTE BLOCO
         //{
-            
+
         //    Reais = reais;
         //    PontosFidelidade = pontosFidelidade;
         //    ValidadePontos = validadePontos;
 
         //}
+
+        public ConfiguracaoPontos(int idEmpresa)
+        {
+            IdEmpresa = idEmpresa;
+        }
 
         public int IdEmpresa { get;  set; } 
         public string Nome { get;  set; } 
