@@ -106,9 +106,9 @@ namespace PontuaAe.Api.Controllers.Perfil
 
 
         [HttpGet]
-        [Route("v1/lista/{idEmpresa}")]
+        [Route("v1/lista/{IdEmpresa}")]
         //[Authorize(Policy = "Admin")]
-        //[Authorize(Policy = "Funcionario")]
+        //[AllowAnonymous]
         public async Task<IEnumerable<ListaRankingClientesConsulta>> ListaRankingClientes(int IdEmpresa)
         {
             return await _repCliente.ListaRankingClientes(IdEmpresa);
