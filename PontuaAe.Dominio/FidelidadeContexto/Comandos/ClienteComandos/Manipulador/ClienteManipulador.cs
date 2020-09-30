@@ -7,6 +7,7 @@ using PontuaAe.Dominio.FidelidadeContexto.ObjetoValor;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -119,8 +120,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
 
         public async Task<IComandoResultado> ManipularAsync(EditarClienteComando comando)
         {
+            //var dataNascimento = DateTime.Parse(comando.DataNascimento);
 
-            var PerfilUsuario = new Cliente(comando.IdUsuario, comando.Nome,comando.DataNascimento, comando.Cidade, comando.Contato, comando.Sexo);
+            var PerfilUsuario = new Cliente(comando.IdUsuario, comando.NomeCompleto, comando.DataNascimento, comando.Cidade, comando.Contato, comando.Sexo);
 
             if (Invalid)
                 return new ComandoClienteResultado(false, "Por favor, corrija os campos abaixo", Notifications);

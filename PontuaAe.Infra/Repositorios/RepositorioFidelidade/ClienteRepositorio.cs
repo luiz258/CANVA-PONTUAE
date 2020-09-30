@@ -29,13 +29,13 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         public async Task Editar(Cliente cliente)
         {
            await  _db.Connection
-                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimento=@DataNascimento Sexo=@Sexo WHERE IdUsuario=@IdUsuario", new
+                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimento=@DataNascimento, Sexo=@Sexo, Contato = @Contato WHERE IdUsuario=@IdUsuario", new
                 {
                     NomeCompleto = cliente.NomeCompleto,
                     @Contato = cliente.Contato,
                     @DataNascimento = cliente.DataNascimento,
                     @Sexo = cliente.Sexo,
-                    @IdUsuario = cliente.IdUsuario,
+                    @IdUsuario = cliente.IdUsuario
                 });
         }
 
