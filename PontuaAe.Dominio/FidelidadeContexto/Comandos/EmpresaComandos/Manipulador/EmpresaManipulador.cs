@@ -53,7 +53,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             AddNotifications(documento.Notifications);
 
             if (Invalid)
-                return new ComandoEmpresaResultado(false, "Por favor, corrija os campos abaixo", Notifications);
+                return new ComandoEmpresaResultado(false, "Por favor, verifique o CNPJ OU CPF", Notifications);
 
             await _empresaRep.Salvar(empresa);
             var _idEmpresa = await _empresaRep.ObterIdEmpresa(usuarioAdmim.ID);
@@ -81,7 +81,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
 
 
             if (Invalid)
-                return new ComandoEmpresaResultado(false, "Por favor, corrija os campos incorretos", Notifications);
+                return new ComandoEmpresaResultado(false, "Por favor, verifique se os dados foram inseridos correto!", Notifications);
 
             await _empresaRep.Editar(empresa);
 
