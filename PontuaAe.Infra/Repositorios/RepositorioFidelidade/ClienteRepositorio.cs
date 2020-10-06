@@ -29,13 +29,13 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         public async Task Editar(Cliente cliente)
         {
            await  _db.Connection
-                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimento=@DataNascimento Sexo=@Sexo WHERE IdUsuario=@IdUsuario", new
+                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimento=@DataNascimento, Sexo=@Sexo, Contato = @Contato WHERE IdUsuario=@IdUsuario", new
                 {
                     NomeCompleto = cliente.NomeCompleto,
                     @Contato = cliente.Contato,
                     @DataNascimento = cliente.DataNascimento,
                     @Sexo = cliente.Sexo,
-                    @IdUsuario = cliente.IdUsuario,
+                    @IdUsuario = cliente.IdUsuario
                 });
         }
 
@@ -100,7 +100,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         //REFATOREI
         public async Task<IEnumerable<ListaRankingClientesConsulta>> ListaRankingClientes(int IdEmpresa)
         {
-            return await _db.Connection.QueryAsync<ListaRankingClientesConsulta>("SELECT top 50 pc.ID, c.NomeCompleto, pc.Contato, p.Segmentacao, p.SegCustomizado,  max(r.DataVenda) AS UltimaVisita, AVG(r.valor) AS GastoMedio, SUM(r.valor) AS GastoTotal, COUNT(r.DataVenda) AS QtdVisita FROM PONTUACAO  p JOIN RECEITA AS r ON p.IdEmpresa = r.IdEmpresa, PRE_CADASTRO AS pc FULL OUTER JOIN CLIENTE AS c ON pc.Contato = c.Contato   WHERE p.IdEmpresa = 19 AND p.ID = r.IdPontuacao   AND  p.IdPreCadastro = pc.ID   GROUP BY  pc.ID, c.NomeCompleto, pc.Contato, r.IdPontuacao, r.IdPontuacao, p.Segmentacao, p.SegCustomizado ORDER BY MAX(r.Valor) DESC", new { @IdEmpresa = IdEmpresa });
+            return await _db.Connection.QueryAsync<ListaRankingClientesConsulta>("SELECT top 50 pc.ID, c.NomeCompleto, pc.Contato, p.Segmentacao, p.SegCustomizado,  max(r.DataVenda) AS UltimaVisita, AVG(r.valor) AS GastoMedio, SUM(r.valor) AS GastoTotal, COUNT(r.DataVenda) AS QtdVisita FROM PONTUACAO  p JOIN RECEITA AS r ON p.IdEmpresa = r.IdEmpresa, PRE_CADASTRO AS pc FULL OUTER JOIN CLIENTE AS c ON pc.Contato = c.Contato   WHERE p.IdEmpresa = @IdEmpresa AND p.ID = r.IdPontuacao   AND  p.IdPreCadastro = pc.ID   GROUP BY  pc.ID, c.NomeCompleto, pc.Contato, r.IdPontuacao, r.IdPontuacao, p.Segmentacao, p.SegCustomizado ORDER BY MAX(r.Valor) DESC", new { @IdEmpresa = IdEmpresa });
 
         }
 

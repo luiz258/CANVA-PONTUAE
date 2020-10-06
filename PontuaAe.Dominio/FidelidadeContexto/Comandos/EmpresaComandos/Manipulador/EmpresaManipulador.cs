@@ -62,11 +62,16 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             ContaSMS creditoSMS = new ContaSMS(_idEmpresa, 200 );
             await _contaSMS.Salvar(creditoSMS);
 
+            //Configuração da Prgrama Fidelidade Basico
+            var config = new ConfiguracaoPontos(_idEmpresa);
+         
 
             // criar configuração para Computar o comportamento do tempo de visita e frequencia do cliente
             TemplateClassificacaoCliente criarConfiguracaoPadrao = new TemplateClassificacaoCliente(_idEmpresa);
              await _repConfigClassificacaoCliente.Salvar(criarConfiguracaoPadrao);
 
+            // Salvar Configuração da Prgrama Fidelidade Basico
+            await _configPontoRep.SalvaConfiguracaoPontuacao(config);
             return new ComandoEmpresaResultado(true, "Dados Salvos", Notifications);
             
         }
