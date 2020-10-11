@@ -167,6 +167,11 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
                     }
                 }
             }
+            else
+            {
+                PerfilNovo();
+                EstadoAtivo(); 
+            }
 
         }
         public void ClassificaClientesNaoFrequentes(DateTime ultimaVisita, int tempoEmDiasClienteInativo, int tempoEmDiasClientePedido)
