@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS;
 using PontuaAe.Dominio.FidelidadeContexto.ObjetoValor;
 using System.Linq;
+using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.ApiChatproWhatsapp;
 
 namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipulador
 {
@@ -25,17 +26,19 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         private readonly IClienteRepositorio _clienteRepositorio;
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
-     
+        private readonly IChatproWhatsApp _EnviarMensagemPorWhatSapp;
+
         //string[] ContatosAniversarianteMesmoDia;  remover
         //string[] ContatosAniversariantesDiasDesiguais;  remover
-      
+
 
         public AutomacaoManipulador(
              IAutomacaoMSGRepositorio automacaoRepositorio,
              IEmpresaRepositorio empresaRepositorio,
              IClienteRepositorio clienteRepositorio,
              ISituacaoRepositorio situacaoRepositorio,
-             IEnviarSMS enviarSMS
+             IEnviarSMS enviarSMS,
+            IChatproWhatsApp EnviarMensagemPorWhatSapp
 
 
             )
@@ -45,6 +48,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
             _clienteRepositorio = clienteRepositorio;
             _situacaoRepositorio = situacaoRepositorio;
             _enviarSMS = enviarSMS;
+            _EnviarMensagemPorWhatSapp = EnviarMensagemPorWhatSapp;
         }
 
         public async Task<IComandoResultado> ManipularAsync(EditarAutomacaoComando comando)
@@ -245,7 +249,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
                             //var data = dataEnvio.ToShortDateString();
                             string hora = "11:47";
 
-                            var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listaDadosAutomacao, linha.Conteudo, dataEnvio, hora);
+                            var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(listaDadosAutomacao, linha.Conteudo, dataEnvio, hora);
                             //resolver esta parte abaixo
                             Agenda agenda = new Agenda(dataEnvio, hora);
                             var campanhaSMS = new Mensagem(ID, idEmpresa, agenda);
@@ -286,7 +290,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
                         string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
                         string horaEnvio = "10:15";
 
-                        var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listDadosAutomacao, dataEnvio, horaEnvio);
+                        var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(listDadosAutomacao, dataEnvio, horaEnvio);
                         Agenda agenda = new Agenda(dataEnvio, horaEnvio);
                         var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
                         int qtdEnviada = arrayDeCodigoDasMensagens.Count;
@@ -350,16 +354,16 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
 
                     //string[] arrayContatos = new string[] { };
 
-
-
-                    string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
-                    string horaEnvio = "14:30";
-
-                    var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listDadosAutomacao, dataEnvio, horaEnvio);
-                    Agenda agenda = new Agenda(dataEnvio, horaEnvio);
-                    var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
-                    campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
-                    await _automacaoRepositorio.atualizarDadosMensagem(campanhaSMS);
+                  
+     
+                        string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
+                        string horaEnvio = "11:40";
+                        
+                        var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(listDadosAutomacao,  dataEnvio, horaEnvio);
+                        Agenda agenda = new Agenda(dataEnvio, horaEnvio);
+                        var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
+                        campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
+                        await _automacaoRepositorio.atualizarDadosMensagem(campanhaSMS);
 
                     foreach (var c in arrayDeCodigoDasMensagens)
                     {
