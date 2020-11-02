@@ -56,6 +56,9 @@
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.11.7.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.11.7\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -109,6 +112,7 @@
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
@@ -262,6 +266,8 @@
     <Compile Include="FidelidadeContexto\Repositorios\ISituacaoRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IUsuarioRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IPreCadastroRepositorio.cs" />
+    <Compile Include="FidelidadeContexto\Repositorios\Servicos\ApiChatproWhatsapp\ChatproWhatsApp.cs" />
+    <Compile Include="FidelidadeContexto\Repositorios\Servicos\ApiChatproWhatsapp\IChatproWhatsApp.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\Servicos\LocaSMS\EnviarSMS.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\Servicos\LocaSMS\IEnviarSMS.cs" />
     <Compile Include="Pesquisa\Comandos\Entradas\SalvaAvaliacaoNps.cs" />

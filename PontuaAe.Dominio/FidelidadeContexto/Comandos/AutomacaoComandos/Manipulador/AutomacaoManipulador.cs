@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS;
 using PontuaAe.Dominio.FidelidadeContexto.ObjetoValor;
 using System.Linq;
+using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.ApiChatproWhatsapp;
 
 namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipulador
 {
@@ -25,17 +26,19 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         private readonly IClienteRepositorio _clienteRepositorio;
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
-     
+        private readonly IChatproWhatsApp _EnviarMensagemPorWhatSapp;
+
         //string[] ContatosAniversarianteMesmoDia;  remover
         //string[] ContatosAniversariantesDiasDesiguais;  remover
-      
+
 
         public AutomacaoManipulador(
              IAutomacaoMSGRepositorio automacaoRepositorio,
              IEmpresaRepositorio empresaRepositorio,
              IClienteRepositorio clienteRepositorio,
              ISituacaoRepositorio situacaoRepositorio,
-             IEnviarSMS enviarSMS
+             IEnviarSMS enviarSMS,
+            IChatproWhatsApp EnviarMensagemPorWhatSapp
 
 
             )
@@ -45,6 +48,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
             _clienteRepositorio = clienteRepositorio;
             _situacaoRepositorio = situacaoRepositorio;
             _enviarSMS = enviarSMS;
+            _EnviarMensagemPorWhatSapp = EnviarMensagemPorWhatSapp;
         }
 
         public async Task<IComandoResultado> ManipularAsync(EditarAutomacaoComando comando)
@@ -112,12 +116,12 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
 
             List<ObterAutomacaoTipoAniversario> listaContatosAniversarianteMesmoDia = new List<ObterAutomacaoTipoAniversario>();
            
-            IEnumerable<Mensagem> Lista = _automacaoRepositorio.ListaTipoAutomacao();    
+            IEnumerable<Mensagem> Lista = await _automacaoRepositorio.ListaTipoAutomacao();    
 
             foreach (var linha in Lista)
             {
 
-                if (linha.Estado == true)
+                if (linha.Estado == 1)
                 {
                     IEnumerable<ObterAutomacaoTipoAniversario> listDadosAutomacaoAniversario;
                     listDadosAutomacaoAniversario = await _automacaoRepositorio.ObterDadosAutomacaoAniversario(linha.Segmentacao, linha.SegCustomizado, linha.IdEmpresa);
@@ -184,10 +188,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         public async Task AutomacaoTipoDiaDaSemana()
         {
 
-            IEnumerable<Mensagem> Lista = _automacaoRepositorio.ListaTipoAutomacao();
+            IEnumerable<Mensagem> Lista = await _automacaoRepositorio.ListaTipoAutomacao();
             foreach (var l in Lista)
             {
-                if (l.Estado == true)
+                if (l.Estado == 1)
                 {
                     if (l.TempoPorDiaDaSemana == "Segunda-feira")
                     {
@@ -245,7 +249,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
                             //var data = dataEnvio.ToShortDateString();
                             string hora = "11:47";
 
-                            var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listaDadosAutomacao, linha.Conteudo, dataEnvio, hora);
+                            var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(listaDadosAutomacao, linha.Conteudo, dataEnvio, hora);
                             //resolver esta parte abaixo
                             Agenda agenda = new Agenda(dataEnvio, hora);
                             var campanhaSMS = new Mensagem(ID, idEmpresa, agenda);
@@ -272,12 +276,12 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
         public async Task AutomacaoTipoTrintaDias()
         {
        
-            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = _automacaoRepositorio.ListaTipoAutomacao();
+            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = await _automacaoRepositorio.ListaTipoAutomacao();
 
             foreach (var l in ListaMensagensAutomaticasDeTodasAsEmpresas)
             {
 
-                if (l.Estado == true)
+                if (l.Estado == 1)
                 {
                     IEnumerable<ObterAutomacaoTipoUltimaFide> listDadosAutomacao;
                     listDadosAutomacao = await _automacaoRepositorio.ObterContatosQueVisitaramAposTrintaDias( l.Segmentacao, l.SegCustomizado, l.IdEmpresa);
@@ -286,7 +290,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
                         string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
                         string horaEnvio = "10:15";
 
-                        var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listDadosAutomacao, dataEnvio, horaEnvio);
+                        var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(listDadosAutomacao, dataEnvio, horaEnvio);
                         Agenda agenda = new Agenda(dataEnvio, horaEnvio);
                         var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
                         int qtdEnviada = arrayDeCodigoDasMensagens.Count;
@@ -321,26 +325,32 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
 
 
 
-        //-----4 APOS QUINZE DIAS SEM RETORNO, EXECUTAR O SHEDULE AS 03:30HS; TODO DIA VERIFICA E AGENDA O ENVIO PARA AS 10:12HS
+        
        
-        //// //-----5 Apos ultima fidelização, EXECUTAR O SHEDULE AS 03:30HS; TODO DIA VERIFICA  E AGENDA O ENVIO PARA AS 10:15HS
+        
         public async Task AutomacaoAposUltimaFidelizacao()
         {
-
+            //BUSCAR LISTA DE DATAS DE VISITAS COM ID EMPRESAS  EM CADA 
             //quando eu criar uma configuração de uma campanha automatica para envia sms para base segmentada na regra de apos ultima fidelização
-            // seja ela apos 3 dias fazer select where por intervalo de dias apos a data da visita
             List<dynamic> arrayContatos = new List<dynamic>();
+           
 
-            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = _automacaoRepositorio.ListaTipoAutomacao();
+            IEnumerable<Mensagem> ListaMensagensAutomaticasDeTodasAsEmpresas = await _automacaoRepositorio.ListaTipoAutomacao();
             foreach (var l in ListaMensagensAutomaticasDeTodasAsEmpresas)
             {
                 int numeroNegativo = -System.Math.Abs(l.TempoPorDia);
-                if (l.Estado == true)
+                IEnumerable<Mensagem> ListaDatasUlimasVisitas = await _automacaoRepositorio.ListaDatasUlimasVisitas(l.IdEmpresa, numeroNegativo, l.SegCustomizado);
+                foreach (var item in ListaDatasUlimasVisitas)
+                {
+
+                
+                
+                if (l.Estado == 1)
                 {
 
                     IEnumerable<ObterAutomacaoTipoUltimaFide> listDadosAutomacao;
-                   
-                    listDadosAutomacao = await _automacaoRepositorio.ObterContatosQueVisitaramAposUltimaFidelizacao(numeroNegativo, l.Segmentacao, l.SegCustomizado, l.IdEmpresa);
+
+                    listDadosAutomacao = await _automacaoRepositorio.ObterContatosQueVisitaramAposUltimaFidelizacao( item.DataUlimaVisita, l.Segmentacao, l.SegCustomizado, l.IdEmpresa);
 
                     //string[] arrayContatos = new string[] { };
 
@@ -349,26 +359,27 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipul
                         string dataEnvio = DateTime.Now.ToString("dd/MM/yyyy");
                         string horaEnvio = "11:40";
                         
-                        var arrayDeCodigoDasMensagens = await _enviarSMS.EnviarSMSPorSMSDEVAsync(listDadosAutomacao,  dataEnvio, horaEnvio);
+                        var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(listDadosAutomacao,  dataEnvio, horaEnvio);
                         Agenda agenda = new Agenda(dataEnvio, horaEnvio);
                         var campanhaSMS = new Mensagem(l.ID, l.IdEmpresa, agenda);
                         campanhaSMS.CalcularQtdEnviado(arrayDeCodigoDasMensagens.Count);
                         await _automacaoRepositorio.atualizarDadosMensagem(campanhaSMS);
 
-                        foreach (var c in arrayDeCodigoDasMensagens)
-                        {
+                    foreach (var c in arrayDeCodigoDasMensagens)
+                    {
 
-                            var array = c.Split(',');
-                            var contato = array[0];
-                            var idSMS = Convert.ToInt32(array[1]);
-                            var _dataEnvio = DateTime.Now;
-                            var mensagemSMS = new SituacaoSMS(_dataEnvio, contato, l.IdEmpresa, l.ID, idSMS);
-                            await _situacaoRepositorio.SalvarSituacao(mensagemSMS);
+                        var array = c.Split(',');
+                        var contato = array[0];
+                        var idSMS = Convert.ToInt32(array[1]);
+                        var _dataEnvio = DateTime.Now;
+                        var mensagemSMS = new SituacaoSMS(_dataEnvio, contato, l.IdEmpresa, l.ID, idSMS);
+                        await _situacaoRepositorio.SalvarSituacao(mensagemSMS);
 
-                        }
+                    }
 
-                   
+
                 }
+            }
             }
         }
     }

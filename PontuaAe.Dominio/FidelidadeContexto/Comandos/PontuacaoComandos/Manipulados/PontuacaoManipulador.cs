@@ -2,8 +2,10 @@
 using PontuaAe.Compartilhado.Comandos;
 using PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Entradas;
 using PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Resultados;
+using PontuaAe.Dominio.FidelidadeContexto.Consulta.PremiosConsulta;
 using PontuaAe.Dominio.FidelidadeContexto.Entidades;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios;
+using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.ApiChatproWhatsapp;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS;
 using System;
 using System.Collections.Generic;
@@ -19,10 +21,12 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
         private readonly IConfigPontosRepositorio _configPontosRepositorio;
         private readonly IPontuacaoRepositorio _pontuacaoRepositorio;
         private readonly IReceitaRepositorio _receitaRepositorio;
+        private readonly IPremioRepositorio _premiosRepositorio;
         private readonly IEmpresaRepositorio _empresaRepositorio;
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
         private readonly IPreCadastroRepositorio _preCadastroRepositorio;
+        private readonly IChatproWhatsApp _EnviarMensagemPorWhatSapp;
 
         public PontuacaoManipulador(
             IClienteRepositorio clienteRepositorio,
@@ -35,16 +39,19 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
             ISituacaoRepositorio situacaoRepositorio,
             IEnviarSMS enviarSMS,
             IPreCadastroRepositorio preCadastroRepositorio,
+            IChatproWhatsApp EnviarMensagemPorWhatSapp,
             IConfiguracaoCashBackRepositorio configCashBackRepositorio
 )
         {
 
             _pontuacaoRepositorio = pontuacaoRepositorio;
             _receitaRepositorio = receitaRepositorio;
+            _premiosRepositorio = premiosRepositorio;
             _configPontosRepositorio = configPontosRepositorio;
             _empresaRepositorio = empresaRepositorio;
             _situacaoRepositorio = situacaoRepositorio;
             _enviarSMS = enviarSMS;
+            _EnviarMensagemPorWhatSapp = EnviarMensagemPorWhatSapp;
             _preCadastroRepositorio = preCadastroRepositorio;
            
         }
@@ -132,12 +139,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                         Pontuacao geraPontuacaoSaldoZero = new Pontuacao(0, comando.IdEmpresa, comando.IdPreCadastro);
                         await _pontuacaoRepositorio.CriarPontuacao(geraPontuacaoSaldoZero);
 
-                        //envia sms boas vindas ao programa de fidelidade
-                        
-                        var n = comando.Contato;
-                        var _numero = n;
-                        await _enviarSMS.Enviar_Um_SMSPor_API_SMSDEVAsync(_numero, $"{campo.NomeFantasia} :Voce recebeu pontos Aêêê! CADASTRE-SE EM NOSSO SITE: http://pontuaae.herokuapp.com/registerCustomer");
-
                         Pontuacao validador = new Pontuacao(comando.IdPreCadastro, comando.IdEmpresa);
 
                         var SaldoAnterior = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, comando.IdPreCadastro);
@@ -146,6 +147,33 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
+                        IEnumerable<ListarPremiosConsulta> ListaPremios = await _premiosRepositorio.listaPremios(comando.IdEmpresa);
+                        foreach (var item in ListaPremios)
+                        {
+
+                            var ponto = validador.SaldoTransacao;
+                            var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
+                            decimal saldo_ = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro_);
+                            int novoSaldo = Convert.ToInt32(saldo_);
+                            var data_ = DateTime.Now.Date;
+                            var data = data_.ToString();
+                            var hora_ = DateTime.Now.Hour;
+                            var hora = hora_.ToString();
+                            var n = comando.Contato;
+                            string _numero = n;
+                            string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto}" + " em " + $"{data}" + " às " + $"{hora}" + @"\r\n" +
+                            @"\r\n Seu saldo atual é de " + $"{novoSaldo}" + "pontos" + @"\r\n" +
+                            @"\r\n Quando achar conveniente, basta" + @"\r\n" +
+                            @"\r\n solicitar o resgate dos seus pontos \r\n" + @" no caixa!" + @"\r\n" +
+                            @"\r\n Obrigado pela preferência! :)" + @"\r\n" +
+                            @"\r\n 💬 *Chame a empresa MAISS no Whats, tocando aqui* 👇" + @"\r\n https://wa.me/5563992816178?text=Seja+bem+vindo+a  " +
+                            @"\r\n ⚠ *POR GENTILEZA COMPLETE SEU CADASTRO AQUI* 👇" + @"\r\n http://pontuaae.herokuapp.com/registerCustomer" +
+                            @"\r\n *Para acessar sua conta, toque no link abaixo 👇 é informe EMAIL e SENHA depois clique em ENTRAR.* \r\n" + @"\r\n http://pontuaae.herokuapp.com/loginCliente" + @"\r\n" +
+                            @"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
+                            await _EnviarMensagemPorWhatSapp.Enviar_mensagemDaPontuacao(_numero, conteudo);
+
+                        }
+
                     }
                 }
 
@@ -153,7 +181,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                 var Id = await _pontuacaoRepositorio.ObterIdPontuacao(comando.IdEmpresa, comando.IdPreCadastro);
 
                 //RECEITA 
-                Receita DadosReceita = new Receita(comando.ValorInfor, comando.IdEmpresa, Id, comando.Id, "pontuacao");
+                Receita DadosReceita = new Receita(comando.ValorInfor, comando.IdEmpresa, Id, comando.Id, "bonificado");
                 await _receitaRepositorio.Salvar(DadosReceita);
                 //Notificação Saldo de Pontos
 

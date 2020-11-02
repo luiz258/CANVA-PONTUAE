@@ -102,7 +102,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
             if (Invalid)
                 return new ComandoClienteResultado(
                     false,
-                    "Por favor, corrija os campos abaixo",
+                    "Por favor, verifique seu email",
                     Notifications);
 
             await _usuarioRepsitorio.Salvar(usuario);

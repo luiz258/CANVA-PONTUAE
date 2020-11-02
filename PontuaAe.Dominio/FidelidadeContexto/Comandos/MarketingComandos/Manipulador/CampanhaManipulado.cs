@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System;
 using PontuaAe.Dominio.FidelidadeContexto.ObjetoValor;
 using PontuaAe.Dominio.FidelidadeContexto.Consulta.MarketingConsulta;
+using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.ApiChatproWhatsapp;
 
 namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipulador
 {
@@ -23,6 +24,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
         private readonly IClienteRepositorio _clienteRepositorio;
         private readonly ISituacaoRepositorio _situacaoRepositorio;
         private readonly IEnviarSMS _enviarSMS;
+        private readonly IChatproWhatsApp _EnviarMensagemPorWhatSapp;
         private readonly IEnviarSMS _agendarSMS;
         private readonly IContaSMSRepositorio _contaSMS;
 
@@ -33,6 +35,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
             IClienteRepositorio clienteRepositorio,
             ISituacaoRepositorio situacaoRepositorio,
             IEnviarSMS enviarSMS,
+            IChatproWhatsApp EnviarMensagemPorWhatSapp,
             IEnviarSMS agendarSMS,
             IContaSMSRepositorio contaSMS
 
@@ -44,6 +47,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
             _clienteRepositorio = clienteRepositorio;
             _situacaoRepositorio = situacaoRepositorio;
             _enviarSMS = enviarSMS;
+            _EnviarMensagemPorWhatSapp = EnviarMensagemPorWhatSapp;
             _agendarSMS = agendarSMS;
             _contaSMS = contaSMS;
 
@@ -59,19 +63,21 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.MarketingComandos.Manipul
 
            
             IEnumerable <ListaContatosPorSegCustomizado> ListContatos = await _campanhaRepositorio.BuscaContatosPorSegCustomizado(comando.IdEmpresa, comando.SegCustomizado);
-           
+
             //List<string> tt = new List<string>();
             //foreach (var item in ListContatos)
             //{
             //    tt.Add(item.Contato);
             //}
 
-            var data_ = comando.DataEnvio.ToString("dd/MM/yyyy");
+            // var data_ = comando.DataEnvio.ToString("dd/MM/yyyy"); 
+            var data_ = DateTime.Now.Date;
+            var hora = DateTime.Now.Hour;
             //var hora_ = comando.HoraEnvio.ToString("HH:mm:ss");
-            var arrayDeCodigoDasMensagens = await  _enviarSMS.EnviarSMSPorSMSDEVAsync(ListContatos, comando.Conteudo, data_, comando.HoraEnvio);
+            var arrayDeCodigoDasMensagens = await _EnviarMensagemPorWhatSapp.EnviarMensagemEmMassa(ListContatos, comando.Conteudo);
 
 
-            var juntaDataHora = $"{data_} " + $"{comando.HoraEnvio}";
+            var juntaDataHora = $"{data_} " + $"{hora}";
 
             var agenda = new Agenda(juntaDataHora);  
             var _campanhaSMS = new Mensagem(comando.IdEmpresa, comando.Nome, comando.Segmentacao, comando.SegCustomizado, comando.QtdSelecionado, comando.Conteudo, agenda);

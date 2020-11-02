@@ -21,7 +21,7 @@ namespace PontuaAe.Api.GereciamentoJobsTask.Jobs
 
         public Task Execute(IJobExecutionContext context)
         {
-            //_manipulador.AutomacaoAposUltimaFidelizacao();
+            _manipulador.AutomacaoAposUltimaFidelizacao();
             return Task.CompletedTask;
         }
     }
