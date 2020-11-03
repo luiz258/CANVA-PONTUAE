@@ -31,6 +31,7 @@ using PontuaAe.Api.Controllers;
 using PontuaAe.Dominio.FidelidadeContexto.Comandos.AutomacaoComandos.Manipulador;
 using System.Threading.Tasks;
 using PontuaAe.Api.Configuration;
+using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.ApiChatproWhatsapp;
 
 namespace PontuaAe.Api
 {
@@ -76,7 +77,7 @@ namespace PontuaAe.Api
             services.AddScoped<ClassificaTipoClienteJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(ClassificaTipoClienteJob),
-            cronExpression: "0 01 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 05 10 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
             //--------JOB Automação-SMS Aniversariantes
             services.AddScoped<AutomacaoAniversarioJob>();
@@ -88,7 +89,7 @@ namespace PontuaAe.Api
             services.AddScoped<AutomacaoDiaDaSemanaJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoDiaDaSemanaJob),
-            cronExpression: "0 16 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 10 10 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
 
 
@@ -96,14 +97,14 @@ namespace PontuaAe.Api
             services.AddScoped<AutomacaoTrintaDiasRetornoJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoTrintaDiasRetornoJob),
-            cronExpression: "0 25 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 20 10 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
 
             //--------JOB Automação-SMS APOS ULTIMA PONTUACAO
             services.AddScoped<AutomacaoUltimaFidelizacaoJob>();
             services.AddSingleton(new JobSchedule(
             jobType: typeof(AutomacaoUltimaFidelizacaoJob),
-            cronExpression: "0 30 00 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
+            cronExpression: "0 25 10 ? * MON-TUE,WED-THU,FRI,SAT-SUN"));
 
 
             //Cofiguração Gerenciamento de Jobs/ Task com HangFire
@@ -135,6 +136,9 @@ namespace PontuaAe.Api
             services.AddTransient<IContaSMSRepositorio, ContaSMSRepositorio>();
             services.AddTransient<ISituacaoRepositorio, SituacaoRepositorio>();
             services.AddTransient<IEnviarSMS, EnviarSMS>();
+            services.AddTransient<IChatproWhatsApp, ChatproWhatsApp >();
+
+
             services.AddTransient<IContaSMSRepositorio, ContaSMSRepositorio>();
             services.AddTransient<IFuncionarioRepositorio, FuncionarioRepositorio>();
             services.AddTransient<IPreCadastroRepositorio, PreCadastroRepositorio>();
@@ -147,8 +151,9 @@ namespace PontuaAe.Api
             services.AddTransient<EmpresaManipulador, EmpresaManipulador>();
             services.AddTransient<FuncionarioComandoManipulador, FuncionarioComandoManipulador>();
             services.AddTransient<CampanhaManipulado, CampanhaManipulado>();
-            services.AddTransient<AutomacaoManipulador, AutomacaoManipulador>();        
-       
+            services.AddTransient<AutomacaoManipulador, AutomacaoManipulador>();
+            services.AddTransient<ChatproWhatsApp, ChatproWhatsApp>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

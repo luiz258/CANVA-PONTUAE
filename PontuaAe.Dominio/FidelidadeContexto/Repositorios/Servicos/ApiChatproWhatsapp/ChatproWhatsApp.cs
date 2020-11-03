@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.ApiChatproWhatsapp
 {
-    class ChatproWhatsApp : IChatproWhatsApp
+    public class ChatproWhatsApp : IChatproWhatsApp
     {
+
+        public ChatproWhatsApp()
+        {
+
+        }
         public async Task Enviar_mensagemDaPontuacao(string Contato, string Conteudo)
         {
             var client = new RestClient("https://v4.chatpro.com.br/chatpro-o6dwpl29ja/api/v1/send_message");
