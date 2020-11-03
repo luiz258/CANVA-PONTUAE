@@ -132,6 +132,33 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
+                        IEnumerable<ListarPremiosConsulta> ListaPremios = await _premiosRepositorio.listaPremios(comando.IdEmpresa);
+                        foreach (var item in ListaPremios)
+                        {
+
+                            var ponto = validador.SaldoTransacao;
+                            var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
+                            decimal saldo_ = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro_);
+                            int novoSaldo = Convert.ToInt32(saldo_);
+                            var data_ = DateTime.Now.Date;
+                            var data = data_.ToString();
+                            var hora_ = DateTime.Now.Hour;
+                            var hora = hora_.ToString();
+                            var n = comando.Contato;
+                            string _numero = n;
+                            string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto}" + " em " + $"{data}" + " às " + $"{hora}" + @"\r\n" +
+                            @"\r\n Seu saldo atual é de " + $"{novoSaldo}" + "pontos" + @"\r\n" +
+                            @"\r\n Quando achar conveniente, basta" + @"\r\n" +
+                            @"\r\n solicitar o resgate dos seus pontos \r\n" + @" no caixa!" + @"\r\n" +
+                            @"\r\n Obrigado pela preferência! :)" + @"\r\n" +
+                            @"\r\n 💬 *Chame a empresa MAISS no Whats, tocando aqui* 👇" + @"\r\n https://wa.me/5563992816178?text=Seja+bem+vindo+a  " +
+                            @"\r\n ⚠ *POR GENTILEZA COMPLETE SEU CADASTRO AQUI* 👇" + @"\r\n http://pontuaae.herokuapp.com/registerCustomer" +
+                            @"\r\n *Para acessar sua conta, toque no link abaixo 👇 é informe EMAIL e SENHA depois clique em ENTRAR.* \r\n" + @"\r\n http://pontuaae.herokuapp.com/loginCliente" + @"\r\n" +
+                            @"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
+                            await _EnviarMensagemPorWhatSapp.Enviar_mensagemDaPontuacao(_numero, conteudo);
+
+                        }
+
                     }
 
                     else if (VerificaIdPrecadastro == false)
@@ -174,6 +201,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         }
 
+
                     }
                 }
 
@@ -190,7 +218,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                 decimal saldoCliente = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro);
                 int saldo = Convert.ToInt32(saldoCliente);
 
-                await _enviarSMS.Enviar_Um_SMSPor_API_SMSDEVAsync(numero, $"{campo.NomeFantasia}: Seu saldo : {saldo} pontos . Acesse http://pontuaae.herokuapp.com/loginCliente e veja como funciona e os premios que pode resgatar");
+                 
+                //await _enviarSMS.Enviar_Um_SMSPor_API_SMSDEVAsync(numero, $"{campo.NomeFantasia}: Seu saldo : {saldo} pontos . Acesse http://pontuaae.herokuapp.com/loginCliente e veja como funciona e os premios que pode resgatar");
 
                 //Este bloco abaixo, averigua se sera necessário
                 //var _saldoCliente =  _clienteRepositorio.ObterSaldo(IdCliente, comando.IdEmpresa);        
