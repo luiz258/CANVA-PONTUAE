@@ -138,13 +138,11 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                             var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
                             decimal saldo_ = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro_);
                             int novoSaldo = Convert.ToInt32(saldo_);
-                            var data_ = DateTime.Now.Date;
+                            var data_ = DateTime.Now;
                             var data = data_.ToString();
-                            var hora_ = DateTime.Now.Hour;
-                            var hora = hora_.ToString();
                             var n = comando.Contato;
                             string _numero = n;
-                        string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto}" + " em " + $"{data}" + " às " + $"{hora}" + @"\r\n" +
+                        string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto} pontos" + " em " + $"{data}" + @"\r\n" +
                         @"\r\n Seu saldo atual é de " + $"{novoSaldo}" + "pontos" + @"\r\n" +
                         @"\r\n Quando achar conveniente, basta" + @"\r\n" +
                         @"\r\n solicitar o resgate dos seus pontos \r\n" + @" no caixa!" + @"\r\n" +
@@ -152,10 +150,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                         @"\r\n 💬 *Chame a empresa MAISS no Whats, tocando aqui* 👇" + @"\r\n https://wa.me/5563992816178?text=Seja+bem+vindo+a  " +
                         @"\r\n ⚠ *POR GENTILEZA COMPLETE SEU CADASTRO AQUI* 👇" + @"\r\n http://pontuaae.herokuapp.com/registerCustomer" +
                         @"\r\n *Para acessar sua conta, toque no link abaixo 👇 é informe EMAIL e SENHA depois clique em ENTRAR.* \r\n" + @"\r\n http://pontuaae.herokuapp.com/loginCliente" + @"\r\n";
-                            //@"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
-                            await _EnviarMensagemPorWhatSapp.Enviar_mensagemDaPontuacao(_numero, conteudo);
+                        //@"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
+                        await _EnviarMensagemPorWhatSapp.Enviar_mensagemDaPontuacao(_numero, conteudo);
 
-                       
+
 
                     }
 
@@ -178,13 +176,11 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                             var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
                             decimal saldo_ = await _pontuacaoRepositorio.obterSaldo(comando.IdEmpresa, idPreCadastro_);
                             int novoSaldo = Convert.ToInt32(saldo_);
-                            var data_ = DateTime.Now.Date;
-                            var data = data_.ToString();
-                            var hora_ = DateTime.Now.Hour;
-                            var hora = hora_.ToString();
+                            var data_ = DateTime.Now;
+                            var data = data_.ToString();                      
                             var n = comando.Contato;
                             string _numero = n;
-                        string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto}" + " em " + $"{data}" + " às " + $"{hora}" + @"\r\n" +
+                        string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto} pontos" + " em " + $"{data}" + @"\r\n" +
                         @"\r\n Seu saldo atual é de " + $"{novoSaldo}" + "pontos" + @"\r\n" +
                         @"\r\n Quando achar conveniente, basta" + @"\r\n" +
                         @"\r\n solicitar o resgate dos seus pontos \r\n" + @" no caixa!" + @"\r\n" +
