@@ -142,8 +142,8 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                             var data = data_.ToString();
                             var n = comando.Contato;
                             string _numero = n;
-                        string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto} pontos" + " em " + $"{data}" + @"\r\n" +
-                        @"\r\n Seu saldo atual é de " + $"{novoSaldo}" + "pontos" + @"\r\n" +
+                        string conteudo = $"*{campo.NomeFantasia}*:" + "Você ganhou " + $"{ponto} pontos" + " em " + $"{data}" + @"\r\n" +
+                        @"\r\n Seu saldo atual é de " + $"{novoSaldo} " + "pontos" + @"\r\n" +
                         @"\r\n Quando achar conveniente, basta" + @"\r\n" +
                         @"\r\n solicitar o resgate dos seus pontos \r\n" + @" no caixa!" + @"\r\n" +
                         @"\r\n Obrigado pela preferência! :)" + @"\r\n" +
