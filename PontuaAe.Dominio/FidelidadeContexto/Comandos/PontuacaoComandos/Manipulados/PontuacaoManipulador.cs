@@ -132,7 +132,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
-                      
+                      ///ola
 
                             var ponto = validador.SaldoTransacao;
                             var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
