@@ -15,9 +15,12 @@ namespace PontuaAe.Infra.FidelidadeContexto.DataContexto
 
         public PontuaAeDataContexto()
         {
-            Connection = new SqlConnection("Server= den1.mssql7.gear.host; Database=pontuaedb; User ID=pontuaedb; Password=Gi3Q-?06D8XL;");
+            Connection = new SqlConnection("Server=db-pontuaae.database.windows.net,1433;Database=Db-Pontuaae;User ID=pontuaae-sa;Password=1q2w3e4r!@#$;Trusted_Connection=False;Encrypt=True;");
             Connection.Open();
         }
+        /// <summary>
+        /// ODBC Driver 17 for SQL Serve
+        /// </summary>
 
         public void Dispose()
         {
