@@ -170,9 +170,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, SaldoAnterior);
 
-                        await _pontuacaoRepositorio.AtualizarSaldo(validador);
-
-                    
+                        await _pontuacaoRepositorio.AtualizarSaldo(validador);                    
 
                             var ponto = validador.SaldoTransacao;
                             var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
@@ -193,8 +191,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                             //@"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
                             await _EnviarMensagemPorWhatSapp.Enviar_mensagemDaPontuacao(_numero, conteudo);
                     
-
-
                     }
                 }
 
