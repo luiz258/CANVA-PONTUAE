@@ -87,7 +87,7 @@ SaldoTransacao decimal(20,2),
 DataVisita DateTime,
 Validade DateTime,
 Segmentacao varchar(40),   
-Estado bit,  --REMOVER ESTE ATRIBUTO
+--Estado bit,  --REMOVER ESTE ATRIBUTO
 SegCustomizado varchar(40)
 );
 
