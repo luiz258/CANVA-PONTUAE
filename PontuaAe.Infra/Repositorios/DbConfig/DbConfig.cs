@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PontuaAe.Compartilhado.DbConfig;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,7 +15,9 @@ namespace PontuaAe.Infra.Repositorios
 
         public DbConfig()
         {
-            Connection = new SqlConnection("Server=db-pontuaae.database.windows.net,1433;Database=Db-Pontuaae;User ID=pontuaae-sa;Password=1q2w3e4r!@#$;Trusted_Connection=False;Encrypt=True;");
+
+            Connection = new SqlConnection(Config.ConnectionString);
+
             Connection.Open();
         }
 

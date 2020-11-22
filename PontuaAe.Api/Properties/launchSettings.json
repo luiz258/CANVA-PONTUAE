@@ -18,7 +18,7 @@
       "nativeDebugging": false
     },
     "PontuaAe.Api": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",
       "environmentVariables": {

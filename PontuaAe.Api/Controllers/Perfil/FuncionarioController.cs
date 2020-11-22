@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using PontuaAe.Dominio.FidelidadeContexto.Consulta.FuncionarioConsulta;
 using System.Threading.Tasks;
 using PontuaAe.Dominio.FidelidadeContexto.Entidades;
+using System;
 
 namespace PontuaAe.Api.Controllers.Account
 {
@@ -36,8 +37,16 @@ namespace PontuaAe.Api.Controllers.Account
         public async Task<IComandoResultado> CreateFuncionario([FromBody] CadastrarFuncionarioComando comando)
         {
 
-            var result =  (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(comando);
-            return result;
+            try
+            {
+                var result = (ComandoFuncionarioResultado)await _manipulador.ManipularAsync(comando);
+                return result;
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+           
         }
 
         [HttpPut]

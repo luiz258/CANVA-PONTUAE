@@ -7,6 +7,7 @@ using PontuaAe.Dominio.FidelidadeContexto.ObjetoValor;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos;
 using PontuaAe.Dominio.FidelidadeContexto.Repositorios.Servicos.LocaSMS;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -97,7 +98,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
                     "Por favor, corrija os campos abaixo",
                     Notifications);
 
-            var usuario = new Usuario( comando.Email, comando.Senha,  comando.RoleId);
+            var usuario = new Usuario(comando.Email, comando.Senha, comando.RoleId);
             if (Invalid)
                 return new ComandoClienteResultado(
                     false,
@@ -106,7 +107,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
 
             await _usuarioRepsitorio.Salvar(usuario);
 
-            
+
             var _usuario = await _usuarioRepsitorio.ObterUsuario(comando.Email);
             var PerfilUsuario = new Cliente(_usuario.ID, comando.Nome, comando.Contato, EmailValido,  comando.DataNascimento, comando.Cidade, comando.Sexo);
 
@@ -119,8 +120,9 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.ClienteComandos.Manipulad
 
         public async Task<IComandoResultado> ManipularAsync(EditarClienteComando comando)
         {
+            //var dataNascimento = DateTime.Parse(comando.DataNascimento);
 
-            var PerfilUsuario = new Cliente(comando.IdUsuario, comando.Nome,comando.DataNascimento, comando.Cidade, comando.Contato, comando.Sexo);
+            var PerfilUsuario = new Cliente(comando.IdUsuario, comando.NomeCompleto, comando.DataNascimento, comando.Cidade, comando.Contato, comando.Sexo);
 
             if (Invalid)
                 return new ComandoClienteResultado(false, "Por favor, corrija os campos abaixo", Notifications);

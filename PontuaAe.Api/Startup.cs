@@ -144,6 +144,7 @@ namespace PontuaAe.Api
             services.AddTransient<IPreCadastroRepositorio, PreCadastroRepositorio>();
             services.AddTransient<IConfigClassificacaoClienteRepositorio, ConfigClassificacaoClienteRepositorio>();
             services.AddTransient<IConfiguracaoCashBackRepositorio, ConfiguracaoCashBackRepositorio>();
+            services.AddTransient<IChatproWhatsApp, ChatproWhatsApp>();
             services.AddTransient<UsuarioManipulador, UsuarioManipulador>();
             services.AddTransient<PontuacaoManipulador, PontuacaoManipulador>();
             services.AddTransient<ClienteManipulador, ClienteManipulador>();

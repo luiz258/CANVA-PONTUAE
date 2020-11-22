@@ -75,8 +75,15 @@ namespace PontuaAe.Api.Controllers.Perfil
         [Route("v1/put")]
         public async Task<IComandoResultado> PutAsync([FromBody] EditarClienteComando comando)
         {
-            var cliente = (ComandoClienteResultado)await _manipulador.ManipularAsync(comando);
-            return cliente;
+            try
+            {
+                var cliente = (ComandoClienteResultado)await _manipulador.ManipularAsync(comando);
+                return cliente;
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
 
 
@@ -99,9 +106,9 @@ namespace PontuaAe.Api.Controllers.Perfil
 
 
         [HttpGet]
-        [Route("v1/lista/{idEmpresa}")]
+        [Route("v1/lista/{IdEmpresa}")]
         //[Authorize(Policy = "Admin")]
-        //[Authorize(Policy = "Funcionario")]
+        //[AllowAnonymous]
         public async Task<IEnumerable<ListaRankingClientesConsulta>> ListaRankingClientes(int IdEmpresa)
         {
             return await _repCliente.ListaRankingClientes(IdEmpresa);

@@ -54,6 +54,7 @@ CREATE TABLE FUNCIONARIO(
 ID int IDENTITY(1,1) PRIMARY KEY,
 IdUsuario int FOREIGN KEY REFERENCES USUARIO(ID),
 IdEmpresa int FOREIGN KEY REFERENCES EMPRESA(ID),
+Contato varchar(11),
 NomeCompleto varchar(40)
 );
 
@@ -67,7 +68,9 @@ CREATE TABLE CLIENTE(
 ID int IDENTITY(1,1) PRIMARY KEY, 
 IdUsuario int FOREIGN KEY REFERENCES USUARIO(ID),
 NomeCompleto varchar(55),
-DataNascimeto DateTime,
+DataNascimento DateTime,
+Sexo varchar(11),
+Cidade varchar(33),
 Contato varchar(15),
 Email varchar(50),
 );  

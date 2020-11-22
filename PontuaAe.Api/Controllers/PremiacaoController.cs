@@ -56,6 +56,7 @@ namespace PontuaAe.Api.Controllers
 
         [HttpPut]
         [Route("v1/put")]
+        [AllowAnonymous]
         public async Task<IComandoResultado> UpdateAsync([FromBody] EditarPremioComando comando)
         {
             var Editar = (ComandoResultado)await _manipulador.ManipularAsync(comando);
@@ -74,8 +75,8 @@ namespace PontuaAe.Api.Controllers
 
 
         [HttpGet]
-        [Route("v1/detalhe/{id}/{idEmpresa}")]
-        // [Authorize(Policy ="Admin")]
+        [Route("v1/detalhe/{Id}/{idEmpresa}")]
+        [AllowAnonymous]
         public async Task<ObterDetalhePremioConsulta> Detalhe(int Id, int idEmpresa)
         {
           

@@ -53,7 +53,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             AddNotifications(documento.Notifications);
 
             if (Invalid)
-                return new ComandoEmpresaResultado(false, "Por favor, corrija os campos abaixo", Notifications);
+                return new ComandoEmpresaResultado(false, "Por favor, verifique o CNPJ OU CPF", Notifications);
 
             await _empresaRep.Salvar(empresa);
             var _idEmpresa = await _empresaRep.ObterIdEmpresa(usuarioAdmim.ID);
@@ -62,11 +62,16 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             ContaSMS creditoSMS = new ContaSMS(_idEmpresa, 200 );
             await _contaSMS.Salvar(creditoSMS);
 
+            //Configuração da Prgrama Fidelidade Basico
+            var config = new ConfiguracaoPontos(_idEmpresa);
+         
 
             // criar configuração para Computar o comportamento do tempo de visita e frequencia do cliente
             TemplateClassificacaoCliente criarConfiguracaoPadrao = new TemplateClassificacaoCliente(_idEmpresa);
              await _repConfigClassificacaoCliente.Salvar(criarConfiguracaoPadrao);
 
+            // Salvar Configuração da Prgrama Fidelidade Basico
+            await _configPontoRep.SalvaConfiguracaoPontuacao(config);
             return new ComandoEmpresaResultado(true, "Dados Salvos", Notifications);
             
         }
@@ -81,7 +86,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
 
 
             if (Invalid)
-                return new ComandoEmpresaResultado(false, "Por favor, corrija os campos incorretos", Notifications);
+                return new ComandoEmpresaResultado(false, "Por favor, verifique se os dados foram inseridos correto!", Notifications);
 
             await _empresaRep.Editar(empresa);
 
@@ -102,12 +107,21 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
 
             //}
             ////2 : Pontos
-         
-                //criação da regra da pontuação
-                var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos, 0, comando.TipoDeProgramaFidelidade);
+            ///
+            var verificarConfig = await _configPontoRep.ObterdadosConfiguracao(comando.IdEmpresa);
+
+            if(verificarConfig.Nome != null)
+            {
+                return new ComandoEmpresaResultado(true, "Já existe uma configuração", Notifications);
+            }
+          
+
+
+            //criação da regra da pontuação
+            var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos, 0, comando.TipoDeProgramaFidelidade);
                 await _configPontoRep.SalvaConfiguracaoPontuacao(configuracaoPontos);
             
-            return new ComandoEmpresaResultado(true, "Salvo", Notifications);
+            return new ComandoEmpresaResultado(true, "Dados Salvos", Notifications);
 
         }
 
@@ -126,12 +140,11 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.EmpresaComandos.Manipulad
             }
 
             //2 : Pontos
-            if (comando.TipoProgramaFidelidade == 2)
-            {
+         
                 //criação da regra da pontuação
                 var configuracaoPontos = new ConfiguracaoPontos(comando.Nome, comando.IdEmpresa, comando.PontosFidelidade, comando.Reais, comando.ValidadePontos, 0, comando.TipoProgramaFidelidade);
                 await _configPontoRep.EditarConfiguracaoPontuacao(configuracaoPontos);
-            }
+            
             return new ComandoEmpresaResultado(true, "cartão fidelidade criado com sucesso", Notifications);
 
 

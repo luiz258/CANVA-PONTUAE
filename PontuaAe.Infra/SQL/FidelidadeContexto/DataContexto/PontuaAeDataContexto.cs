@@ -12,14 +12,12 @@ namespace PontuaAe.Infra.FidelidadeContexto.DataContexto
     public class PontuaAeDataContexto : IDisposable
     {
         public SqlConnection Connection { get; set; }
-
+        //classe nao utilizada
         public PontuaAeDataContexto()
         {
-<<<<<<< Updated upstream
-            Connection = new SqlConnection("Server=db-pontuaae.database.windows.net,1433;Database=Db-Pontuaae;User ID=pontuaae-sa;Password=1q2w3e4r!@#$;Trusted_Connection=False;Encrypt=True;");
-=======
+
             Connection = new SqlConnection("Data Source=SQL5097.site4now.net;Initial Catalog=DB_A6977E_pontuaae;User Id=DB_A6977E_pontuaae_admin;Password=3412@Sousa");
->>>>>>> Stashed changes
+
             Connection.Open();
         }
         /// <summary>

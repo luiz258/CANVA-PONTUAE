@@ -29,13 +29,13 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         public async Task Editar(Cliente cliente)
         {
            await  _db.Connection
-                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimento=@DataNascimento Sexo=@Sexo WHERE IdUsuario=@IdUsuario", new
+                .ExecuteAsync("UPDATE CLIENTE SET NomeCompleto=@NomeCompleto, DataNascimento=@DataNascimento, Sexo=@Sexo, Contato = @Contato WHERE IdUsuario=@IdUsuario", new
                 {
                     NomeCompleto = cliente.NomeCompleto,
                     @Contato = cliente.Contato,
                     @DataNascimento = cliente.DataNascimento,
                     @Sexo = cliente.Sexo,
-                    @IdUsuario = cliente.IdUsuario,
+                    @IdUsuario = cliente.IdUsuario
                 });
         }
 
@@ -49,7 +49,7 @@ namespace PontuaAe.Infra.Repositorios.RepositorioAvaliacao
         {
 
             await _db.Connection
-           .ExecuteAsync("INSERT INTO CLIENTE ( IdUsuario, NomeCompleto, DataNascimento, Contato, Sexo, Email, Cidade) values (@IdUsuario ,@NomeCompleto ,@DataNascimento, @Contato, @Sexo, @Email, @Cidade)", new
+           .ExecuteAsync("INSERT INTO CLIENTE ( IdUsuario, NomeCompleto, DataNascimento, Contato, Sexo, Email, Cidade) values (@IdUsuario, @NomeCompleto, @DataNascimento, @Contato, @Sexo, @Email, @Cidade)", new
            {
                @IdUsuario = cliente.IdUsuario,
                @NomeCompleto = cliente.NomeCompleto,

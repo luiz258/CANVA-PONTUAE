@@ -88,80 +88,89 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
             this.IdEmpresa = idEmpresa;
 
 
-
-            if (tempoEmdiasClienteOuro == 0)
+            if (qtdRetornoBronze > 3) // o valor 3   determina o segmento customizado como ativo
             {
-                tempoEmdiasClienteOuro = 30;
 
-                if (TempoEmDias <= tempoEmdiasClienteOuro)
+                if (tempoEmdiasClienteOuro == 0)
                 {
+                    tempoEmdiasClienteOuro = 30;
 
-                    if (qtdRetornoOuro == 2 ) 
+                    if (TempoEmDias <= tempoEmdiasClienteOuro)
                     {
-                        EstadoAtivo();
 
+                        if (qtdRetornoOuro == 2)
+                        {
+                            EstadoAtivo();
+
+                        }
+
+                        if (qtdRetornoOuro <= qtdVisitasClassificacaoBronze)
+                        {
+                            EstadoBronze();
+                            PerfilVip();
+
+                        }
+
+                        if (qtdRetornoOuro > qtdVisitasClassificacaoBronze && qtdRetornoOuro <= qtdVisitasClassificacaoPrata)
+                        {
+                            EstadoPrata();
+                            PerfilVip();
+                        }
+
+                        else if (qtdRetornoOuro > qtdVisitasClassificacaoPrata) //os numeros vao se substituido pela variavel qtdVisitasClassificacaoOuro...
+                        {
+                            EstadoOuro();
+                            PerfilVip();
+                        }
                     }
+                }
 
-                    if ( qtdRetornoOuro <= qtdVisitasClassificacaoBronze) 
+                if (tempoEmDiasClientePrata == -1)
+                {
+                    tempoEmDiasClientePrata = 60;
+
+                    if (TempoEmDias <= tempoEmDiasClientePrata)
                     {
-                        EstadoBronze();
-                        PerfilVip();
 
+                        if (qtdRetornoBronze > qtdVisitasClassificacaoBronze && qtdRetornoPrata <= qtdVisitasClassificacaoPrata)
+                        {
+                            EstadoPrata();
+                            PerfilVip();
+                        }
                     }
 
-                    if (qtdRetornoOuro > qtdVisitasClassificacaoBronze && qtdRetornoOuro <= qtdVisitasClassificacaoPrata)                    {
-                        EstadoPrata();
-                        PerfilVip();
-                    }
-
-                    else if (qtdRetornoOuro > qtdVisitasClassificacaoPrata) //os numeros vao se substituido pela variavel qtdVisitasClassificacaoOuro...
+                    else if (qtdRetornoPrata > qtdVisitasClassificacaoPrata)
                     {
                         EstadoOuro();
                         PerfilVip();
                     }
                 }
+
+
+                if (tempoEmDiasClienteBronze == -3)
+                {
+                    tempoEmDiasClienteBronze = 90;
+
+                    if (TempoEmDias <= tempoEmDiasClienteBronze)
+                    {
+
+                        if (qtdRetornoPrata >= qtdVisitasClassificacaoBronze && qtdRetornoPrata < qtdVisitasClassificacaoPrata)
+                        {
+                            EstadoBronze();
+                            PerfilVip();
+                        }
+                        else if (qtdRetornoBronze > qtdVisitasClassificacaoOuro)
+                        {
+                            EstadoOuro();
+                            PerfilVip();
+                        }
+                    }
+                }
             }
-
-            if (tempoEmDiasClientePrata == -1)
+            else
             {
-                tempoEmDiasClientePrata = 60;
-
-                if (TempoEmDias <= tempoEmDiasClientePrata)
-                {
-
-                    if (qtdRetornoBronze > qtdVisitasClassificacaoBronze && qtdRetornoPrata <= qtdVisitasClassificacaoPrata)
-                    {
-                        EstadoPrata();
-                        PerfilVip();
-                    }
-                }
-
-                else if (qtdRetornoPrata > qtdVisitasClassificacaoPrata)
-                {
-                    EstadoOuro();
-                    PerfilVip();
-                }
-            }
-
-
-            if (tempoEmDiasClienteBronze == -3)
-            {
-                tempoEmDiasClienteBronze = 90;
-
-                if (TempoEmDias <= tempoEmDiasClienteBronze)
-                {
-
-                    if (qtdRetornoPrata >= qtdVisitasClassificacaoBronze && qtdRetornoPrata < qtdVisitasClassificacaoPrata)
-                    {
-                        EstadoBronze();
-                        PerfilVip();
-                    }
-                    else if (qtdRetornoBronze > qtdVisitasClassificacaoOuro)
-                    {
-                        EstadoOuro();
-                        PerfilVip();
-                    }
-                }
+                PerfilNovo();
+                EstadoAtivo(); 
             }
 
         }
