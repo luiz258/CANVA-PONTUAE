@@ -15,7 +15,9 @@ namespace PontuaAe.Infra.Repositorios
 
         public DbConfig()
         {
+
             Connection = new SqlConnection(Config.ConnectionString);
+
             Connection.Open();
         }
 

@@ -132,7 +132,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         await _pontuacaoRepositorio.AtualizarSaldo(validador);
 
-                      
+                      ///ola
 
                             var ponto = validador.SaldoTransacao;
                             var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
@@ -142,12 +142,14 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                             var data = data_.ToString();
                             var n = comando.Contato;
                             string _numero = n;
-                        string conteudo = $"*{campo.NomeFantasia}:*" + "Você ganhou " + $"{ponto} pontos" + " em " + $"{data}" + @"\r\n" +
-                        @"\r\n Seu saldo atual é de " + $"{novoSaldo}" + "pontos" + @"\r\n" +
+                        dynamic linkWhatsapEmpresa_ = await _empresaRepositorio.ObterDados(comando.IdEmpresa);
+                        string linkWhatsapEmpresa = Convert.ToString(linkWhatsapEmpresa_);
+                        string conteudo = $"*{campo.NomeFantasia}*:" + "Você ganhou " + $"{ponto} pontos" + " em " + $"{data}" + @"\r\n" +
+                        @"\r\n Seu saldo atual é de " + $"{novoSaldo} " + "pontos" + @"\r\n" +
                         @"\r\n Quando achar conveniente, basta" + @"\r\n" +
                         @"\r\n solicitar o resgate dos seus pontos \r\n" + @" no caixa!" + @"\r\n" +
                         @"\r\n Obrigado pela preferência! :)" + @"\r\n" +
-                        @"\r\n 💬 *Chame a empresa MAISS no Whats, tocando aqui* 👇" + @"\r\n https://wa.me/5563992816178?text=Seja+bem+vindo+a  " +
+                        @"\r\n 💬 *Chame a empresa "+ $"{ campo.NomeFantasia} "+ "no Whats, tocando aqui* 👇 " + @"\r\n" + $"{linkWhatsapEmpresa_.LinkWhatSapp} " +
                         @"\r\n ⚠ *POR GENTILEZA COMPLETE SEU CADASTRO AQUI* 👇" + @"\r\n http://pontuaae.herokuapp.com/registerCustomer" +
                         @"\r\n *Para acessar sua conta, toque no link abaixo 👇 é informe EMAIL e SENHA depois clique em ENTRAR.* \r\n" + @"\r\n http://pontuaae.herokuapp.com/loginCliente" + @"\r\n";
                         //@"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
@@ -168,9 +170,7 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                         validador.Pontuar(comando.ValorInfor, configPontuacao.PontosFidelidade, configPontuacao.Reais, SaldoAnterior);
 
-                        await _pontuacaoRepositorio.AtualizarSaldo(validador);
-
-                    
+                        await _pontuacaoRepositorio.AtualizarSaldo(validador);                    
 
                             var ponto = validador.SaldoTransacao;
                             var idPreCadastro_ = await _preCadastroRepositorio.ObterIdPreCadastro(comando.Contato);
@@ -191,8 +191,6 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
                             //@"\r\n 🎁 *PRÊMIOS que você pode está resgatando ao completa o saldo de pontos necessário:* \r\n" + $"{item};";
                             await _EnviarMensagemPorWhatSapp.Enviar_mensagemDaPontuacao(_numero, conteudo);
                     
-
-
                     }
                 }
 

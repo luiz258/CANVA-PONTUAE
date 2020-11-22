@@ -8,6 +8,9 @@ namespace PontuaAe.Compartilhado.DbConfig
 {
     public static class Config
     {
-        public static string ConnectionString = ("Server=tcp:db-pontuaae.database.windows.net,1433;Initial Catalog=Db-Pontuaae;Persist Security Info=False;User ID=pontuaae-sa;Password=1q2w3e4r!@#$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+
+        public static string ConnectionString = ("Data Source=SQL5097.site4now.net;Initial Catalog=DB_A6977E_pontuaae;User Id=DB_A6977E_pontuaae_admin;Password=3412@Sousa");
+
     }
 }
