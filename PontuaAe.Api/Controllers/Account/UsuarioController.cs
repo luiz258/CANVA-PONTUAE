@@ -97,7 +97,7 @@ namespace PontuaAe.Api.Controllers.Account
         public async Task<IComandoResultado> PutAsync([FromBody]  UsuarioComando comando)
         {
             var senhaCriptografada = CriptografarSenha(comando.Senha);
-            var objeto = new UsuarioComando { Senha = senhaCriptografada };
+            var objeto = new UsuarioComando { Senha = senhaCriptografada, ID = comando.ID};
             var usuario = (ComandoUsuarioResultado)await _manipulador.ManipularAsync(objeto);
             return usuario;
         }

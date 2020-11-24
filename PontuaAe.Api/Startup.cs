@@ -137,6 +137,7 @@ namespace PontuaAe.Api
             services.AddTransient<ISituacaoRepositorio, SituacaoRepositorio>();
             services.AddTransient<IEnviarSMS, EnviarSMS>();
             services.AddTransient<IChatproWhatsApp, ChatproWhatsApp >();
+            services.AddTransient<IContatosRepositorio, ContatosRepositorio>();
 
 
             services.AddTransient<IContaSMSRepositorio, ContaSMSRepositorio>();
@@ -154,6 +155,7 @@ namespace PontuaAe.Api
             services.AddTransient<CampanhaManipulado, CampanhaManipulado>();
             services.AddTransient<AutomacaoManipulador, AutomacaoManipulador>();
             services.AddTransient<ChatproWhatsApp, ChatproWhatsApp>();
+            services.AddTransient<ContatosRepositorio, ContatosRepositorio>();
 
         }
 
