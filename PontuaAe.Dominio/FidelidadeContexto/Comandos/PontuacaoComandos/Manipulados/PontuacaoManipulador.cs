@@ -165,10 +165,10 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Comandos.PontuacaoComandos.Manipul
 
                     else if (VerificaIdPrecadastro == false)
                     {
-                        
-                        //// salva numero de telefone na tabela Contatos
-                        //Contatos c = new Contatos(comando.IdEmpresa, comando.Contato);
-                        //await _contatosRepositorio.Salvar(c);
+
+                        // salva numero de telefone na tabela Contatos
+                        Contatos c = new Contatos(comando.IdEmpresa, comando.Contato);
+                        await _contatosRepositorio.Salvar(c);
 
 
 

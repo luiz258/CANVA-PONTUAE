@@ -21,10 +21,10 @@ namespace PontuaAe.Infra.Repositorios.RepositorioFidelidade
         public async Task Salvar(Contatos numero)
         {
             await _db.Connection
-               .ExecuteAsync(" INSERT INTO Contatos (ID, Numero) VALUES  (@ID, @Numero)",
+               .ExecuteAsync(" INSERT INTO Contatos (IdEmpresa, Numero) VALUES  (@IdEmpresa, @Numero)",
                    new
-                   { 
-                       @ID  = numero.ID,
+                   {
+                       @IdEmpresa = numero.IdEmpresa,
                        @Numero = numero.Numero,
 
                    });

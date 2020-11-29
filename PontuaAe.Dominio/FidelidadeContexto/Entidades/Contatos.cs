@@ -12,13 +12,13 @@ namespace PontuaAe.Dominio.FidelidadeContexto.Entidades
         {
 
         }
-        public Contatos(int Id, string numero)
+        public Contatos(int IDEmpresa, string numero)
         {
-            ID = Id;
+            IdEmpresa = IDEmpresa;
             Numero = numero;
         }
 
-        public int ID {  get;  set; }
+        public int IdEmpresa {  get;  set; }
         public string Numero {  get;  set; }
     }
 }
