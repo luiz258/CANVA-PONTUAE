@@ -224,6 +224,7 @@
     <Compile Include="FidelidadeContexto\Consulta\RelatoriosConsulta\ObterTotalClientes.cs" />
     <Compile Include="FidelidadeContexto\Consulta\UsuarioConsulta\ObterIDConsulta.cs" />
     <Compile Include="FidelidadeContexto\Entidades\ConsultaTemplateClassificacaoCliente.cs" />
+    <Compile Include="FidelidadeContexto\Entidades\Contatos.cs" />
     <Compile Include="FidelidadeContexto\Entidades\TemplateClassificacaoCliente.cs" />
     <Compile Include="FidelidadeContexto\Entidades\ConfiguracaoCashBack.cs" />
     <Compile Include="FidelidadeContexto\Entidades\ContaSMS.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="FidelidadeContexto\Repositorios\IConfigPontosRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IConfiguracaoCashBackRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IContaSMSRepositorio.cs" />
+    <Compile Include="FidelidadeContexto\Repositorios\IContatosRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IEmpresaRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IFuncionarioRepositorio.cs" />
     <Compile Include="FidelidadeContexto\Repositorios\IMensagem.cs" />

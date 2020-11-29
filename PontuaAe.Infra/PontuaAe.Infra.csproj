@@ -118,6 +118,7 @@
     <Compile Include="Repositorios\DbConfig\DbConfig.cs" />
     <Compile Include="Repositorios\RepositorioFidelidade\ConfigClassificacaoClienteRepositorio.cs" />
     <Compile Include="Repositorios\RepositorioFidelidade\ConfiguracaoCashBackRepositorio.cs" />
+    <Compile Include="Repositorios\RepositorioFidelidade\ContatosRepositorio.cs" />
     <Compile Include="Repositorios\RepositorioFidelidade\FuncionarioRepositorio.cs" />
     <Compile Include="Repositorios\RepositorioFidelidade\PreCadastroRepositorio.cs" />
     <Compile Include="SQL\FidelidadeContexto\DataContexto\PontuaAeDataContexto.cs" />
